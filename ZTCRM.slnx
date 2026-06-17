@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="ZTCRM.Business/ZTCRM.Business.csproj" />
+  <Project Path="ZTCRM.Data/ZTCRM.Data.csproj" />
+  <Project Path="ZTCRM.Models/ZTCRM.Models.csproj" />
+  <Project Path="ZTCRM.UI/ZTCRM.UI.csproj" />
+  <Project Path="ZTCRM.ViewModels/ZTCRM.ViewModels.csproj" />
+</Solution>

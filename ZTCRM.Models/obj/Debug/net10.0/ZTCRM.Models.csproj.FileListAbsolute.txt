@@ -1,0 +1,12 @@
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/bin/Debug/net10.0/ZTCRM.Models.deps.json
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/bin/Debug/net10.0/ZTCRM.Models.dll
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/bin/Debug/net10.0/ZTCRM.Models.pdb
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/obj/Debug/net10.0/ZTCRM.Models.GeneratedMSBuildEditorConfig.editorconfig
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/obj/Debug/net10.0/ZTCRM.Models.AssemblyInfoInputs.cache
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/obj/Debug/net10.0/ZTCRM.Models.AssemblyInfo.cs
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/obj/Debug/net10.0/ZTCRM.Models.csproj.CoreCompileInputs.cache
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/obj/Debug/net10.0/ZTCRM.Models.sourcelink.json
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/obj/Debug/net10.0/ZTCRM.Models.dll
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/obj/Debug/net10.0/refint/ZTCRM.Models.dll
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/obj/Debug/net10.0/ZTCRM.Models.pdb
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Models/obj/Debug/net10.0/ref/ZTCRM.Models.dll

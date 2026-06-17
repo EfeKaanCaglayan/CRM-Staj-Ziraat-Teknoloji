@@ -1,0 +1,16 @@
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/bin/Debug/net10.0/ZTCRM.Data.deps.json
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/bin/Debug/net10.0/ZTCRM.Data.dll
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/bin/Debug/net10.0/ZTCRM.Data.pdb
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/ZTCRM.Data.GeneratedMSBuildEditorConfig.editorconfig
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/ZTCRM.Data.AssemblyInfoInputs.cache
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/ZTCRM.Data.AssemblyInfo.cs
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/ZTCRM.Data.csproj.CoreCompileInputs.cache
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/ZTCRM.Data.sourcelink.json
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/ZTCRM.Data.dll
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/refint/ZTCRM.Data.dll
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/ZTCRM.Data.pdb
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/ref/ZTCRM.Data.dll
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/bin/Debug/net10.0/ZTCRM.Models.dll
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/bin/Debug/net10.0/ZTCRM.Models.pdb
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/ZTCRM.Data.csproj.AssemblyReference.cache
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.Data/obj/Debug/net10.0/ZTCRM.Data.csproj.Up2Date
