@@ -32,5 +32,8 @@ build_property.EnableCodeStyleSeverity =
 [/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.UI/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.UI/Views/LoginView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.UI/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

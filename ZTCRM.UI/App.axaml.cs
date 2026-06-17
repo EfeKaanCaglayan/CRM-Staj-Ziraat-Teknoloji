@@ -1,11 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
-using Avalonia.Data.Core.Plugins;
-using System.Linq;
 using Avalonia.Markup.Xaml;
 using ZTCRM.UI.ViewModels;
 using ZTCRM.UI.Views;
+using System;
+using ZTCRM.ViewModels;
 
 namespace ZTCRM.UI;
 
@@ -20,10 +19,18 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
+            try
             {
-                DataContext = new MainWindowViewModel(),
-            };
+                desktop.MainWindow = new LoginView
+                {
+                    DataContext = new LoginViewModel(),
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"HATA: {ex}");
+                throw;
+            }
         }
 
         base.OnFrameworkInitializationCompleted();

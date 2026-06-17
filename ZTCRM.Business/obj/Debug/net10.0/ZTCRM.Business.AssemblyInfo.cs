@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZTCRM.Business")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6e8c190676e2bb42f295644c2b7fcbf45886c4f7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93ef597c762e5209095d9f1f80e5af07ee1d8a81")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZTCRM.Business")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZTCRM.Business")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
