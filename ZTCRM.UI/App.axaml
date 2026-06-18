@@ -17,6 +17,14 @@
             <Setter Property="CornerRadius" Value="6"/>
             <Setter Property="Foreground" Value="#111111"/>
         </Style>
+        <Style Selector="Button.active">
+            <Setter Property="Background" Value="#E8182E"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.inactive">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#888888"/>
+        </Style>
         <Style Selector="TextBox:focus">
             <Setter Property="Background" Value="#F8F8F8"/>
             <Setter Property="BorderBrush" Value="#AAAAAA"/>

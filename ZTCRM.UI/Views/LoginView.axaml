@@ -121,49 +121,80 @@
                             Margin="0,0,0,16" Padding="3">
                         <Grid ColumnDefinitions="*,*">
                             <Button Grid.Column="0" Content="Personel"
-                                    Background="#E8182E" Foreground="White"
+                                    Command="{Binding SelectPersonelCommand}"
+                                    Classes.active="{Binding IsPersonelTab}"
+                                    Classes.inactive="{Binding IsMusteriTab}"
                                     CornerRadius="6" Margin="0,0,3,0"
                                     HorizontalAlignment="Stretch"
                                     HorizontalContentAlignment="Center"
                                     FontSize="12" Height="34"/>
                             <Button Grid.Column="1" Content="Müşteri"
-                                    Background="Transparent" Foreground="#888888"
-                                    CornerRadius="6" Margin="3,0,0,0"
+                                    Command="{Binding SelectMusteriCommand}"
+                                    Classes.active="{Binding IsMusteriTab}"
+                                    Classes.inactive="{Binding IsPersonelTab}"                                    CornerRadius="6" Margin="3,0,0,0"
                                     HorizontalAlignment="Stretch"
                                     HorizontalContentAlignment="Center"
                                     FontSize="12" Height="34"/>
                         </Grid>
                     </Border>
 
-                    <!-- Kullanıcı adı -->
-                    <TextBox Watermark="Kullanıcı adınızı girin"
+                    <!-- Kullanıcı adı — sadece Personel tabında -->
+                    <TextBox PlaceholderText="Kullanıcı adınızı girin"
                              Text="{Binding Username}"
+                             IsVisible="{Binding IsPersonelTab}"
                              Margin="0,0,0,12"
                              Height="38" FontSize="13"
-                             Background="#F8F8F8"
-                             Foreground="#111111"
-                             BorderBrush="#DDDDDD"
-                             BorderThickness="1"
-                             CornerRadius="6"
-                             Padding="10,0"
+                             Background="#F8F8F8" Foreground="#111111"
+                             BorderBrush="#DDDDDD" BorderThickness="1"
+                             CornerRadius="6" Padding="10,0"
                              VerticalContentAlignment="Center"/>
 
-                    <!-- Şifre -->
-                    <TextBox Watermark="Şifrenizi girin"
+                    <!-- TC Kimlik No — sadece Müşteri tabında -->
+                    <!-- TC Kimlik No — sadece Müşteri tabında -->
+                    <TextBox x:Name="TcknBox"
+                             PlaceholderText="TC Kimlik numaranızı girin"
+                             Text="{Binding Username}"
+                             IsVisible="{Binding IsTcknVisible}"
+                             Margin="0,0,0,8"
+                             Height="38" FontSize="13"
+                             Background="#F8F8F8" Foreground="#111111"
+                             BorderBrush="#DDDDDD" BorderThickness="1"
+                             CornerRadius="6" Padding="10,0"
+                             VerticalContentAlignment="Center"/>
+
+                    <!-- Yabancı uyruklu checkbox — sadece Müşteri tabında -->
+                    <CheckBox Content="Yabancı Uyruklu"
+                              IsChecked="{Binding IsYabanciMusteri}"
+                              IsVisible="{Binding IsMusteriTab}"
+                              Foreground="#444444" FontSize="12"
+                              Margin="0,0,0,8"/>
+
+                    <!-- Pasaport No — sadece yabancı müşteride -->
+                    <TextBox PlaceholderText="Pasaport numaranızı girin"
+                             Text="{Binding Username}"
+                             IsVisible="{Binding IsYabanciMusteri}"
+                             Margin="0,0,0,12"
+                             Height="38" FontSize="13"
+                             Background="#F8F8F8" Foreground="#111111"
+                             BorderBrush="#DDDDDD" BorderThickness="1"
+                             CornerRadius="6" Padding="10,0"
+                             VerticalContentAlignment="Center"/>
+
+                    <!-- Şifre — sadece Personel tabında -->
+                    <TextBox PlaceholderText="Şifrenizi girin"
                              Text="{Binding Password}"
+                             IsVisible="{Binding IsPersonelTab}"
                              PasswordChar="•"
                              Margin="0,0,0,4"
                              Height="38" FontSize="13"
-                             Background="#F8F8F8"
-                             Foreground="#111111"
-                             BorderBrush="#DDDDDD"
-                             BorderThickness="1"
-                             CornerRadius="6"
-                             Padding="10,0"
+                             Background="#F8F8F8" Foreground="#111111"
+                             BorderBrush="#DDDDDD" BorderThickness="1"
+                             CornerRadius="6" Padding="10,0"
                              VerticalContentAlignment="Center"/>
 
-                    <!-- Şifremi unuttum -->
+                    <!-- Şifremi unuttum — sadece Personel tabında -->
                     <TextBlock Text="Şifremi unuttum"
+                               IsVisible="{Binding IsPersonelTab}"
                                Foreground="#E8182E" FontSize="12"
                                HorizontalAlignment="Right"
                                Cursor="Hand" Margin="0,0,0,12"/>

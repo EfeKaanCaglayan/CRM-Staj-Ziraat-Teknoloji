@@ -2,12 +2,14 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ZTCRM.Data;
 using ZTCRM.Models;
+using System.Linq;
 
 namespace ZTCRM.ViewModels;
 
 public partial class LoginViewModel : ObservableObject
 {
     private readonly StaffRepository _staffRepository = new StaffRepository();
+    private readonly CustomerRepository _customerRepository = new CustomerRepository();
 
     [ObservableProperty]
     private string _username = string.Empty;
@@ -24,11 +26,38 @@ public partial class LoginViewModel : ObservableObject
     [ObservableProperty]
     private bool _isMusteriTab = false;
 
+    [ObservableProperty]
+    private bool _isYabanciMusteri = false;
+
+    public bool IsTcknVisible => IsMusteriTab && !IsYabanciMusteri;
+
+    partial void OnUsernameChanged(string value)
+    {
+        if (IsMusteriTab && !IsYabanciMusteri && !string.IsNullOrEmpty(value))
+        {
+            var filtered = new string(value.Where(char.IsDigit).ToArray());
+            if (filtered != value)
+                Username = filtered;
+        }
+    }
+
+    partial void OnIsYabanciMusteriChanged(bool value)
+    {
+        Username = string.Empty;
+        OnPropertyChanged(nameof(IsTcknVisible));
+    }
+
+    partial void OnIsMusteriTabChanged(bool value)
+    {
+        OnPropertyChanged(nameof(IsTcknVisible));
+    }
+
     [RelayCommand]
     private void SelectPersonel()
     {
         IsPersonelTab = true;
         IsMusteriTab = false;
+        IsYabanciMusteri = false;
         Username = string.Empty;
         Password = string.Empty;
         ErrorMessage = string.Empty;
@@ -39,6 +68,7 @@ public partial class LoginViewModel : ObservableObject
     {
         IsPersonelTab = false;
         IsMusteriTab = true;
+        IsYabanciMusteri = false;
         Username = string.Empty;
         Password = string.Empty;
         ErrorMessage = string.Empty;
@@ -49,25 +79,60 @@ public partial class LoginViewModel : ObservableObject
     {
         ErrorMessage = string.Empty;
 
-        if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
+        if (IsPersonelTab)
         {
-            ErrorMessage = "Kullanıcı adı veya şifre boş bırakılamaz.";
-            return;
+            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessage = "Kullanıcı adı ve şifre boş bırakılamaz.";
+                return;
+            }
+
+            var staff = _staffRepository.Login(Username, Password);
+            if (staff == null)
+            {
+                ErrorMessage = "Kullanıcı adı veya şifre hatalı.";
+                return;
+            }
+
+            OnLoginSuccess(staff);
         }
-
-        var staff = _staffRepository.Login(Username, Password);
-
-        if (staff == null)
+        else
         {
-            ErrorMessage = "Kullanıcı adı veya şifre hatalı.";
-            return;
-        }
+            if (string.IsNullOrWhiteSpace(Username))
+            {
+                ErrorMessage = IsYabanciMusteri
+                    ? "Pasaport No boş bırakılamaz."
+                    : "TC Kimlik No boş bırakılamaz.";
+                return;
+            }
 
-        OnLoginSuccess(staff);
+            if (!IsYabanciMusteri && Username.Length != 11)
+            {
+                ErrorMessage = "TC Kimlik No 11 haneli olmalıdır.";
+                return;
+            }
+
+            var customer = IsYabanciMusteri
+                ? _customerRepository.Login(null, Username)
+                : _customerRepository.Login(Username);
+
+            if (customer == null)
+            {
+                ErrorMessage = IsYabanciMusteri
+                    ? "Pasaport No bulunamadı."
+                    : "TC Kimlik No bulunamadı.";
+                return;
+            }
+
+            OnCustomerLoginSuccess(customer);
+        }
     }
 
     private void OnLoginSuccess(Staff staff)
     {
-        // Sonraki adımda dolduracağız
+    }
+
+    private void OnCustomerLoginSuccess(Customer customer)
+    {
     }
 }
