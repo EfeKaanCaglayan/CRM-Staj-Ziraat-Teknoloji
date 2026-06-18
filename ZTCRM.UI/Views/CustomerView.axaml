@@ -1,0 +1,11 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ZTCRM.UI.Views.CustomerView"
+        Title="ZTCRM - Müşteri"
+        Width="1200" Height="700"
+        WindowStartupLocation="CenterScreen">
+    <TextBlock Text="Müşteri Ekranı"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontSize="24"/>
+</Window>

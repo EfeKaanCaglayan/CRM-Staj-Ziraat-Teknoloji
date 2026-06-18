@@ -1,16 +1,16 @@
+using System;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ZTCRM.Data;
 using ZTCRM.Models;
 using System.Linq;
-
 namespace ZTCRM.ViewModels;
 
 public partial class LoginViewModel : ObservableObject
 {
     private readonly StaffRepository _staffRepository = new StaffRepository();
     private readonly CustomerRepository _customerRepository = new CustomerRepository();
-
+    public event Action<string>? LoginSuccessful;
     [ObservableProperty]
     private string _username = string.Empty;
 
@@ -130,9 +130,11 @@ public partial class LoginViewModel : ObservableObject
 
     private void OnLoginSuccess(Staff staff)
     {
+        LoginSuccessful?.Invoke(staff.RoleName);
     }
 
     private void OnCustomerLoginSuccess(Customer customer)
     {
+        LoginSuccessful?.Invoke("Customer");
     }
 }

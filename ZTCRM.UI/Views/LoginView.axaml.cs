@@ -2,6 +2,7 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using ZTCRM.ViewModels;
 
 namespace ZTCRM.UI.Views;
 
@@ -28,5 +29,26 @@ public partial class LoginView : Window
                         e.Handled = true;
                 },
                 RoutingStrategies.Tunnel);
+
+            this.DataContextChanged += (_, _) =>
+            {
+                if (DataContext is LoginViewModel vm)
+                {
+                    vm.LoginSuccessful += roleName =>
+                    {
+                        Window nextWindow = roleName switch
+                        {
+                            "Admin" => new AdminView(),
+                            "Operator" => new OperatorView(),
+                            "Staff" => new StaffView(),
+                            "Manager" => new ManagerView(),
+                            "Customer" => new CustomerView(),
+                            _ => new OperatorView()
+                        };
+                        nextWindow.Show();
+                        this.Close();
+                    };
+                }
+            };
     }
 }
