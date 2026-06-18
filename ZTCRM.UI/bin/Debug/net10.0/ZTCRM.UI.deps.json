@@ -9,6 +9,7 @@
       "ZTCRM.UI/1.0.0": {
         "dependencies": {
           "Avalonia": "12.0.4",
+          "Avalonia.Controls.DataGrid": "12.0.0",
           "Avalonia.Desktop": "12.0.4",
           "Avalonia.Fonts.Inter": "12.0.4",
           "Avalonia.Themes.Fluent": "12.0.4",
@@ -89,6 +90,17 @@
             "rid": "win-x86",
             "assetType": "native",
             "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Avalonia.Controls.DataGrid/12.0.0": {
+        "dependencies": {
+          "Avalonia": "12.0.4"
+        },
+        "runtime": {
+          "lib/net10.0/Avalonia.Controls.DataGrid.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.0.0"
           }
         }
       },
@@ -722,6 +734,13 @@
       "sha512": "sha512-l17nI3XVDN3oMnpjf2pnmJg0YTwK4m6NLsn/itAjDMdObTFxN77D5F1M9sRMSfViSY3KKcse1ROczwgoWLJsnA==",
       "path": "avalonia.angle.windows.natives/2.1.27548.20260419",
       "hashPath": "avalonia.angle.windows.natives.2.1.27548.20260419.nupkg.sha512"
+    },
+    "Avalonia.Controls.DataGrid/12.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pQ9NiviIoxbZ7fiD/KTdoEHRgdKibKtx8Low3nTrU6ZbvULtesuB65aLL/umjibsGMhzPOveqs/om98QAA5FMg==",
+      "path": "avalonia.controls.datagrid/12.0.0",
+      "hashPath": "avalonia.controls.datagrid.12.0.0.nupkg.sha512"
     },
     "Avalonia.Desktop/12.0.4": {
       "type": "package",

@@ -9,6 +9,7 @@
     </Application.DataTemplates>
 
     <Application.Styles>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
         <FluentTheme />
         <Style Selector="TextBox">
             <Setter Property="Background" Value="#F8F8F8"/>
