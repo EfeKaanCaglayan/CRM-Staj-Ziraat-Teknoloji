@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
 using ZTCRM.Models;
-
 namespace ZTCRM.ViewModels;
 
 public partial class CustomerViewModel : ObservableObject
@@ -62,4 +61,6 @@ public partial class CustomerViewModel : ObservableObject
         Description = string.Empty;
         LoadRequests();
     }
+    
+    
 }

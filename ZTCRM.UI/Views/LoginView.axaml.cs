@@ -32,19 +32,19 @@ public partial class LoginView : Window
         {
             if (DataContext is LoginViewModel vm)
             {
-                vm.LoginSuccessful += roleName =>
-                {
-                    Window nextWindow = roleName switch
-                    {
-                        "Admin"    => new AdminView(),
-                        "Operator" => new OperatorView(),
-                        "Staff"    => new StaffView(),
-                        "Manager"  => new ManagerView(),
-                        _          => new OperatorView()
-                    };
-                    nextWindow.Show();
-                    this.Close();
-                };
+               vm.LoginSuccessful += staff =>
+               {
+                   Window nextWindow = staff.RoleName switch
+                   {
+                       "Admin"    => new AdminView(),
+                       "Operator" => new OperatorView(staff),
+                       "Staff"    => new StaffView(),
+                       "Manager"  => new ManagerView(),
+                       _          => new OperatorView(staff)
+                   };
+                   nextWindow.Show();
+                   this.Close();
+               };
 
                 vm.CustomerLoginSuccessful += customer =>
                 {

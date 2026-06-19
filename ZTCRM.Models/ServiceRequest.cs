@@ -2,6 +2,7 @@ namespace ZTCRM.Models;
 
 public class ServiceRequest
 {
+    public string? CustomerName { get; set; }
     public int RequestId       { get; set; }
     public int CustomerId      { get; set; }
     public string RequestType  { get; set; } = string.Empty;

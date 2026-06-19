@@ -1,13 +1,18 @@
+
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:ZTCRM.ViewModels"
         x:Class="ZTCRM.UI.Views.CustomerView"
         x:DataType="vm:CustomerViewModel"
         Title="ZTCRM — Müşteri Paneli"
-        Width="1100" Height="680"
+        WindowState="Maximized"
+        CanResize="True"
         WindowStartupLocation="CenterScreen"
-        CanResize="False"
+
+        xmlns:models="using:ZTCRM.Models"
+        xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
         Background="#2C2C2C">
+    
 
     <DockPanel>
 
@@ -201,6 +206,20 @@
                                 <DataGridTextColumn Header="Tarih"
                                                     Binding="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy}'}"
                                                     Width="90"/>
+                                
+                                        <DataGridTemplateColumn Header="Detay" Width="70">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate x:DataType="models:ServiceRequest">
+                                                    <Button Content="Detay"
+                                                            Tag="{Binding}"
+                                                            Click="DetailButton_Click"
+                                                            HorizontalAlignment="Center"
+                                                            Height="26" FontSize="11"
+                                                            Background="#E8182E" Foreground="White"
+                                                            CornerRadius="4" Padding="10,0"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
 

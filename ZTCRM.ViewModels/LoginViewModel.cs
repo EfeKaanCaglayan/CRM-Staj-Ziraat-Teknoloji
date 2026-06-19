@@ -14,7 +14,7 @@ public partial class LoginViewModel : ObservableObject
    
     private readonly StaffRepository _staffRepository = new StaffRepository();
     private readonly CustomerRepository _customerRepository = new CustomerRepository();
-    public event Action<string>? LoginSuccessful;
+    public event Action<Staff>? LoginSuccessful;
      public event Action<Customer>? CustomerLoginSuccessful;
     [ObservableProperty]
     private string _username = string.Empty;
@@ -135,7 +135,7 @@ public partial class LoginViewModel : ObservableObject
 
     private void OnLoginSuccess(Staff staff)
     {
-        LoginSuccessful?.Invoke(staff.RoleName);
+        LoginSuccessful?.Invoke(staff);
     }
 
     private void OnCustomerLoginSuccess(Customer customer) => CustomerLoginSuccessful?.Invoke(customer);

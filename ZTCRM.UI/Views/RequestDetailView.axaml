@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:models="using:ZTCRM.Models"
+        x:Class="ZTCRM.UI.Views.RequestDetailView"
+        x:DataType="models:ServiceRequest"
+        Title="Başvuru Detayı"
+        Width="460" Height="500"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="#F5F5F5">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#C8102E" Padding="24,20">
+            <StackPanel Spacing="4">
+                <TextBlock Text="{Binding RequestId, StringFormat='Başvuru #{0}'}"
+                           FontSize="18" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="{Binding RequestType}"
+                           FontSize="12" Foreground="#FFCCCC"/>
+            </StackPanel>
+        </Border>
+
+        <!-- İçerik -->
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="24" Spacing="8">
+
+                <Border Background="White" CornerRadius="8" Padding="16,12">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="DURUM" FontSize="10" Foreground="#999999"/>
+                        <TextBlock Text="{Binding CurrentStatus}" FontSize="13" Foreground="#111111"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="8" Padding="16,12">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="TARİH" FontSize="10" Foreground="#999999"/>
+                        <TextBlock Text="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
+                                   FontSize="13" Foreground="#111111"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="8" Padding="16,12">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="KATEGORİ" FontSize="10" Foreground="#999999"/>
+                        <TextBlock Text="{Binding CategoryName}" FontSize="13" Foreground="#111111"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="8" Padding="16,12">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="AÇIKLAMA" FontSize="10" Foreground="#999999"/>
+                        <TextBlock Text="{Binding Description}" FontSize="13"
+                                   Foreground="#111111" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+</Window>

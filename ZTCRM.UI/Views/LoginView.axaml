@@ -4,9 +4,9 @@
         x:Class="ZTCRM.UI.Views.LoginView"
         x:DataType="vm:LoginViewModel"
         Title="ZTCRM"
-        Width="1000" Height="650"
+        WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
-        CanResize="False"
+        CanResize="true"
         Background="#2C2C2C">
 
     <Design.DataContext>
