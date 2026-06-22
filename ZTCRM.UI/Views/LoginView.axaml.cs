@@ -38,7 +38,7 @@ public partial class LoginView : Window
                    {
                        "Admin"    => new AdminView(),
                        "Operator" => new OperatorView(staff),
-                       "Staff"    => new StaffView(),
+                       "Staff"    => new StaffView(staff),
                        "Manager"  => new ManagerView(),
                        _          => new OperatorView(staff)
                    };

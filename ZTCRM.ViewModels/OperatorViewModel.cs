@@ -21,7 +21,7 @@ public partial class OperatorViewModel : ObservableObject
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private string _successMessage = string.Empty;
 
-    public List<string> Priorities { get; } = new() { "Dusuk", "Orta", "Yuksek" };
+    public List<string> Priorities { get; } = new() { "Düşük", "Orta", "Yüksek" };
     public List<string> RejectionTypes { get; } = new() { "Eksik Bilgi", "Kapsam Dışı", "Mükerrer", "Diğer" };    
     [ObservableProperty] private string _selectedRejectionType = string.Empty;
     [ObservableProperty] private string _rejectionReason = string.Empty;
@@ -78,9 +78,9 @@ public partial class OperatorViewModel : ObservableObject
 
             var mappedPriority = SelectedPriority switch
             {
-                "Düşük"  => "Dusuk",
-                "Orta"   => "Orta",
-                "Yüksek" => "Yuksek",
+                "Düşük"  => "Low",
+                "Orta"   => "Medium",
+                "Yüksek" => "High",
                 _        => SelectedPriority
             };
 

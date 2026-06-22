@@ -13,4 +13,5 @@ public class ServiceRequest
     public DateTime CreatedAt  { get; set; }
     public DateTime? ResolvedAt { get; set; }
     public DateTime? ClosedAt  { get; set; }
+    public string? OperatorName { get; set; }
 }
