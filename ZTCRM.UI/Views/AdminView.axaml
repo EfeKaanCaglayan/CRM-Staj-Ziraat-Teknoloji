@@ -1,11 +1,429 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ZTCRM.ViewModels"
+        xmlns:models="using:ZTCRM.Models"
         x:Class="ZTCRM.UI.Views.AdminView"
-        Title="ZTCRM - Admin"
-        Width="1200" Height="700"
-        WindowStartupLocation="CenterScreen">
-    <TextBlock Text="Admin Ekranı"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               FontSize="24"/>
+        x:DataType="vm:AdminViewModel"
+        Title="ZTCRM — Admin Paneli"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        CanResize="True"
+        Background="#2C2C2C">
+
+    <DockPanel>
+
+        <!-- HEADER -->
+        <Border DockPanel.Dock="Top" Background="#2C2C2C" Height="68">
+            <Grid ColumnDefinitions="Auto,*,Auto" Margin="24,0">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12"
+                            VerticalAlignment="Center">
+                    <Border Width="42" Height="42" CornerRadius="8" Background="#E8182E">
+                        <PathIcon Width="22" Height="22" Foreground="White"
+                                  Data="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center" Spacing="1">
+                        <TextBlock Text="ZTCRM" Foreground="White" FontSize="18"
+                                   FontWeight="Medium" LetterSpacing="3"/>
+                        <TextBlock Text="ŞİKAYET YÖNETİM SİSTEMİ"
+                                   Foreground="#AAAAAA" FontSize="9" LetterSpacing="2"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal"
+                            Spacing="12" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding WelcomeMessage}"
+                               Foreground="#AAAAAA" FontSize="12"/>
+                    <TextBlock Text="|" Foreground="#3A3A3A" FontSize="11"/>
+                    <TextBlock Text="v1.0.0" Foreground="#444444" FontSize="11"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Kırmızı çizgi -->
+        <Border DockPanel.Dock="Top" Height="3" Background="#E8182E"/>
+        <Border DockPanel.Dock="Top" Height="1" Background="#3A3A3A"/>
+
+        <!-- FOOTER -->
+        <Border DockPanel.Dock="Bottom" Background="#2C2C2C" Height="44"
+                BorderThickness="0,1,0,0" BorderBrush="#3A3A3A">
+            <Grid ColumnDefinitions="Auto,*,Auto" Margin="24,0">
+                <TextBlock Grid.Column="0" Text="Güvenli bağlantı aktif"
+                           Foreground="#444444" FontSize="11" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="© 2026 ZTCRM — Şikayet Yönetim Sistemi"
+                           Foreground="#333333" FontSize="11" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- ORTA -->
+        <Grid>
+            <Border>
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                        <GradientStop Color="#C8102E" Offset="0"/>
+                        <GradientStop Color="#8C0B1F" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+
+            <Canvas>
+                <Ellipse Canvas.Left="700" Canvas.Top="-140"
+                         Width="560" Height="560"
+                         Fill="#A50E26" Opacity="0.5"/>
+                <Ellipse Canvas.Left="-160" Canvas.Top="300"
+                         Width="480" Height="480"
+                         Fill="#A50E26" Opacity="0.4"/>
+            </Canvas>
+
+            <Border Margin="32" Background="White" CornerRadius="12" Padding="28,24">
+                <Border.BoxShadow>0 8 40 0 #40000000</Border.BoxShadow>
+
+                <TabControl>
+
+                    <!-- BİRİMLER SEKMESI -->
+                    <TabItem Header="Birimler">
+                        <Grid ColumnDefinitions="*,380" Margin="0,16,0,0">
+
+                            <!-- Sol: Birim Listesi -->
+                            <Border Grid.Column="0" Margin="0,0,16,0">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Top"
+                                               Text="Mevcut Birimler"
+                                               FontSize="13" FontWeight="Medium"
+                                               Foreground="#111111" Margin="0,0,0,12"/>
+                                    <DataGrid ItemsSource="{Binding Units}"
+                                              SelectedItem="{Binding SelectedUnit}"
+                                              AutoGenerateColumns="False"
+                                              IsReadOnly="True"
+                                              CanUserReorderColumns="False"
+                                              GridLinesVisibility="Horizontal"
+                                              BorderThickness="1"
+                                              BorderBrush="#EEEEEE">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="ID"
+                                                                Binding="{Binding UnitId}"
+                                                                Width="55"/>
+                                            <DataGridTextColumn Header="Birim Adı"
+                                                                Binding="{Binding UnitName}"
+                                                                Width="*"/>
+                                            <DataGridTextColumn Header="Tip"
+                                                                Binding="{Binding UnitType}"
+                                                                Width="110"/>
+                                            <DataGridTextColumn Header="Aktif"
+                                                                Binding="{Binding IsActiveText}"
+                                                                Width="70"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DockPanel>
+                            </Border>
+
+                            <!-- Sağ: Birim İşlemleri -->
+                            <Border Grid.Column="1" Background="#F8F8F8"
+                                    CornerRadius="8" Padding="20">
+                                <StackPanel Spacing="0">
+                                    <TextBlock Text="YENİ BİRİM EKLE"
+                                               FontSize="10" Foreground="#999999"
+                                               LetterSpacing="1" Margin="0,0,0,16"/>
+
+                                    <TextBlock Text="Birim Adı" FontSize="12"
+                                               Foreground="#555555" Margin="0,0,0,6"/>
+                                    <TextBox Text="{Binding NewUnitName}"
+                                             PlaceholderText="Birim adını girin"
+                                             Height="38" FontSize="13"
+                                             Background="White" Foreground="#111111"
+                                             BorderBrush="#DDDDDD" BorderThickness="1"
+                                             CornerRadius="6" Padding="10,0"
+                                             Margin="0,0,0,12"/>
+
+                                    <TextBlock Text="Birim Tipi" FontSize="12"
+                                               Foreground="#555555" Margin="0,0,0,6"/>
+                                    <ComboBox ItemsSource="{Binding UnitTypes}"
+                                              SelectedItem="{Binding NewUnitType}"
+                                              PlaceholderText="Tip seçin"
+                                              HorizontalAlignment="Stretch"
+                                              Height="38" FontSize="13"
+                                              Margin="0,0,0,16"/>
+
+                                    <Button Content="Birim Ekle"
+                                            Command="{Binding CreateUnitCommand}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            Height="42" FontSize="13" FontWeight="Medium"
+                                            Background="#E8182E" Foreground="White"
+                                            CornerRadius="8" Margin="0,0,0,8"/>
+
+                                    <Border Height="1" Background="#EEEEEE" Margin="0,8,0,16"/>
+
+                                    <TextBlock Text="SEÇİLİ BİRİM"
+                                               FontSize="10" Foreground="#999999"
+                                               LetterSpacing="1" Margin="0,0,0,12"/>
+
+                                    <Border Background="White" CornerRadius="8"
+                                            Padding="14,10" Margin="0,0,0,12"
+                                            IsVisible="{Binding SelectedUnit,
+                                                        Converter={x:Static ObjectConverters.IsNotNull}}">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="{Binding SelectedUnit.UnitName}"
+                                                       FontSize="13" FontWeight="Medium"
+                                                       Foreground="#111111"/>
+                                            <TextBlock Text="{Binding SelectedUnit.UnitType}"
+                                                       FontSize="12" Foreground="#555555"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Button Content="Birimi Pasife Al"
+                                            Command="{Binding DeactivateUnitCommand}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            Height="42" FontSize="13" FontWeight="Medium"
+                                            Background="#555555" Foreground="White"
+                                            CornerRadius="8"/>
+
+                                    <!-- Mesajlar -->
+                                    <Border Background="#FEF2F2" BorderBrush="#FECACA"
+                                            BorderThickness="1" CornerRadius="8"
+                                            Padding="12,10" Margin="0,12,0,0"
+                                            IsVisible="{Binding ErrorMessage,
+                                                        Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                        <TextBlock Text="{Binding ErrorMessage}"
+                                                   Foreground="#B91C1C" FontSize="12"
+                                                   TextWrapping="Wrap"/>
+                                    </Border>
+                                    <Border Background="#F0FDF4" BorderBrush="#BBF7D0"
+                                            BorderThickness="1" CornerRadius="8"
+                                            Padding="12,10" Margin="0,8,0,0"
+                                            IsVisible="{Binding SuccessMessage,
+                                                        Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                        <TextBlock Text="{Binding SuccessMessage}"
+                                                   Foreground="#15803D" FontSize="12"
+                                                   TextWrapping="Wrap"/>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+
+                        </Grid>
+                    </TabItem>
+
+                    <!-- PERSONEL SEKMESI -->
+                    <TabItem Header="Personel">
+                        <Grid ColumnDefinitions="*,400" Margin="0,16,0,0">
+
+                            <!-- Sol: Personel Listesi -->
+                            <Border Grid.Column="0" Margin="0,0,16,0">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Top"
+                                               Text="Mevcut Personel"
+                                               FontSize="13" FontWeight="Medium"
+                                               Foreground="#111111" Margin="0,0,0,12"/>
+                                    <DataGrid ItemsSource="{Binding StaffList}"
+                                              SelectedItem="{Binding SelectedStaff}"
+                                              AutoGenerateColumns="False"
+                                              IsReadOnly="True"
+                                              CanUserReorderColumns="False"
+                                              GridLinesVisibility="Horizontal"
+                                              BorderThickness="1"
+                                              BorderBrush="#EEEEEE">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="ID"
+                                                                Binding="{Binding StaffId}"
+                                                                Width="55"/>
+                                            <DataGridTextColumn Header="Ad Soyad"
+                                                                Binding="{Binding FullName}"
+                                                                Width="*"/>
+                                            <DataGridTextColumn Header="Kullanıcı Adı"
+                                                                Binding="{Binding Username}"
+                                                                Width="150"/>
+                                            <DataGridTextColumn Header="Rol"
+                                                                Binding="{Binding RoleId}"
+                                                                Width="70"/>
+                                            <DataGridTextColumn Header="Birim"
+                                                                Binding="{Binding UnitName}"
+                                                                Width="*"/>
+                                            <DataGridTextColumn Header="Aktif"
+                                                                Binding="{Binding IsActiveText}"
+                                                                Width="70"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DockPanel>
+                            </Border>
+
+                            <!-- Sağ: Personel İşlemleri -->
+                            <Border Grid.Column="1" Background="#F8F8F8"
+                                    CornerRadius="8" Padding="20">
+                                <ScrollViewer>
+                                    <StackPanel Spacing="0">
+                                        <TextBlock Text="YENİ PERSONEL EKLE"
+                                                   FontSize="10" Foreground="#999999"
+                                                   LetterSpacing="1" Margin="0,0,0,16"/>
+
+                                        <TextBlock Text="Ad Soyad" FontSize="12"
+                                                   Foreground="#555555" Margin="0,0,0,6"/>
+                                        <TextBox Text="{Binding NewFullName}"
+                                                 PlaceholderText="Ad soyad girin"
+                                                 Height="38" FontSize="13"
+                                                 Background="White" Foreground="#111111"
+                                                 BorderBrush="#DDDDDD" BorderThickness="1"
+                                                 CornerRadius="6" Padding="10,0"
+                                                 Margin="0,0,0,12"/>
+
+                                        <TextBlock Text="Kullanıcı Adı" FontSize="12"
+                                                   Foreground="#555555" Margin="0,0,0,6"/>
+                                        <TextBox Text="{Binding NewUsername}"
+                                                 PlaceholderText="Kullanıcı adı girin"
+                                                 Height="38" FontSize="13"
+                                                 Background="White" Foreground="#111111"
+                                                 BorderBrush="#DDDDDD" BorderThickness="1"
+                                                 CornerRadius="6" Padding="10,0"
+                                                 Margin="0,0,0,12"/>
+
+                                        <TextBlock Text="Şifre" FontSize="12"
+                                                   Foreground="#555555" Margin="0,0,0,6"/>
+                                        <TextBox Text="{Binding NewPasswordHash}"
+                                                 PlaceholderText="Şifre girin"
+                                                 PasswordChar="•"
+                                                 Height="38" FontSize="13"
+                                                 Background="White" Foreground="#111111"
+                                                 BorderBrush="#DDDDDD" BorderThickness="1"
+                                                 CornerRadius="6" Padding="10,0"
+                                                 Margin="0,0,0,12"/>
+
+                                        <TextBlock Text="Rol" FontSize="12"
+                                                   Foreground="#555555" Margin="0,0,0,6"/>
+                                        <ComboBox ItemsSource="{Binding RoleIds}"
+                                                  SelectedItem="{Binding NewRoleId}"
+                                                  HorizontalAlignment="Stretch"
+                                                  Height="38" FontSize="13"
+                                                  Margin="0,0,0,16"/>
+
+                                        <Button Content="Personel Ekle"
+                                                Command="{Binding CreateStaffCommand}"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Center"
+                                                Height="42" FontSize="13" FontWeight="Medium"
+                                                Background="#E8182E" Foreground="White"
+                                                CornerRadius="8" Margin="0,0,0,8"/>
+
+                                        <Border Height="1" Background="#EEEEEE" Margin="0,8,0,16"/>
+
+                                        <TextBlock Text="ROL GÜNCELLE"
+                                                   FontSize="10" Foreground="#999999"
+                                                   LetterSpacing="1" Margin="0,0,0,12"/>
+
+                                        <Border Background="White" CornerRadius="8"
+                                                Padding="14,10" Margin="0,0,0,12"
+                                                IsVisible="{Binding SelectedStaff,
+                                                            Converter={x:Static ObjectConverters.IsNotNull}}">
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="{Binding SelectedStaff.FullName}"
+                                                           FontSize="13" FontWeight="Medium"
+                                                           Foreground="#111111"/>
+                                                <TextBlock Text="{Binding SelectedStaff.RoleId, StringFormat='Mevcut Rol: {0}'}"
+                                                           FontSize="12" Foreground="#555555"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Button Content="Rolü Güncelle"
+                                                Command="{Binding UpdateStaffRoleCommand}"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Center"
+                                                Height="42" FontSize="13" FontWeight="Medium"
+                                                Background="#555555" Foreground="White"
+                                                CornerRadius="8" Margin="0,0,0,8"/>
+
+                                        <Border Height="1" Background="#EEEEEE" Margin="0,16,0,16"/>
+
+                                        <TextBlock Text="BİRİM ATA"
+                                                   FontSize="10" Foreground="#999999"
+                                                   LetterSpacing="1" Margin="0,0,0,12"/>
+
+                                        <TextBlock Text="Birim Seç" FontSize="12"
+                                                   Foreground="#555555" Margin="0,0,0,6"/>
+                                        <ComboBox ItemsSource="{Binding Units}"
+                                                  SelectedItem="{Binding SelectedUnitForStaff}"
+                                                  PlaceholderText="Birim seçin"
+                                                  HorizontalAlignment="Stretch"
+                                                  Height="38" FontSize="13"
+                                                  Margin="0,0,0,16">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate x:DataType="models:OrgUnit">
+                                                    <TextBlock Text="{Binding UnitName}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+
+                                        <Button Content="Birime Ata"
+                                                Command="{Binding AssignStaffToUnitCommand}"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Center"
+                                                Height="42" FontSize="13" FontWeight="Medium"
+                                                Background="#0369A1" Foreground="White"
+                                                CornerRadius="8"/>
+
+                                        <!-- Mesajlar -->
+                                        <Border Background="#FEF2F2" BorderBrush="#FECACA"
+                                                BorderThickness="1" CornerRadius="8"
+                                                Padding="12,10" Margin="0,12,0,0"
+                                                IsVisible="{Binding ErrorMessage,
+                                                            Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                            <TextBlock Text="{Binding ErrorMessage}"
+                                                       Foreground="#B91C1C" FontSize="12"
+                                                       TextWrapping="Wrap"/>
+                                        </Border>
+                                        <Border Background="#F0FDF4" BorderBrush="#BBF7D0"
+                                                BorderThickness="1" CornerRadius="8"
+                                                Padding="12,10" Margin="0,8,0,0"
+                                                IsVisible="{Binding SuccessMessage,
+                                                            Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                            <TextBlock Text="{Binding SuccessMessage}"
+                                                       Foreground="#15803D" FontSize="12"
+                                                       TextWrapping="Wrap"/>
+                                        </Border>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Border>
+
+                        </Grid>
+                    </TabItem>
+
+                    <!-- AKTİVİTE LOGU SEKMESI -->
+                    <TabItem Header="Aktivite Logu">
+                        <DockPanel Margin="0,16,0,0">
+                            <TextBlock DockPanel.Dock="Top"
+                                       Text="Sistem Aktivite Logu"
+                                       FontSize="13" FontWeight="Medium"
+                                       Foreground="#111111" Margin="0,0,0,12"/>
+                            <DataGrid ItemsSource="{Binding ActivityLogs}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      CanUserReorderColumns="False"
+                                      GridLinesVisibility="Horizontal"
+                                      BorderThickness="1"
+                                      BorderBrush="#EEEEEE">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Log ID"
+                                                        Binding="{Binding LogId}"
+                                                        Width="70"/>
+                                    <DataGridTextColumn Header="Başvuru No"
+                                                        Binding="{Binding RequestId}"
+                                                        Width="90"/>
+                                    <DataGridTextColumn Header="Eski Durum"
+                                                        Binding="{Binding OldStatus}"
+                                                        Width="150"/>
+                                    <DataGridTextColumn Header="Yeni Durum"
+                                                        Binding="{Binding NewStatus}"
+                                                        Width="150"/>
+                                    <DataGridTextColumn Header="Değiştiren"
+                                                        Binding="{Binding ChangedBy}"
+                                                        Width="150"/>
+                                    <DataGridTextColumn Header="Tarih"
+                                                        Binding="{Binding ChangedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
+                                                        Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </TabItem>
+
+                </TabControl>
+            </Border>
+        </Grid>
+
+    </DockPanel>
 </Window>

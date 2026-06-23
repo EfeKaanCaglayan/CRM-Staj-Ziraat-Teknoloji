@@ -2,6 +2,8 @@ namespace ZTCRM.Models;
 
 public class ServiceRequest
 {
+    public string? StaffName { get; set; }
+    public string? ResolutionNote { get; set; }
     public string? CustomerName { get; set; }
     public int RequestId       { get; set; }
     public int CustomerId      { get; set; }

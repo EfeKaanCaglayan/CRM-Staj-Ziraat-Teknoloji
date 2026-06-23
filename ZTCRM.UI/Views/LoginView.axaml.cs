@@ -39,7 +39,7 @@ public partial class LoginView : Window
                        "Admin"    => new AdminView(),
                        "Operator" => new OperatorView(staff),
                        "Staff"    => new StaffView(staff),
-                       "Manager"  => new ManagerView(),
+                       "Manager"  => new ManagerView(staff),
                        _          => new OperatorView(staff)
                    };
                    nextWindow.Show();
