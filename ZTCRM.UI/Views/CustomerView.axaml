@@ -208,28 +208,34 @@
                             </StackPanel>
                         </Border>
 
-                        <DataGrid ItemsSource="{Binding Requests}"
+                        <DataGrid Sorting="RequestsGrid_Sorting"
+                                  ItemsSource="{Binding Requests}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
+                                  CanUserSortColumns="True"
                                   CanUserReorderColumns="False"
                                   GridLinesVisibility="Horizontal"
                                   BorderThickness="0">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="No"
                                                     Binding="{Binding RequestId}"
-                                                    Width="55"/>
+                                                    Width="55"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Tür"
                                                     Binding="{Binding RequestType}"
-                                                    Width="130"/>
+                                                    Width="130"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Açıklama"
                                                     Binding="{Binding Description}"
                                                     Width="*"/>
                                 <DataGridTextColumn Header="Durum"
                                                     Binding="{Binding CurrentStatus}"
-                                                    Width="90"/>
+                                                    Width="90"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Tarih"
                                                     Binding="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy}'}"
-                                                    Width="90"/>
+                                                    Width="90"
+                                                    CanUserSort="True"/>
                                 <DataGridTemplateColumn Header="Detay" Width="70">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate x:DataType="models:ServiceRequest">

@@ -92,10 +92,7 @@
                                 BorderThickness="0,0,0,2" BorderBrush="#E8182E"
                                 Padding="0,0,0,16" Margin="0,0,0,20">
                             <StackPanel Orientation="Horizontal" Spacing="12">
-                                <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
-                                    <PathIcon Width="16" Height="16" Foreground="White"
-                                              Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                </Border>
+                                <Image Source="/Assets/Logo2.png" Width="36" Height="36"/>
                                 <StackPanel VerticalAlignment="Center" Spacing="2">
                                     <TextBlock Text="Onay Bekleyen Başvurular"
                                                FontSize="14" FontWeight="Medium"
@@ -106,35 +103,44 @@
                             </StackPanel>
                         </Border>
 
-                        <DataGrid ItemsSource="{Binding Requests}"
+                        <DataGrid Sorting="RequestsGrid_Sorting"
+                                  ItemsSource="{Binding Requests}"
                                   SelectedItem="{Binding SelectedRequest}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
+                                  CanUserSortColumns="True"
                                   CanUserReorderColumns="False"
                                   GridLinesVisibility="Horizontal"
                                   BorderThickness="0">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="No"
                                                     Binding="{Binding RequestId}"
-                                                    Width="55"/>
+                                                    Width="55"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Müşteri"
                                                     Binding="{Binding CustomerName}"
-                                                    Width="130"/>
+                                                    Width="130"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Personel"
                                                     Binding="{Binding StaffName}"
-                                                    Width="130"/>
+                                                    Width="130"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Kategori"
                                                     Binding="{Binding CategoryName}"
-                                                    Width="150"/>
+                                                    Width="150"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Öncelik"
                                                     Binding="{Binding Priority}"
-                                                    Width="80"/>
+                                                    Width="80"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Durum"
                                                     Binding="{Binding CurrentStatus}"
-                                                    Width="100"/>
+                                                    Width="100"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Tarih"
                                                     Binding="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy}'}"
-                                                    Width="100"/>
+                                                    Width="100"
+                                                    CanUserSort="True"/>
                                 <DataGridTemplateColumn Header="Detay" Width="80">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate x:DataType="models:ServiceRequest">
@@ -178,7 +184,6 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Seçili başvuru bilgisi -->
                             <Border Background="#F8F8F8" CornerRadius="8"
                                     Padding="14,10" Margin="0,0,0,16"
                                     IsVisible="{Binding SelectedRequest,
@@ -197,7 +202,6 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Personelin çözüm notu -->
                             <Border Background="#F0F9FF" BorderBrush="#BAE6FD"
                                     BorderThickness="1" CornerRadius="8"
                                     Padding="14,10" Margin="0,0,0,16"
@@ -212,7 +216,6 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Yönetici notu -->
                             <TextBlock Text="Yönetici Notu" FontSize="12"
                                        Foreground="#555555" Margin="0,0,0,6"/>
                             <TextBox PlaceholderText="Onay veya ret gerekçenizi yazın..."
@@ -224,7 +227,6 @@
                                      AcceptsReturn="True" TextWrapping="Wrap"
                                      Margin="0,0,0,16"/>
 
-                            <!-- Butonlar -->
                             <Grid ColumnDefinitions="*,*" Margin="0,0,0,12">
                                 <Button Grid.Column="0" Content="Onayla"
                                         Command="{Binding ApproveCommand}"
@@ -242,7 +244,6 @@
                                         CornerRadius="8"/>
                             </Grid>
 
-                            <!-- Mesajlar -->
                             <Border Background="#FEF2F2" BorderBrush="#FECACA"
                                     BorderThickness="1" CornerRadius="8"
                                     Padding="12,10" Margin="0,0,0,8"

@@ -1,10 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "MZ+tyd2tR9U=",
+  "dgSpecHash": "aglKqsbErgw=",
   "success": true,
   "projectFilePath": "/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.ViewModels/ZTCRM.ViewModels.csproj",
   "expectedPackageFiles": [
+    "/Users/efekaancaglayan/.nuget/packages/avalonia/12.0.5/avalonia.12.0.5.nupkg.sha512",
+    "/Users/efekaancaglayan/.nuget/packages/avalonia.buildservices/11.3.2/avalonia.buildservices.11.3.2.nupkg.sha512",
+    "/Users/efekaancaglayan/.nuget/packages/avalonia.controls.datagrid/12.0.0/avalonia.controls.datagrid.12.0.0.nupkg.sha512",
+    "/Users/efekaancaglayan/.nuget/packages/avalonia.remote.protocol/12.0.5/avalonia.remote.protocol.12.0.5.nupkg.sha512",
     "/Users/efekaancaglayan/.nuget/packages/communitytoolkit.mvvm/8.4.2/communitytoolkit.mvvm.8.4.2.nupkg.sha512",
+    "/Users/efekaancaglayan/.nuget/packages/microcom.runtime/0.11.4/microcom.runtime.0.11.4.nupkg.sha512",
     "/Users/efekaancaglayan/.nuget/packages/oracle.manageddataaccess.core/23.26.200/oracle.manageddataaccess.core.23.26.200.nupkg.sha512",
     "/Users/efekaancaglayan/.nuget/packages/system.configuration.configurationmanager/8.0.0/system.configuration.configurationmanager.8.0.0.nupkg.sha512",
     "/Users/efekaancaglayan/.nuget/packages/system.diagnostics.eventlog/8.0.0/system.diagnostics.eventlog.8.0.0.nupkg.sha512",

@@ -18,3 +18,4 @@
 /Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.ViewModels/bin/Debug/net10.0/ZTCRM.Data.pdb
 /Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.ViewModels/obj/Debug/net10.0/ZTCRM.ViewModels.csproj.AssemblyReference.cache
 /Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.ViewModels/obj/Debug/net10.0/ZTCRM.Vi.F3ACA3CD.Up2Date
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.ViewModels/obj/Debug/net10.0/Avalonia/Resources.Inputs.cache

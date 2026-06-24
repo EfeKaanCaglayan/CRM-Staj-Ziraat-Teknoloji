@@ -28,7 +28,7 @@
                 <StackPanel Grid.Column="2" Orientation="Horizontal"
                             Spacing="12" VerticalAlignment="Center">
                     <TextBlock Text="{Binding WelcomeMessage}"
-                               Foreground="White" FontSize="12"  FontWeight="Medium"/>
+                               Foreground="White" FontSize="12" FontWeight="Medium"/>
                     <TextBlock Text="|" Foreground="#3A3A3A" FontSize="11"/>
                     <TextBlock Text="v1.0.0" Foreground="#444444" FontSize="11"/>
                     <TextBlock Text="|" Foreground="#3A3A3A" FontSize="11"/>
@@ -41,7 +41,6 @@
                             CornerRadius="6"
                             VerticalAlignment="Center"
                             BorderThickness="0"/>
-                 
                 </StackPanel>
             </Grid>
         </Border>
@@ -116,32 +115,39 @@
                                 Background="#E8182E" Foreground="White"
                                 CornerRadius="8" Margin="0,16,0,0"/>
 
-                        <DataGrid ItemsSource="{Binding PoolRequests}"
+                        <DataGrid Sorting="PoolGrid_Sorting"
+                                  ItemsSource="{Binding PoolRequests}"
                                   SelectedItem="{Binding SelectedPoolRequest}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
+                                  CanUserSortColumns="True"
                                   CanUserReorderColumns="False"
                                   GridLinesVisibility="Horizontal"
                                   BorderThickness="0">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="No"
                                                     Binding="{Binding RequestId}"
-                                                    Width="55"/>
+                                                    Width="55"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Müşteri"
                                                     Binding="{Binding CustomerName}"
-                                                    Width="130"/>
+                                                    Width="130"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Kategori"
                                                     Binding="{Binding CategoryName}"
-                                                    Width="*"/>
+                                                    Width="*"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Öncelik"
                                                     Binding="{Binding Priority}"
-                                                    Width="80"/>
+                                                    Width="80"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Açıklama"
                                                     Binding="{Binding Description}"
                                                     Width="*"/>
                                 <DataGridTextColumn Header="Tarih"
                                                     Binding="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy}'}"
-                                                    Width="100"/>
+                                                    Width="100"
+                                                    CanUserSort="True"/>
                                 <DataGridTemplateColumn Header="Detay" Width="70">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate x:DataType="models:ServiceRequest">
@@ -188,29 +194,36 @@
                                 </StackPanel>
                             </Border>
 
-                            <DataGrid ItemsSource="{Binding MyRequests}"
+                            <DataGrid Sorting="MyRequestsGrid_Sorting"
+                                      ItemsSource="{Binding MyRequests}"
                                       SelectedItem="{Binding SelectedMyRequest}"
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True"
+                                      CanUserSortColumns="True"
                                       CanUserReorderColumns="False"
                                       GridLinesVisibility="Horizontal"
                                       BorderThickness="0">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="No"
                                                         Binding="{Binding RequestId}"
-                                                        Width="55"/>
+                                                        Width="55"
+                                                        CanUserSort="True"/>
                                     <DataGridTextColumn Header="Müşteri"
                                                         Binding="{Binding CustomerName}"
-                                                        Width="*"/>
+                                                        Width="*"
+                                                        CanUserSort="True"/>
                                     <DataGridTextColumn Header="Kategori"
                                                         Binding="{Binding CategoryName}"
-                                                        Width="130"/>
+                                                        Width="130"
+                                                        CanUserSort="True"/>
                                     <DataGridTextColumn Header="Öncelik"
                                                         Binding="{Binding Priority}"
-                                                        Width="80"/>
+                                                        Width="80"
+                                                        CanUserSort="True"/>
                                     <DataGridTextColumn Header="Durum"
                                                         Binding="{Binding CurrentStatus}"
-                                                        Width="120"/>
+                                                        Width="120"
+                                                        CanUserSort="True"/>
                                     <DataGridTemplateColumn Header="Detay" Width="70">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate x:DataType="models:ServiceRequest">

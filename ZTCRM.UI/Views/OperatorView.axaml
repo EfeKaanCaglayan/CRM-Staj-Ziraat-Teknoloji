@@ -88,7 +88,6 @@
                     <Border.BoxShadow>0 8 40 0 #40000000</Border.BoxShadow>
                     <DockPanel>
 
-                        <!-- Başlık -->
                         <Border DockPanel.Dock="Top"
                                 BorderThickness="0,0,0,2" BorderBrush="#E8182E"
                                 Padding="0,0,0,16" Margin="0,0,0,20">
@@ -107,26 +106,31 @@
                             </StackPanel>
                         </Border>
 
-                        <DataGrid ItemsSource="{Binding Requests}"
+                        <DataGrid Sorting="RequestsGrid_Sorting"
+                                  ItemsSource="{Binding Requests}"
                                   SelectedItem="{Binding SelectedRequest}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
+                                  CanUserSortColumns="True"
                                   CanUserReorderColumns="False"
                                   GridLinesVisibility="Horizontal"
                                   BorderThickness="0">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="No"
                                                     Binding="{Binding RequestId}"
-                                                    Width="55"/>
+                                                    Width="55"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Müşteri"
                                                     Binding="{Binding CustomerName}"
-                                                    Width="140"/>
+                                                    Width="140"
+                                                    CanUserSort="True"/>
                                 <DataGridTextColumn Header="Açıklama"
                                                     Binding="{Binding Description}"
                                                     Width="*"/>
                                 <DataGridTextColumn Header="Tarih"
                                                     Binding="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy}'}"
-                                                    Width="110"/>
+                                                    Width="110"
+                                                    CanUserSort="True"/>
                                 <DataGridTemplateColumn Header="Detay" Width="80">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate x:DataType="models:ServiceRequest">
@@ -140,7 +144,6 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                
                             </DataGrid.Columns>
                         </DataGrid>
 
@@ -154,7 +157,6 @@
                     <ScrollViewer>
                         <StackPanel Spacing="0">
 
-                            <!-- Başlık -->
                             <Border BorderThickness="0,0,0,2" BorderBrush="#E8182E"
                                     Padding="0,0,0,16" Margin="0,0,0,20">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
@@ -172,7 +174,6 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Seçili başvuru bilgisi -->
                             <Border Background="#F8F8F8" CornerRadius="8"
                                     Padding="14,10" Margin="0,0,0,16"
                                     IsVisible="{Binding SelectedRequest,
@@ -187,7 +188,6 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Kategori -->
                             <TextBlock Text="Kategori" FontSize="12"
                                        Foreground="#555555" Margin="0,0,0,6"/>
                             <ComboBox ItemsSource="{Binding Categories}"
@@ -203,7 +203,6 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
 
-                            <!-- Öncelik -->
                             <TextBlock Text="Öncelik" FontSize="12"
                                        Foreground="#555555" Margin="0,0,0,6"/>
                             <ComboBox ItemsSource="{Binding Priorities}"
@@ -213,7 +212,6 @@
                                       Height="38" FontSize="13"
                                       Margin="0,0,0,14"/>
 
-                            <!-- Kategorize Et + Havuza Ekle -->
                             <Button Content="Havuza Ekle"
                                     Command="{Binding CategorizeAndPoolCommand}"
                                     HorizontalAlignment="Stretch"
@@ -222,12 +220,8 @@
                                     Background="#E8182E" Foreground="White"
                                     CornerRadius="8" Margin="0,0,0,8"/>
 
-                           
-
-                            <!-- Ayırıcı -->
                             <Border Height="1" Background="#EEEEEE" Margin="0,0,0,20"/>
 
-                            <!-- Red Alanı -->
                             <TextBlock Text="BAŞVURUYU REDDET"
                                        FontSize="10" Foreground="#999999"
                                        LetterSpacing="1" Margin="0,0,0,12"/>
@@ -260,7 +254,6 @@
                                     Background="#555555" Foreground="White"
                                     CornerRadius="8"/>
 
-                            <!-- Mesajlar -->
                             <Border Background="#FEF2F2" BorderBrush="#FECACA"
                                     BorderThickness="1" CornerRadius="8"
                                     Padding="12,10" Margin="0,12,0,0"

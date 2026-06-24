@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
@@ -13,7 +12,7 @@ public partial class ManagerViewModel : ObservableObject
 
     public string WelcomeMessage => $"Hoş geldiniz, {_manager.FullName}";
 
-    [ObservableProperty] private ObservableCollection<ServiceRequest> _requests = new();
+    [ObservableProperty] private List<ServiceRequest> _requests = new();
     [ObservableProperty] private ServiceRequest? _selectedRequest;
     [ObservableProperty] private string _managerNote = string.Empty;
     [ObservableProperty] private string _errorMessage = string.Empty;
@@ -29,8 +28,7 @@ public partial class ManagerViewModel : ObservableObject
     {
         try
         {
-            var list = _repository.GetPendingApproval(_manager.StaffId);
-            Requests = new ObservableCollection<ServiceRequest>(list);
+            Requests = _repository.GetPendingApproval(_manager.StaffId);
         }
         catch (Exception ex)
         {

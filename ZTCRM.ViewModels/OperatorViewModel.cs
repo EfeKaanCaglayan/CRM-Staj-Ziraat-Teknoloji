@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
@@ -13,16 +12,16 @@ public partial class OperatorViewModel : ObservableObject
 
     public string WelcomeMessage => $"Hoş geldiniz, {_operator.FullName}";
 
-    [ObservableProperty] private ObservableCollection<ServiceRequest> _requests = new();
+    [ObservableProperty] private List<ServiceRequest> _requests = new();
     [ObservableProperty] private ServiceRequest? _selectedRequest;
-    [ObservableProperty] private ObservableCollection<Category> _categories = new();
+    [ObservableProperty] private List<Category> _categories = new();
     [ObservableProperty] private Category? _selectedCategory;
     [ObservableProperty] private string _selectedPriority = string.Empty;
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private string _successMessage = string.Empty;
 
     public List<string> Priorities { get; } = new() { "Düşük", "Orta", "Yüksek" };
-    public List<string> RejectionTypes { get; } = new() { "Eksik Bilgi", "Kapsam Dışı", "Mükerrer", "Diğer" };    
+    public List<string> RejectionTypes { get; } = new() { "Eksik Bilgi", "Kapsam Dışı", "Mükerrer", "Diğer" };
     [ObservableProperty] private string _selectedRejectionType = string.Empty;
     [ObservableProperty] private string _rejectionReason = string.Empty;
 
@@ -37,8 +36,7 @@ public partial class OperatorViewModel : ObservableObject
     {
         try
         {
-            var list = _repository.GetPending();
-            Requests = new ObservableCollection<ServiceRequest>(list);
+            Requests = _repository.GetPending();
         }
         catch (Exception ex)
         {
@@ -48,8 +46,7 @@ public partial class OperatorViewModel : ObservableObject
 
     private void LoadCategories()
     {
-        var list = _repository.GetCategories();
-        Categories = new ObservableCollection<Category>(list);
+        Categories = _repository.GetCategories();
     }
 
     [RelayCommand]
@@ -97,8 +94,6 @@ public partial class OperatorViewModel : ObservableObject
         }
     }
 
-   
-
     [RelayCommand]
     private void Reject()
     {
@@ -112,18 +107,17 @@ public partial class OperatorViewModel : ObservableObject
                 ErrorMessage = "Lütfen bir başvuru seçin.";
                 return;
             }
-
             if (string.IsNullOrWhiteSpace(SelectedRejectionType))
             {
                 ErrorMessage = "Lütfen red sebebi türü seçin.";
                 return;
             }
-
             if (string.IsNullOrWhiteSpace(RejectionReason))
             {
                 ErrorMessage = "Lütfen red sebebi açıklaması girin.";
                 return;
             }
+
             var mappedType = SelectedRejectionType switch
             {
                 "Eksik Bilgi" => "MissingInfo",

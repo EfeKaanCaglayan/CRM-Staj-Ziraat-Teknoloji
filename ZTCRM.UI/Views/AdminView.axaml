@@ -44,6 +44,7 @@
                 </StackPanel>
             </Grid>
         </Border>
+
         <!-- Kırmızı çizgi -->
         <Border DockPanel.Dock="Top" Height="3" Background="#E8182E"/>
         <Border DockPanel.Dock="Top" Height="1" Background="#3A3A3A"/>
@@ -88,17 +89,18 @@
                     <TabItem Header="Birimler">
                         <Grid ColumnDefinitions="*,380" Margin="0,16,0,0">
 
-                            <!-- Sol: Birim Listesi -->
                             <Border Grid.Column="0" Margin="0,0,16,0">
                                 <DockPanel>
                                     <TextBlock DockPanel.Dock="Top"
                                                Text="Mevcut Birimler"
                                                FontSize="13" FontWeight="Medium"
                                                Foreground="#111111" Margin="0,0,0,12"/>
-                                    <DataGrid ItemsSource="{Binding Units}"
+                                    <DataGrid Sorting="UnitsGrid_Sorting"
+                                              ItemsSource="{Binding Units}"
                                               SelectedItem="{Binding SelectedUnit}"
                                               AutoGenerateColumns="False"
                                               IsReadOnly="True"
+                                              CanUserSortColumns="True"
                                               CanUserReorderColumns="False"
                                               GridLinesVisibility="Horizontal"
                                               BorderThickness="1"
@@ -106,29 +108,31 @@
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="ID"
                                                                 Binding="{Binding UnitId}"
-                                                                Width="55"/>
+                                                                Width="55"
+                                                                CanUserSort="True"/>
                                             <DataGridTextColumn Header="Birim Adı"
                                                                 Binding="{Binding UnitName}"
-                                                                Width="*"/>
+                                                                Width="*"
+                                                                CanUserSort="True"/>
                                             <DataGridTextColumn Header="Tip"
                                                                 Binding="{Binding UnitType}"
-                                                                Width="110"/>
+                                                                Width="110"
+                                                                CanUserSort="True"/>
                                             <DataGridTextColumn Header="Aktif"
                                                                 Binding="{Binding IsActiveText}"
-                                                                Width="70"/>
+                                                                Width="70"
+                                                                CanUserSort="True"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DockPanel>
                             </Border>
 
-                            <!-- Sağ: Birim İşlemleri -->
                             <Border Grid.Column="1" Background="#F8F8F8"
                                     CornerRadius="8" Padding="20">
                                 <StackPanel Spacing="0">
                                     <TextBlock Text="YENİ BİRİM EKLE"
                                                FontSize="10" Foreground="#999999"
                                                LetterSpacing="1" Margin="0,0,0,16"/>
-
                                     <TextBlock Text="Birim Adı" FontSize="12"
                                                Foreground="#555555" Margin="0,0,0,6"/>
                                     <TextBox Text="{Binding NewUnitName}"
@@ -138,7 +142,6 @@
                                              BorderBrush="#DDDDDD" BorderThickness="1"
                                              CornerRadius="6" Padding="10,0"
                                              Margin="0,0,0,12"/>
-
                                     <TextBlock Text="Birim Tipi" FontSize="12"
                                                Foreground="#555555" Margin="0,0,0,6"/>
                                     <ComboBox ItemsSource="{Binding UnitTypes}"
@@ -147,7 +150,6 @@
                                               HorizontalAlignment="Stretch"
                                               Height="38" FontSize="13"
                                               Margin="0,0,0,16"/>
-
                                     <Button Content="Birim Ekle"
                                             Command="{Binding CreateUnitCommand}"
                                             HorizontalAlignment="Stretch"
@@ -155,13 +157,10 @@
                                             Height="42" FontSize="13" FontWeight="Medium"
                                             Background="#E8182E" Foreground="White"
                                             CornerRadius="8" Margin="0,0,0,8"/>
-
                                     <Border Height="1" Background="#EEEEEE" Margin="0,8,0,16"/>
-
                                     <TextBlock Text="SEÇİLİ BİRİM"
                                                FontSize="10" Foreground="#999999"
                                                LetterSpacing="1" Margin="0,0,0,12"/>
-
                                     <Border Background="White" CornerRadius="8"
                                             Padding="14,10" Margin="0,0,0,12"
                                             IsVisible="{Binding SelectedUnit,
@@ -174,7 +173,6 @@
                                                        FontSize="12" Foreground="#555555"/>
                                         </StackPanel>
                                     </Border>
-
                                     <Button Content="Birimi Pasife Al"
                                             Command="{Binding DeactivateUnitCommand}"
                                             HorizontalAlignment="Stretch"
@@ -182,8 +180,6 @@
                                             Height="42" FontSize="13" FontWeight="Medium"
                                             Background="#555555" Foreground="White"
                                             CornerRadius="8"/>
-
-                                    <!-- Mesajlar -->
                                     <Border Background="#FEF2F2" BorderBrush="#FECACA"
                                             BorderThickness="1" CornerRadius="8"
                                             Padding="12,10" Margin="0,12,0,0"
@@ -212,17 +208,18 @@
                     <TabItem Header="Personel">
                         <Grid ColumnDefinitions="*,400" Margin="0,16,0,0">
 
-                            <!-- Sol: Personel Listesi -->
                             <Border Grid.Column="0" Margin="0,0,16,0">
                                 <DockPanel>
                                     <TextBlock DockPanel.Dock="Top"
                                                Text="Mevcut Personel"
                                                FontSize="13" FontWeight="Medium"
                                                Foreground="#111111" Margin="0,0,0,12"/>
-                                    <DataGrid ItemsSource="{Binding StaffList}"
+                                    <DataGrid Sorting="StaffGrid_Sorting"
+                                              ItemsSource="{Binding StaffList}"
                                               SelectedItem="{Binding SelectedStaff}"
                                               AutoGenerateColumns="False"
                                               IsReadOnly="True"
+                                              CanUserSortColumns="True"
                                               CanUserReorderColumns="False"
                                               GridLinesVisibility="Horizontal"
                                               BorderThickness="1"
@@ -230,28 +227,33 @@
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="ID"
                                                                 Binding="{Binding StaffId}"
-                                                                Width="55"/>
+                                                                Width="55"
+                                                                CanUserSort="True"/>
                                             <DataGridTextColumn Header="Ad Soyad"
                                                                 Binding="{Binding FullName}"
-                                                                Width="*"/>
+                                                                Width="*"
+                                                                CanUserSort="True"/>
                                             <DataGridTextColumn Header="Kullanıcı Adı"
                                                                 Binding="{Binding Username}"
-                                                                Width="150"/>
+                                                                Width="150"
+                                                                CanUserSort="True"/>
                                             <DataGridTextColumn Header="Rol"
                                                                 Binding="{Binding RoleId}"
-                                                                Width="70"/>
+                                                                Width="70"
+                                                                CanUserSort="True"/>
                                             <DataGridTextColumn Header="Birim"
                                                                 Binding="{Binding UnitName}"
-                                                                Width="*"/>
+                                                                Width="*"
+                                                                CanUserSort="True"/>
                                             <DataGridTextColumn Header="Aktif"
                                                                 Binding="{Binding IsActiveText}"
-                                                                Width="70"/>
+                                                                Width="70"
+                                                                CanUserSort="True"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DockPanel>
                             </Border>
 
-                            <!-- Sağ: Personel İşlemleri -->
                             <Border Grid.Column="1" Background="#F8F8F8"
                                     CornerRadius="8" Padding="20">
                                 <ScrollViewer>
@@ -259,7 +261,6 @@
                                         <TextBlock Text="YENİ PERSONEL EKLE"
                                                    FontSize="10" Foreground="#999999"
                                                    LetterSpacing="1" Margin="0,0,0,16"/>
-
                                         <TextBlock Text="Ad Soyad" FontSize="12"
                                                    Foreground="#555555" Margin="0,0,0,6"/>
                                         <TextBox Text="{Binding NewFullName}"
@@ -269,7 +270,6 @@
                                                  BorderBrush="#DDDDDD" BorderThickness="1"
                                                  CornerRadius="6" Padding="10,0"
                                                  Margin="0,0,0,12"/>
-
                                         <TextBlock Text="Kullanıcı Adı" FontSize="12"
                                                    Foreground="#555555" Margin="0,0,0,6"/>
                                         <TextBox Text="{Binding NewUsername}"
@@ -279,7 +279,6 @@
                                                  BorderBrush="#DDDDDD" BorderThickness="1"
                                                  CornerRadius="6" Padding="10,0"
                                                  Margin="0,0,0,12"/>
-
                                         <TextBlock Text="Şifre" FontSize="12"
                                                    Foreground="#555555" Margin="0,0,0,6"/>
                                         <TextBox Text="{Binding NewPasswordHash}"
@@ -290,7 +289,6 @@
                                                  BorderBrush="#DDDDDD" BorderThickness="1"
                                                  CornerRadius="6" Padding="10,0"
                                                  Margin="0,0,0,12"/>
-
                                         <TextBlock Text="Rol" FontSize="12"
                                                    Foreground="#555555" Margin="0,0,0,6"/>
                                         <ComboBox ItemsSource="{Binding RoleIds}"
@@ -298,7 +296,6 @@
                                                   HorizontalAlignment="Stretch"
                                                   Height="38" FontSize="13"
                                                   Margin="0,0,0,16"/>
-
                                         <Button Content="Personel Ekle"
                                                 Command="{Binding CreateStaffCommand}"
                                                 HorizontalAlignment="Stretch"
@@ -306,13 +303,10 @@
                                                 Height="42" FontSize="13" FontWeight="Medium"
                                                 Background="#E8182E" Foreground="White"
                                                 CornerRadius="8" Margin="0,0,0,8"/>
-
                                         <Border Height="1" Background="#EEEEEE" Margin="0,8,0,16"/>
-
                                         <TextBlock Text="ROL GÜNCELLE"
                                                    FontSize="10" Foreground="#999999"
                                                    LetterSpacing="1" Margin="0,0,0,12"/>
-
                                         <Border Background="White" CornerRadius="8"
                                                 Padding="14,10" Margin="0,0,0,12"
                                                 IsVisible="{Binding SelectedStaff,
@@ -325,7 +319,6 @@
                                                            FontSize="12" Foreground="#555555"/>
                                             </StackPanel>
                                         </Border>
-
                                         <Button Content="Rolü Güncelle"
                                                 Command="{Binding UpdateStaffRoleCommand}"
                                                 HorizontalAlignment="Stretch"
@@ -333,13 +326,10 @@
                                                 Height="42" FontSize="13" FontWeight="Medium"
                                                 Background="#555555" Foreground="White"
                                                 CornerRadius="8" Margin="0,0,0,8"/>
-
                                         <Border Height="1" Background="#EEEEEE" Margin="0,16,0,16"/>
-
                                         <TextBlock Text="BİRİM ATA"
                                                    FontSize="10" Foreground="#999999"
                                                    LetterSpacing="1" Margin="0,0,0,12"/>
-
                                         <TextBlock Text="Birim Seç" FontSize="12"
                                                    Foreground="#555555" Margin="0,0,0,6"/>
                                         <ComboBox ItemsSource="{Binding Units}"
@@ -354,7 +344,6 @@
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
-
                                         <Button Content="Birime Ata"
                                                 Command="{Binding AssignStaffToUnitCommand}"
                                                 HorizontalAlignment="Stretch"
@@ -362,8 +351,6 @@
                                                 Height="42" FontSize="13" FontWeight="Medium"
                                                 Background="#0369A1" Foreground="White"
                                                 CornerRadius="8"/>
-
-                                        <!-- Mesajlar -->
                                         <Border Background="#FEF2F2" BorderBrush="#FECACA"
                                                 BorderThickness="1" CornerRadius="8"
                                                 Padding="12,10" Margin="0,12,0,0"
@@ -396,9 +383,11 @@
                                        Text="Sistem Aktivite Logu"
                                        FontSize="13" FontWeight="Medium"
                                        Foreground="#111111" Margin="0,0,0,12"/>
-                            <DataGrid ItemsSource="{Binding ActivityLogs}"
+                            <DataGrid Sorting="ActivityGrid_Sorting"
+                                      ItemsSource="{Binding ActivityLogs}"
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True"
+                                      CanUserSortColumns="True"
                                       CanUserReorderColumns="False"
                                       GridLinesVisibility="Horizontal"
                                       BorderThickness="1"
@@ -406,22 +395,28 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Log ID"
                                                         Binding="{Binding LogId}"
-                                                        Width="70"/>
+                                                        Width="70"
+                                                        CanUserSort="True"/>
                                     <DataGridTextColumn Header="Başvuru No"
                                                         Binding="{Binding RequestId}"
-                                                        Width="90"/>
+                                                        Width="90"
+                                                        CanUserSort="True"/>
                                     <DataGridTextColumn Header="Eski Durum"
                                                         Binding="{Binding OldStatus}"
-                                                        Width="150"/>
+                                                        Width="150"
+                                                        CanUserSort="True"/>
                                     <DataGridTextColumn Header="Yeni Durum"
                                                         Binding="{Binding NewStatus}"
-                                                        Width="150"/>
+                                                        Width="150"
+                                                        CanUserSort="True"/>
                                     <DataGridTextColumn Header="Değiştiren"
                                                         Binding="{Binding ChangedBy}"
-                                                        Width="200"/>
+                                                        Width="200"
+                                                        CanUserSort="True"/>
                                     <DataGridTextColumn Header="Tarih"
                                                         Binding="{Binding ChangedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
-                                                        Width="*"/>
+                                                        Width="*"
+                                                        CanUserSort="True"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </DockPanel>

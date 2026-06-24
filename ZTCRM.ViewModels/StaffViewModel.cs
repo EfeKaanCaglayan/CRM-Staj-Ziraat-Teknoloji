@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
@@ -13,8 +12,8 @@ public partial class StaffViewModel : ObservableObject
 
     public string WelcomeMessage => $"Hoş geldiniz, {_staff.FullName} | {_staff.UnitName ?? "Birim atanmadı"}";
 
-    [ObservableProperty] private ObservableCollection<ServiceRequest> _poolRequests = new();
-    [ObservableProperty] private ObservableCollection<ServiceRequest> _myRequests = new();
+    [ObservableProperty] private List<ServiceRequest> _poolRequests = new();
+    [ObservableProperty] private List<ServiceRequest> _myRequests = new();
     [ObservableProperty] private ServiceRequest? _selectedPoolRequest;
     [ObservableProperty] private ServiceRequest? _selectedMyRequest;
     [ObservableProperty] private string _resolutionNote = string.Empty;
@@ -32,16 +31,11 @@ public partial class StaffViewModel : ObservableObject
     {
         try
         {
-            var list = _repository.GetPool(_staff.StaffId);
-            PoolRequests = new ObservableCollection<ServiceRequest>(list);
-        
-          
-            if (list.Count == 0) Console.WriteLine("DEBUG: Pool sorgusu 0 kayıt döndürdü.");
+            PoolRequests = _repository.GetPool(_staff.StaffId);
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"DEBUG HATASI: {ex.Message}";
-            Console.WriteLine($"DEBUG: {ex.ToString()}");
+            ErrorMessage = $"Hata: {ex.Message}";
         }
     }
 
@@ -49,8 +43,7 @@ public partial class StaffViewModel : ObservableObject
     {
         try
         {
-            var list = _repository.GetMyRequests(_staff.StaffId);
-            MyRequests = new ObservableCollection<ServiceRequest>(list);
+            MyRequests = _repository.GetMyRequests(_staff.StaffId);
         }
         catch (Exception ex)
         {
