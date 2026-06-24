@@ -17,7 +17,10 @@ public partial class CustomerViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<ServiceRequest> _requests = new();
     [ObservableProperty] private string _aiMessage = string.Empty;
     [ObservableProperty] private bool _isApproved = false;
-
+    [ObservableProperty] private ServiceRequest? _selectedRequest;
+    
+    
+    
     private readonly GroqService _groqService = new();
     [RelayCommand]
     private async Task GetApproval()
@@ -95,6 +98,37 @@ public partial class CustomerViewModel : ObservableObject
         AiMessage = string.Empty;
         LoadRequests();
     }
-    
-    
+
+    [RelayCommand]
+    private void CancelRequest()
+    {
+        try
+        {
+                ErrorMessage=string.Empty;
+                SuccessMessage=string.Empty;
+                if (SelectedRequest==null)
+                {
+                    ErrorMessage = "Lütfen başvuru seçin.";
+                    return;
+                }
+
+                if (SelectedRequest.CurrentStatus == "Kapatıldı" || 
+                    SelectedRequest.CurrentStatus == "İptal" || 
+                    SelectedRequest.CurrentStatus == "Reddedildi")
+                {
+                    ErrorMessage = "Bu başvuru iptal edilemez.";
+                    return;
+                }
+                _repository.Cancel(SelectedRequest.RequestId,_customer.CustomerId);
+                SuccessMessage = $"#{SelectedRequest.RequestId} numaralı başvuru iptal edildi.";
+                SelectedRequest = null;
+                LoadRequests();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+
 }

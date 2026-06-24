@@ -28,9 +28,9 @@ public partial class AdminViewModel : ObservableObject
     [ObservableProperty] private string _successMessage = string.Empty;
     [ObservableProperty] private OrgUnit? _selectedUnitForStaff;
 
-    public List<string> UnitTypes { get; } = new() { "Unit", "Branch", "Department", "Region" };
+    public List<string> UnitTypes { get; } = new() { "Birim", "Şube", "Departman", "Bölge" };    
     public List<int> RoleIds { get; } = new() { 1, 2, 3, 4 };
-
+    
     public AdminViewModel()
     {
         LoadUnits();
@@ -123,7 +123,16 @@ public partial class AdminViewModel : ObservableObject
                 return;
             }
 
-            var unitId = _repository.CreateUnit(NewUnitName, NewUnitType, null);
+            var mappedType = NewUnitType switch
+            {
+                "Birim"     => "Unit",
+                "Şube"      => "Branch",
+                "Departman" => "Department",
+                "Bölge"     => "Region",
+                _           => NewUnitType
+            };
+
+            var unitId = _repository.CreateUnit(NewUnitName, mappedType, null);
             SuccessMessage = $"Birim #{unitId} oluşturuldu.";
             NewUnitName = string.Empty;
             NewUnitType = string.Empty;
@@ -134,7 +143,6 @@ public partial class AdminViewModel : ObservableObject
             ErrorMessage = $"Hata: {ex.Message}";
         }
     }
-
     [RelayCommand]
     private void DeactivateUnit()
     {

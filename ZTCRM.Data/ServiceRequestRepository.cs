@@ -5,6 +5,20 @@ namespace ZTCRM.Data;
 
 public class ServiceRequestRepository
 {
+
+
+
+    public void Cancel(int requestId,int customerId)
+    {
+        using var conn =DbConnection.GetConnection();
+        conn.Open();
+        using var cmd = new OracleCommand("ZTCRM.sp_ServiceRequest_Cancel", conn);
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        cmd.Parameters.Add("p_requestId", OracleDbType.Int32).Value = requestId;
+        cmd.Parameters.Add("p_CustomerId", OracleDbType.Int32).Value = customerId;
+        cmd.ExecuteNonQuery();
+    
+    }
     public int Create(int customerId, string requestType, string description, int? categoryId)
     {
         using var conn = DbConnection.GetConnection();
