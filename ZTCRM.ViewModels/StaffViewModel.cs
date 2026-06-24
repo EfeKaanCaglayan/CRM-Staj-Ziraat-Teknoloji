@@ -11,7 +11,7 @@ public partial class StaffViewModel : ObservableObject
     private readonly StaffRequestRepository _repository = new();
     private readonly Staff _staff;
 
-    public string WelcomeMessage => $"Hoş geldiniz, {_staff.FullName}";
+    public string WelcomeMessage => $"Hoş geldiniz, {_staff.FullName} | {_staff.UnitName ?? "Birim atanmadı"}";
 
     [ObservableProperty] private ObservableCollection<ServiceRequest> _poolRequests = new();
     [ObservableProperty] private ObservableCollection<ServiceRequest> _myRequests = new();

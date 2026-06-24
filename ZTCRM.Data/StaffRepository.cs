@@ -26,7 +26,8 @@ public class StaffRepository
                 Username = reader.GetString(reader.GetOrdinal("Username")),
                 RoleId = reader.GetInt32(reader.GetOrdinal("RoleId")),
                 RoleName = reader.GetString(reader.GetOrdinal("RoleName")),
-                IsActive = reader.GetInt32(reader.GetOrdinal("IsActive")) == 1
+                IsActive = reader.GetInt32(reader.GetOrdinal("IsActive")) == 1,
+                UnitName = reader.IsDBNull(reader.GetOrdinal("UnitName")) ? null : reader.GetString(reader.GetOrdinal("UnitName"))
 
             };
         }

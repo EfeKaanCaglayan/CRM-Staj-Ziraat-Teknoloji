@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZTCRM.UI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+278784628d15575d42a285433c24f914cc2b6c6a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f081caa6dc05d1c7c1e3d2bb14b26eeb7f03018e")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZTCRM.UI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZTCRM.UI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

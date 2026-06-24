@@ -13,38 +13,41 @@ public partial class LoginView : Window
     {
         InitializeComponent();
 
-        var tcknBox = this.FindControl<TextBox>("TcknBox")!;
-        tcknBox.AddHandler(
-            InputElement.TextInputEvent,
-            (sender, e) =>
-            {
-                if (e.Text?.Any(c => !char.IsDigit(c)) == true)
+        var tcknBox = this.FindControl<TextBox>("TcknBox");
+        if (tcknBox != null)
+        {
+            tcknBox.AddHandler(
+                InputElement.TextInputEvent,
+                (sender, e) =>
                 {
-                    e.Handled = true;
-                    return;
-                }
-                if (tcknBox.Text?.Length >= 11)
-                    e.Handled = true;
-            },
-            RoutingStrategies.Tunnel);
+                    if (e.Text?.Any(c => !char.IsDigit(c)) == true)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                    if (tcknBox.Text?.Length >= 11)
+                        e.Handled = true;
+                },
+                RoutingStrategies.Tunnel);
+        }
 
-        this.DataContextChanged += (_, _) =>
+        this.Loaded += (_, _) =>
         {
             if (DataContext is LoginViewModel vm)
             {
-               vm.LoginSuccessful += staff =>
-               {
-                   Window nextWindow = staff.RoleName switch
-                   {
-                       "Admin"    => new AdminView(),
-                       "Operator" => new OperatorView(staff),
-                       "Staff"    => new StaffView(staff),
-                       "Manager"  => new ManagerView(staff),
-                       _          => new OperatorView(staff)
-                   };
-                   nextWindow.Show();
-                   this.Close();
-               };
+                vm.LoginSuccessful += staff =>
+                {
+                    Window nextWindow = staff.RoleName switch
+                    {
+                        "Admin"    => new AdminView(),
+                        "Operator" => new OperatorView(staff),
+                        "Staff"    => new StaffView(staff),
+                        "Manager"  => new ManagerView(staff),
+                        _          => new OperatorView(staff)
+                    };
+                    nextWindow.Show();
+                    this.Close();
+                };
 
                 vm.CustomerLoginSuccessful += customer =>
                 {

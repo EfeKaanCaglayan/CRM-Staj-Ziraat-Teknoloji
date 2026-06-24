@@ -9,21 +9,20 @@
         CanResize="true"
         Background="#2C2C2C">
 
-    <Design.DataContext>
+    <Window.DataContext>
         <vm:LoginViewModel/>
-    </Design.DataContext>
+    </Window.DataContext>
 
     <DockPanel>
 
         <!-- HEADER -->
-        <Border DockPanel.Dock="Top" Background="#2C2C2C" Height="68">
+        <Border DockPanel.Dock="Top" Background="#2C2C2C" Height="68" ZIndex="10">
             <Grid ColumnDefinitions="Auto,*,Auto" Margin="24,0">
                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12"
                             VerticalAlignment="Center">
-                    <Border Width="42" Height="42" CornerRadius="8" Background="#E8182E">
-                        <PathIcon Width="22" Height="22" Foreground="White"
-                                  Data="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/>
-                    </Border>
+                    
+                    <Image Source="/Assets/Logo2.png" Width="52" Height="52"/>
+            
                     <StackPanel VerticalAlignment="Center" Spacing="1">
                         <TextBlock Text="ZTCRM"
                                    Foreground="White"
@@ -131,7 +130,8 @@
                             <Button Grid.Column="1" Content="Müşteri"
                                     Command="{Binding SelectMusteriCommand}"
                                     Classes.active="{Binding IsMusteriTab}"
-                                    Classes.inactive="{Binding IsPersonelTab}"                                    CornerRadius="6" Margin="3,0,0,0"
+                                    Classes.inactive="{Binding IsPersonelTab}"
+                                    CornerRadius="6" Margin="3,0,0,0"
                                     HorizontalAlignment="Stretch"
                                     HorizontalContentAlignment="Center"
                                     FontSize="12" Height="34"/>
@@ -149,7 +149,6 @@
                              CornerRadius="6" Padding="10,0"
                              VerticalContentAlignment="Center"/>
 
-                    <!-- TC Kimlik No — sadece Müşteri tabında -->
                     <!-- TC Kimlik No — sadece Müşteri tabında -->
                     <TextBox x:Name="TcknBox"
                              PlaceholderText="TC Kimlik numaranızı girin"

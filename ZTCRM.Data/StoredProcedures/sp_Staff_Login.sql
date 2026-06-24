@@ -5,12 +5,18 @@ CREATE OR REPLACE PROCEDURE ZTCRM.sp_Staff_Login(
 ) AS
 BEGIN
 OPEN p_Result FOR
-SELECT s.StaffId, s.FullName, s.Username,
-       s.PasswordHash, s.IsActive,
-       s.CreatedAt, s.LastLoginAt,
-       r.RoleId, r.RoleName
+SELECT s.StaffId,
+       s.RoleId,
+       s.FullName,
+       s.Username,
+       s.PasswordHash,
+       s.IsActive,
+       r.RoleName,
+       ou.UnitName
 FROM ZTCRM.Staff s
-         JOIN ZTCRM.Role r ON s.RoleId = r.RoleId
+         JOIN ZTCRM.Role r ON r.RoleId = s.RoleId
+         LEFT JOIN ZTCRM.StaffUnit su ON su.StaffId = s.StaffId AND su.IsPrimary = 1
+         LEFT JOIN ZTCRM.OrgUnit ou ON ou.UnitId = su.UnitId
 WHERE s.Username = p_Username
   AND s.PasswordHash = p_Password
   AND s.IsActive = 1;

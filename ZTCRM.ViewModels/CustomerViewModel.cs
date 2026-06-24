@@ -15,6 +15,33 @@ public partial class CustomerViewModel : ObservableObject
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private string _successMessage = string.Empty;
     [ObservableProperty] private ObservableCollection<ServiceRequest> _requests = new();
+    [ObservableProperty] private string _aiMessage = string.Empty;
+    [ObservableProperty] private bool _isApproved = false;
+
+    private readonly GroqService _groqService = new();
+    [RelayCommand]
+    private async Task GetApproval()
+    {
+        if (string.IsNullOrWhiteSpace(Description))
+        {
+            AiMessage = "Lütfen önce açıklama girin.";
+            return;
+        }
+
+        AiMessage = "Kontrol ediliyor...";
+        IsApproved = false;
+
+        var messages = new List<(string role, string content)>
+        {
+            ("user", $"Müşteri adı: {_customer.FullName}\nŞikayet türü: {RequestType}\nAçıklama: {Description}")
+        };
+
+        var response = await _groqService.SendMessageAsync(messages);
+        AiMessage = response;
+
+        if (response.Contains("Bilgiler tam"))
+            IsApproved = true;
+    }
 
     public string WelcomeMessage => $"Hoş geldiniz, {_customer.FullName}";
 
@@ -33,9 +60,12 @@ public partial class CustomerViewModel : ObservableObject
     [RelayCommand]
     private void CreateRequest()
     {
-       
-
-       
+        if (!IsApproved)
+        {
+            ErrorMessage = "Lütfen önce 'Onay Al' butonuna basın.";
+            return;
+        }
+   
         ErrorMessage = string.Empty;
         SuccessMessage = string.Empty;
 
@@ -56,9 +86,13 @@ public partial class CustomerViewModel : ObservableObject
             "Talep"   => "Request",
             _         => RequestType
         };
-        var requestId = _repository.Create(_customer.CustomerId, mappedType, Description, null);        SuccessMessage = $"Şikayetiniz #{requestId} numarayla alındı.";
+
+        var requestId = _repository.Create(_customer.CustomerId, mappedType, Description, null);
+        SuccessMessage = $"Şikayetiniz #{requestId} numarayla alındı.";
         RequestType = string.Empty;
         Description = string.Empty;
+        IsApproved = false;
+        AiMessage = string.Empty;
         LoadRequests();
     }
     

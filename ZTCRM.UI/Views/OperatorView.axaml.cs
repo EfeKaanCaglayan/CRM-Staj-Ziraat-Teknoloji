@@ -22,4 +22,10 @@ public partial class OperatorView : Window
             dialog.ShowDialog(this);
         }
     }
+    private void LogoutButton_Click(object? sender, RoutedEventArgs e)
+    {
+        var login = new LoginView();
+        login.Show();
+        this.Close();
+    }
 }

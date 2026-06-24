@@ -29,4 +29,10 @@ public partial class CustomerView : Window
         if (sender is Button btn && btn.Tag is ServiceRequest request)
             ShowDetailDialog(request);
     }
+    private void LogoutButton_Click(object? sender, RoutedEventArgs e)
+    {
+        var login = new LoginView();
+        login.Show();
+        this.Close();
+    }
 }

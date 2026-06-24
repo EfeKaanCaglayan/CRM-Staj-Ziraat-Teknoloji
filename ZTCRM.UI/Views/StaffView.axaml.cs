@@ -23,4 +23,10 @@ public partial class StaffView : Window
         InitializeComponent();
         DataContext = new StaffViewModel(staff);
     }
+    private void LogoutButton_Click(object? sender, RoutedEventArgs e)
+    {
+        var login = new LoginView();
+        login.Show();
+        this.Close();
+    }
 }
