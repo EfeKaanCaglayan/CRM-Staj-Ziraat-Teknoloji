@@ -11,27 +11,31 @@ public class StaffRepository
         conn.Open();
         using var cmd = new OracleCommand("ZTCRM.sp_Staff_Login", conn);
         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
         cmd.Parameters.Add("p_Username", OracleDbType.Varchar2).Value = username;
-        cmd.Parameters.Add("p_Password", OracleDbType.Varchar2).Value = password;
         cmd.Parameters.Add("p_Result", OracleDbType.RefCursor).Direction = System.Data.ParameterDirection.Output;
         using var reader = cmd.ExecuteReader();
         if (reader.Read())
         {
-            return new Staff
+            var staff = new Staff
             {
-
                 StaffId = reader.GetInt32(reader.GetOrdinal("StaffId")),
                 FullName = reader.GetString(reader.GetOrdinal("FullName")),
                 Username = reader.GetString(reader.GetOrdinal("Username")),
+                PasswordHash = reader.GetString(reader.GetOrdinal("PasswordHash")),
                 RoleId = reader.GetInt32(reader.GetOrdinal("RoleId")),
                 RoleName = reader.GetString(reader.GetOrdinal("RoleName")),
                 IsActive = reader.GetInt32(reader.GetOrdinal("IsActive")) == 1,
-                UnitName = reader.IsDBNull(reader.GetOrdinal("UnitName")) ? null : reader.GetString(reader.GetOrdinal("UnitName"))
-
+                UnitName = reader.IsDBNull(reader.GetOrdinal("UnitName"))
+                    ? null
+                    : reader.GetString(reader.GetOrdinal("UnitName"))
             };
+
+            if (BCrypt.Net.BCrypt.Verify(password, staff.PasswordHash))
+                return staff;
+
+        
         }
 
         return null;
-        }
     }
+}

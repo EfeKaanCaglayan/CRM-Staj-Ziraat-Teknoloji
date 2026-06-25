@@ -261,6 +261,14 @@
           }
         }
       },
+      "BCrypt.Net-Next/4.2.0": {
+        "runtime": {
+          "lib/net10.0/BCrypt-Net-Next.dll": {
+            "assemblyVersion": "4.2.0.0",
+            "fileVersion": "4.2.0.0"
+          }
+        }
+      },
       "CommunityToolkit.Mvvm/8.4.2": {
         "runtime": {
           "lib/net8.0/CommunityToolkit.Mvvm.dll": {
@@ -682,6 +690,7 @@
       },
       "ZTCRM.Data/1.0.0": {
         "dependencies": {
+          "BCrypt.Net-Next": "4.2.0",
           "Oracle.ManagedDataAccess.Core": "23.26.200",
           "ZTCRM.Models": "1.0.0"
         },
@@ -827,6 +836,13 @@
       "sha512": "sha512-PXviRj+8t6IT7JdnVhs1EET+VgGB/K1Ju3yL/Q9sXR2YD9NzkIYybyfJG3DPXcTYXpEJZJvxGiCTjH1N8AkLhQ==",
       "path": "avaloniaui.diagnosticssupport/2.2.1",
       "hashPath": "avaloniaui.diagnosticssupport.2.2.1.nupkg.sha512"
+    },
+    "BCrypt.Net-Next/4.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gwLD2KfCuwQesP17aVh4h6lpiMPEVt5Lbpndo0ej903hNUUTtyxt3ARdDjmuydBRTAUICc7OVKVbaOvc6SQYXA==",
+      "path": "bcrypt.net-next/4.2.0",
+      "hashPath": "bcrypt.net-next.4.2.0.nupkg.sha512"
     },
     "CommunityToolkit.Mvvm/8.4.2": {
       "type": "package",

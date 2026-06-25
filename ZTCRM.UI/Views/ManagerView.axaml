@@ -92,7 +92,10 @@
                                 BorderThickness="0,0,0,2" BorderBrush="#E8182E"
                                 Padding="0,0,0,16" Margin="0,0,0,20">
                             <StackPanel Orientation="Horizontal" Spacing="12">
-                                <Image Source="/Assets/Logo2.png" Width="36" Height="36"/>
+                                <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
+                                    <PathIcon Width="16" Height="16" Foreground="White"
+                                              Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </Border>
                                 <StackPanel VerticalAlignment="Center" Spacing="2">
                                     <TextBlock Text="Onay Bekleyen Başvurular"
                                                FontSize="14" FontWeight="Medium"

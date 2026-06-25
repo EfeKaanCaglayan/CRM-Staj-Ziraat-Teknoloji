@@ -27,7 +27,8 @@ public partial class AdminViewModel : ObservableObject
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private string _successMessage = string.Empty;
     [ObservableProperty] private OrgUnit? _selectedUnitForStaff;
-
+    [ObservableProperty] private string _newRoleName = string.Empty;
+    public List<string> RoleNames { get; } = new() { "Admin", "Operatör", "Personel", "Yönetici" };
     public List<string> UnitTypes { get; } = new() { "Birim", "Şube", "Departman", "Bölge" };    
     public List<int> RoleIds { get; } = new() { 1, 2, 3, 4 };
     
@@ -171,6 +172,15 @@ public partial class AdminViewModel : ObservableObject
     [RelayCommand]
     private void CreateStaff()
     {
+        var mappedRole = NewRoleName switch
+        {
+            "Admin"    => 1,
+            "Operatör" => 2,
+            "Personel" => 3,
+            "Yönetici" => 4,
+            _          => 3
+        };
+      
         try
         {
             ErrorMessage = string.Empty;
@@ -192,7 +202,7 @@ public partial class AdminViewModel : ObservableObject
                 return;
             }
 
-            var staffId = _repository.CreateStaff(NewRoleId, NewFullName, NewUsername, NewPasswordHash);
+            var staffId = _repository.CreateStaff(mappedRole, NewFullName, NewUsername, NewPasswordHash);   
             SuccessMessage = $"Personel #{staffId} oluşturuldu.";
             NewFullName = string.Empty;
             NewUsername = string.Empty;
@@ -209,6 +219,14 @@ public partial class AdminViewModel : ObservableObject
     [RelayCommand]
     private void UpdateStaffRole()
     {
+        var mappedRole = NewRoleName switch
+        {
+            "Admin"    => 1,
+            "Operatör" => 2,
+            "Personel" => 3,
+            "Yönetici" => 4,
+            _          => 3
+        };
         try
         {
             ErrorMessage = string.Empty;
@@ -220,7 +238,7 @@ public partial class AdminViewModel : ObservableObject
                 return;
             }
 
-            _repository.UpdateStaffRole(SelectedStaff.StaffId, NewRoleId);
+            _repository.UpdateStaffRole(SelectedStaff.StaffId, mappedRole);
             SuccessMessage = $"{SelectedStaff.FullName} personelinin rolü güncellendi.";
             LoadStaff();
             SelectedStaff = null;

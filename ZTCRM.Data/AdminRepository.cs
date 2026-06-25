@@ -6,7 +6,6 @@ namespace ZTCRM.Data;
 public class AdminRepository
 {
     private readonly string _connectionString = DbConnection.ConnectionString;
-
     public List<OrgUnit> GetAllUnits()
     {
         var list = new List<OrgUnit>();
@@ -77,7 +76,9 @@ public class AdminRepository
                 UnitName = reader.IsDBNull(reader.GetOrdinal("UnitName")) ? null : reader.GetString(reader.GetOrdinal("UnitName")),
                 PasswordHash = reader.GetString(reader.GetOrdinal("PasswordHash")),
                 IsActiveText = reader.GetString(reader.GetOrdinal("IsActiveText")),
-                UnitIsActiveText = reader.IsDBNull(reader.GetOrdinal("UnitIsActiveText")) ? string.Empty : reader.GetString(reader.GetOrdinal("UnitIsActiveText"))          });
+                UnitIsActiveText = reader.IsDBNull(reader.GetOrdinal("UnitIsActiveText")) ? string.Empty : reader.GetString(reader.GetOrdinal("UnitIsActiveText")),
+                RoleName = reader.GetString(reader.GetOrdinal("RoleName"))
+            });
         }
         return list;
     }
@@ -91,7 +92,7 @@ public class AdminRepository
         cmd.Parameters.Add("p_RoleId",       OracleDbType.Int32).Value    = roleId;
         cmd.Parameters.Add("p_FullName",     OracleDbType.Varchar2).Value = fullName;
         cmd.Parameters.Add("p_UserName",     OracleDbType.Varchar2).Value = username;
-        cmd.Parameters.Add("p_PasswordHash", OracleDbType.Varchar2).Value = passwordHash;
+        cmd.Parameters.Add("p_PasswordHash", OracleDbType.Varchar2).Value = BCrypt.Net.BCrypt.HashPassword(passwordHash);
         cmd.Parameters.Add("p_IsActive",     OracleDbType.Int32).Value    = 1;
         var outParam = cmd.Parameters.Add("p_StaffId", OracleDbType.Int32);
         outParam.Direction = System.Data.ParameterDirection.Output;

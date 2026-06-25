@@ -238,7 +238,7 @@
                                                                 Width="150"
                                                                 CanUserSort="True"/>
                                             <DataGridTextColumn Header="Rol"
-                                                                Binding="{Binding RoleId}"
+                                                                Binding="{Binding RoleName}"
                                                                 Width="70"
                                                                 CanUserSort="True"/>
                                             <DataGridTextColumn Header="Birim"
@@ -295,8 +295,8 @@
                                                  Margin="0,0,0,12"/>
                                         <TextBlock Text="Rol" FontSize="12"
                                                    Foreground="#555555" Margin="0,0,0,6"/>
-                                        <ComboBox ItemsSource="{Binding RoleIds}"
-                                                  SelectedItem="{Binding NewRoleId}"
+                                        <ComboBox ItemsSource="{Binding RoleNames}"
+                                                  SelectedItem="{Binding NewRoleName}"
                                                   HorizontalAlignment="Stretch"
                                                   Height="38" FontSize="13"
                                                   Margin="0,0,0,16"/>
@@ -319,7 +319,7 @@
                                                 <TextBlock Text="{Binding SelectedStaff.FullName}"
                                                            FontSize="13" FontWeight="Medium"
                                                            Foreground="#111111"/>
-                                                <TextBlock Text="{Binding SelectedStaff.RoleId, StringFormat='Mevcut Rol: {0}'}"
+                                                <TextBlock Text="{Binding SelectedStaff.RoleName, StringFormat='Mevcut Rol: {0}'}"
                                                            FontSize="12" Foreground="#555555"/>
                                             </StackPanel>
                                         </Border>
