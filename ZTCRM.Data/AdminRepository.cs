@@ -77,8 +77,7 @@ public class AdminRepository
                 UnitName = reader.IsDBNull(reader.GetOrdinal("UnitName")) ? null : reader.GetString(reader.GetOrdinal("UnitName")),
                 PasswordHash = reader.GetString(reader.GetOrdinal("PasswordHash")),
                 IsActiveText = reader.GetString(reader.GetOrdinal("IsActiveText")),
-                UnitIsActiveText = reader.IsDBNull(reader.GetOrdinal("UnitIsActiveText")) ? null : reader.GetString(reader.GetOrdinal("UnitIsActiveText"))
-            });
+                UnitIsActiveText = reader.IsDBNull(reader.GetOrdinal("UnitIsActiveText")) ? string.Empty : reader.GetString(reader.GetOrdinal("UnitIsActiveText"))          });
         }
         return list;
     }
