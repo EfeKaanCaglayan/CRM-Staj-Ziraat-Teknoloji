@@ -8,7 +8,9 @@ namespace ZTCRM.ViewModels;
 public partial class CustomerViewModel : ObservableObject
 {
     private readonly ServiceRequestRepository _repository = new();
+    private readonly NotificationRepository _notifications = new();
     private readonly Customer _customer;
+    public bool HasUnread => UnreadCount > 0;
     public List<string> RequestTypes { get; } = new() { "Şikayet", "Talep" };
     [ObservableProperty] private string _requestType = string.Empty;
     [ObservableProperty] private string _description = string.Empty;
@@ -18,6 +20,7 @@ public partial class CustomerViewModel : ObservableObject
     [ObservableProperty] private string _aiMessage = string.Empty;
     [ObservableProperty] private bool _isApproved = false;
     [ObservableProperty] private ServiceRequest? _selectedRequest;
+    [ObservableProperty] private List<Notification>  _notifications2=new();
     
     
     
@@ -45,6 +48,7 @@ public partial class CustomerViewModel : ObservableObject
         if (response.Contains("Bilgiler tam"))
             IsApproved = true;
     }
+    
 
     public string WelcomeMessage => $"Hoş geldiniz, {_customer.FullName}";
 
@@ -52,12 +56,32 @@ public partial class CustomerViewModel : ObservableObject
     {
         _customer = customer;
         LoadRequests();
+        LoadNotifications();
+        LoadUnreadCount();
     }
+    private void LoadNotifications()
+    {
+        Notifications2 = _notifications.GetByCustomer(_customer.CustomerId);
+    }
+
 
     private void LoadRequests()
     {
         var list = _repository.GetByCustomer(_customer.CustomerId);
         Requests = new ObservableCollection<ServiceRequest>(list);
+    }
+    
+    [ObservableProperty] private int _unreadCount;
+
+    private void LoadUnreadCount()
+    {
+        UnreadCount = _notifications.GetUnreadCount(_customer.CustomerId);
+        OnPropertyChanged(nameof(HasUnread));
+    }
+    public void MarkNotificationsAsRead()
+    {
+        _notifications.MarkAsRead(_customer.CustomerId);
+        LoadUnreadCount();
     }
 
     [RelayCommand]

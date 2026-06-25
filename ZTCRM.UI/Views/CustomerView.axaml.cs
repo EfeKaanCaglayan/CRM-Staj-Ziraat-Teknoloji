@@ -33,6 +33,16 @@ public partial class CustomerView : Window
             ShowDetailDialog(request);
     }
 
+    private void NotificationButton_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is CustomerViewModel vm)
+        {
+            vm.MarkNotificationsAsRead();
+            var popup = new NotificationView(vm.Notifications2);
+            popup.ShowDialog(this);
+        }
+    }
+
     private void LogoutButton_Click(object? sender, RoutedEventArgs e)
     {
         var login = new LoginView();

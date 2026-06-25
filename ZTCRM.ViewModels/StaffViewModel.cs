@@ -11,6 +11,8 @@ public partial class StaffViewModel : ObservableObject
     private readonly Staff _staff;
 
     public string WelcomeMessage => $"Hoş geldiniz, {_staff.FullName} | {_staff.UnitName ?? "Birim atanmadı"}";
+    private readonly NotificationRepository _notificationRepository = new();
+
 
     [ObservableProperty] private List<ServiceRequest> _poolRequests = new();
     [ObservableProperty] private List<ServiceRequest> _myRequests = new();
@@ -19,12 +21,29 @@ public partial class StaffViewModel : ObservableObject
     [ObservableProperty] private string _resolutionNote = string.Empty;
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private string _successMessage = string.Empty;
+    [ObservableProperty] private List<Notification> _staffNotifications = new();
+    [ObservableProperty] private int _unreadCount;
+    public bool HasUnread => UnreadCount > 0;
+    
+    private void LoadNotifications()
+    {
+        StaffNotifications = _notificationRepository.GetByStaff(_staff.StaffId);
+        UnreadCount = _notificationRepository.GetUnreadCountByStaff(_staff.StaffId);
+        OnPropertyChanged(nameof(HasUnread));
+    }
+
+    public void MarkNotificationsAsRead()
+    {
+        _notificationRepository.MarkAsReadByStaff(_staff.StaffId);
+        LoadNotifications();
+    }
 
     public StaffViewModel(Staff staff)
     {
         _staff = staff;
         LoadPool();
         LoadMyRequests();
+        LoadNotifications();
     }
 
     private void LoadPool()

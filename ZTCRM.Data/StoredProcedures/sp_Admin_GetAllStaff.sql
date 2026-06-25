@@ -12,7 +12,8 @@ SELECT s.StaffId,
        s.CreatedAt,
        s.LastLoginAt,
        ou.UnitName,
-       CASE s.IsActive WHEN 1 THEN 'Aktif' ELSE 'İnaktif' END AS IsActiveText
+       CASE s.IsActive WHEN 1 THEN 'Aktif' ELSE 'İnaktif' END AS IsActiveText,
+       CASE ou.IsActive WHEN 1 THEN 'Aktif' ELSE 'İnaktif' END AS UnitIsActiveText
 FROM ZTCRM.Staff s
          LEFT JOIN ZTCRM.StaffUnit su ON su.StaffId = s.StaffId AND su.IsPrimary = 1
          LEFT JOIN ZTCRM.OrgUnit ou ON ou.UnitId = su.UnitId

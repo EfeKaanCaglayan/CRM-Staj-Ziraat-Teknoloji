@@ -20,6 +20,15 @@ public partial class StaffView : Window
         InitializeComponent();
         DataContext = new StaffViewModel(staff);
     }
+    private void NotificationButton_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is StaffViewModel vm)
+        {
+            vm.MarkNotificationsAsRead();
+            var popup = new NotificationView(vm.StaffNotifications);
+            popup.ShowDialog(this);
+        }
+    }
 
     private void DetailButton_Click(object? sender, RoutedEventArgs e)
     {

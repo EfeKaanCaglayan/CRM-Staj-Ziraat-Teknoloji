@@ -245,9 +245,13 @@
                                                                 Binding="{Binding UnitName}"
                                                                 Width="*"
                                                                 CanUserSort="True"/>
-                                            <DataGridTextColumn Header="Aktif"
+                                            <DataGridTextColumn Header="Personel Aktif"
                                                                 Binding="{Binding IsActiveText}"
                                                                 Width="70"
+                                                                CanUserSort="True"/>
+                                            <DataGridTextColumn Header="Birim Aktif"
+                                                                Binding="{Binding UnitIsActiveText}"
+                                                                Width="90"
                                                                 CanUserSort="True"/>
                                         </DataGrid.Columns>
                                     </DataGrid>

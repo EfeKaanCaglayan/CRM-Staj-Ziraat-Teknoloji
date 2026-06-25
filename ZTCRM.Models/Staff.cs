@@ -3,6 +3,7 @@ namespace ZTCRM.Models;
 public class Staff
 {
     
+    public string  UnitIsActiveText { get; set; } =string.Empty;
     public string? IsActiveText { get; set; }
     public string? UnitName { get; set; }
     public int StaffId { get; set; }
