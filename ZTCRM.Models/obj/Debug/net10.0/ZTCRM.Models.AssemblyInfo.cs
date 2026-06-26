@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZTCRM.Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c42f44547b807fec1f0a3b22a744fd4e77d68925")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+068bf947a007bb3078f923da4354ce0e90cd5ece")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZTCRM.Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZTCRM.Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
