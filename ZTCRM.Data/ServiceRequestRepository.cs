@@ -19,7 +19,30 @@ public class ServiceRequestRepository
         cmd.ExecuteNonQuery();
     
     }
-    public int Create(int customerId, string requestType, string description, int? categoryId)
+    public NotificationInfo? GetNotificationInfo(int requestId)
+    {
+        using var conn = DbConnection.GetConnection();
+        conn.Open();
+        using var cmd = new OracleCommand("ZTCRM.sp_ServiceRequest_GetNotificationInfo", conn);
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        cmd.Parameters.Add("p_RequestId", OracleDbType.Int32).Value = requestId;
+        cmd.Parameters.Add("p_Result", OracleDbType.RefCursor).Direction = System.Data.ParameterDirection.Output;
+        using var reader = cmd.ExecuteReader();
+        if (reader.Read())
+        {
+            return new NotificationInfo
+            {
+                Channel = reader.IsDBNull(reader.GetOrdinal("Channel")) ? "App" : reader.GetString(reader.GetOrdinal("Channel")),
+                Email = reader.IsDBNull(reader.GetOrdinal("Email")) ? null : reader.GetString(reader.GetOrdinal("Email")),
+                Phone = reader.IsDBNull(reader.GetOrdinal("Phone")) ? null : reader.GetString(reader.GetOrdinal("Phone")),
+                FullName = reader.GetString(reader.GetOrdinal("FullName")),
+                RejectionReason = reader.IsDBNull(reader.GetOrdinal("RejectionReason")) ? null : reader.GetString(reader.GetOrdinal("RejectionReason")),
+                ApprovalNote = reader.IsDBNull(reader.GetOrdinal("ApprovalNote")) ? null : reader.GetString(reader.GetOrdinal("ApprovalNote"))
+            };
+        }
+        return null;
+    }
+    public int Create(int customerId, string requestType, string description, int? categoryId,string channel="App")
     {
         using var conn = DbConnection.GetConnection();
         conn.Open();
@@ -29,6 +52,7 @@ public class ServiceRequestRepository
         cmd.Parameters.Add("p_requestType", OracleDbType.Varchar2).Value = requestType;
         cmd.Parameters.Add("p_description", OracleDbType.Varchar2).Value = description;
         cmd.Parameters.Add("p_CategoryId", OracleDbType.Int32).Value = (object?)categoryId ?? DBNull.Value;
+        cmd.Parameters.Add("p_Channel", OracleDbType.Varchar2).Value = channel;
         var outParam = cmd.Parameters.Add("p_requestId", OracleDbType.Int32);
         outParam.Direction = System.Data.ParameterDirection.Output;
         cmd.ExecuteNonQuery();

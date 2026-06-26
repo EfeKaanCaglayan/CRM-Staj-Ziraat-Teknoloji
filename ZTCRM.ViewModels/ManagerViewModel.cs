@@ -17,6 +17,18 @@ public partial class ManagerViewModel : ObservableObject
     [ObservableProperty] private string _managerNote = string.Empty;
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private string _successMessage = string.Empty;
+    private static async Task NotifyStatusChange(int requestId, string status)
+    {
+        try
+        {
+            using var client = new HttpClient();
+            var payload = new { requestId, status };
+            var json = System.Text.Json.JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            await client.PostAsync("http://localhost:5678/webhook/status-change", content);
+        }
+        catch { } 
+    }
 
     public ManagerViewModel(Staff manager)
     {
@@ -49,8 +61,10 @@ public partial class ManagerViewModel : ObservableObject
                 ErrorMessage = "Lütfen bir başvuru seçin.";
                 return;
             }
+            
 
             _repository.Approve(SelectedRequest.RequestId, _manager.StaffId, ManagerNote);
+            _ = NotifyStatusChange(SelectedRequest.RequestId, "Resolved"); // ekle
             SuccessMessage = $"#{SelectedRequest.RequestId} numaralı başvuru onaylandı.";
             LoadRequests();
             SelectedRequest = null;
@@ -77,6 +91,7 @@ public partial class ManagerViewModel : ObservableObject
             }
 
             _repository.RejectByManager(SelectedRequest.RequestId, _manager.StaffId, ManagerNote);
+            _ = NotifyStatusChange(SelectedRequest.RequestId, "Resolved");
             SuccessMessage = $"#{SelectedRequest.RequestId} numaralı başvuru reddedildi, personele geri döndü.";
             LoadRequests();
             SelectedRequest = null;

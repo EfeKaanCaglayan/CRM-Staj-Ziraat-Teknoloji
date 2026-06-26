@@ -4,13 +4,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 
-// Webhook: N8n'den gelen şikayet oluşturma isteği
 app.MapPost("/api/requests/create", async (CreateRequestDto dto) =>
 {
     try
     {
         var repo = new ServiceRequestRepository();
-        var requestId = repo.Create(dto.CustomerId, dto.RequestType, dto.Description, null);
+        var requestId = repo.Create(dto.CustomerId, dto.RequestType, dto.Description, null, dto.Channel);
         return Results.Ok(new { success = true, requestId });
     }
     catch (Exception ex)
@@ -19,7 +18,6 @@ app.MapPost("/api/requests/create", async (CreateRequestDto dto) =>
     }
 });
 
-// Müşteri TC/Pasaport ile arama
 app.MapGet("/api/customers/find", (string nationalId) =>
 {
     try
@@ -36,6 +34,35 @@ app.MapGet("/api/customers/find", (string nationalId) =>
     }
 });
 
+app.MapPost("/api/notify/status-change", async (StatusChangeDto dto) =>
+{
+    try
+    {
+        var repo = new ServiceRequestRepository();
+        var info = repo.GetNotificationInfo(dto.RequestId);
+        if (info == null)
+            return Results.NotFound(new { success = false, message = "Başvuru bulunamadı" });
+
+        return Results.Ok(new
+        {
+            success = true,
+            requestId = dto.RequestId,
+            status = dto.Status,
+            channel = info.Channel,
+            email = info.Email,
+            phone = info.Phone,
+            fullName = info.FullName,
+            rejectionReason = info.RejectionReason,
+            approvalNote = info.ApprovalNote
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new { success = false, error = ex.Message });
+    }
+});
+
 app.Run();
 
-public record CreateRequestDto(int CustomerId, string RequestType, string Description);
+public record CreateRequestDto(int CustomerId, string RequestType, string Description, string Channel);
+public record StatusChangeDto(int RequestId, string Status);

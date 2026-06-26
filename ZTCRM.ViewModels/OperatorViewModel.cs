@@ -24,6 +24,22 @@ public partial class OperatorViewModel : ObservableObject
     public List<string> RejectionTypes { get; } = new() { "Eksik Bilgi", "Kapsam Dışı", "Mükerrer", "Diğer" };
     [ObservableProperty] private string _selectedRejectionType = string.Empty;
     [ObservableProperty] private string _rejectionReason = string.Empty;
+    
+    private static async Task NotifyStatusChange(int requestId, string status)
+    {
+        try
+        {
+            
+            using var client = new HttpClient();
+            var payload = new { requestId, status };
+            var json = System.Text.Json.JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            await client.PostAsync("http://localhost:5678/webhook/status-change", content);
+            
+        }
+        catch { } // Bildirim hatası ana akışı durdurmasın
+    }
+    
 
     public OperatorViewModel(Staff staff)
     {
@@ -128,6 +144,7 @@ public partial class OperatorViewModel : ObservableObject
             };
 
             _repository.Reject(SelectedRequest.RequestId, mappedType, RejectionReason, _operator.StaffId);
+            _ = NotifyStatusChange(SelectedRequest.RequestId, "Rejected"); 
             SuccessMessage = $"#{SelectedRequest.RequestId} numaralı başvuru reddedildi.";
             LoadRequests();
             SelectedRequest = null;
