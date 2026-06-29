@@ -2,11 +2,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
 using ZTCRM.Models;
+using Avalonia.Threading;
 
 namespace ZTCRM.ViewModels;
 
 public partial class AdminViewModel : ObservableObject
-{
+{ private readonly DispatcherTimer _refreshTimer;
     private readonly AdminRepository _repository = new AdminRepository();
     public string WelcomeMessage => "Hoş geldiniz Admin";
 
@@ -28,6 +29,8 @@ public partial class AdminViewModel : ObservableObject
     [ObservableProperty] private string _successMessage = string.Empty;
     [ObservableProperty] private OrgUnit? _selectedUnitForStaff;
     [ObservableProperty] private string _newRoleName = string.Empty;
+    [ObservableProperty] private bool _isRefreshing = false;
+    
     public List<string> RoleNames { get; } = new() { "Admin", "Operatör", "Personel", "Yönetici" };
     public List<string> UnitTypes { get; } = new() { "Birim", "Şube", "Departman", "Bölge" };    
     public List<int> RoleIds { get; } = new() { 1, 2, 3, 4 };
@@ -37,8 +40,30 @@ public partial class AdminViewModel : ObservableObject
         LoadUnits();
         LoadStaff();
         LoadActivityLog();
+        _refreshTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(30)
+        };
+        _refreshTimer.Tick += (s, e) => RefreshAll();
+        _refreshTimer.Start();
+    }
+    private async void RefreshAll()
+    {
+        IsRefreshing = true;
+        await Task.Delay(100);
+        LoadUnits();
+        LoadStaff();
+        LoadActivityLog();
+        IsRefreshing = false;
     }
 
+    [RelayCommand]
+    private void Refresh()
+    {
+        RefreshAll();
+    }
+
+    
     private void LoadUnits()
     {
         try

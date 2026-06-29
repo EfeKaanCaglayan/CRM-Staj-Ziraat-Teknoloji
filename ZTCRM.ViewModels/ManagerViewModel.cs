@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
 using ZTCRM.Models;
+using Avalonia.Threading;
 
 namespace ZTCRM.ViewModels;
 
@@ -9,6 +10,7 @@ public partial class ManagerViewModel : ObservableObject
 {
     private readonly ManagerRepository _repository = new();
     private readonly Staff _manager;
+    private readonly DispatcherTimer _refreshTimer;
 
     public string WelcomeMessage => $"Hoş geldiniz, {_manager.FullName}";
 
@@ -17,6 +19,7 @@ public partial class ManagerViewModel : ObservableObject
     [ObservableProperty] private string _managerNote = string.Empty;
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private string _successMessage = string.Empty;
+    [ObservableProperty] private bool _isRefreshing = false;
     private static async Task NotifyStatusChange(int requestId, string status)
     {
         try
@@ -34,6 +37,25 @@ public partial class ManagerViewModel : ObservableObject
     {
         _manager = manager;
         LoadRequests();
+        _refreshTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(30)
+        };
+        _refreshTimer.Tick += (s, e) => RefreshAll();
+        _refreshTimer.Start();
+    }
+    private async void RefreshAll()
+    {
+        IsRefreshing = true;
+        await Task.Delay(100);
+        LoadRequests();
+        IsRefreshing = false;
+    }
+
+    [RelayCommand]
+    private void Refresh()
+    {
+        RefreshAll();
     }
 
     private void LoadRequests()

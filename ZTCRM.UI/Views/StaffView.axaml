@@ -108,19 +108,55 @@
                         <Border DockPanel.Dock="Top"
                                 BorderThickness="0,0,0,2" BorderBrush="#E8182E"
                                 Padding="0,0,0,16" Margin="0,0,0,20">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
-                                    <PathIcon Width="16" Height="16" Foreground="White"
-                                              Data="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
-                                </Border>
-                                <StackPanel VerticalAlignment="Center" Spacing="2">
-                                    <TextBlock Text="Birim Havuzu"
-                                               FontSize="14" FontWeight="Medium"
-                                               Foreground="#111111"/>
-                                    <TextBlock Text="Atanmayı bekleyen başvurular"
-                                               FontSize="11" Foreground="#999999"/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                                    <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
+                                        <PathIcon Width="16" Height="16" Foreground="White"
+                                                  Data="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center" Spacing="2">
+                                        <TextBlock Text="Birim Havuzu"
+                                                   FontSize="14" FontWeight="Medium"
+                                                   Foreground="#111111"/>
+                                        <TextBlock Text="Atanmayı bekleyen başvurular"
+                                                   FontSize="11" Foreground="#999999"/>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
+                                <Button Grid.Column="1"
+                                        Command="{Binding RefreshCommand}"
+                                        Width="36" Height="36"
+                                        CornerRadius="8"
+                                        Background="#F5F5F5"
+                                        VerticalAlignment="Center"
+                                        ToolTip.Tip="Yenile">
+                                    <Panel>
+                                        <PathIcon Width="16" Height="16" Foreground="#555555"
+                                                  IsVisible="{Binding !IsRefreshing}"
+                                                  Data="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                                        <PathIcon Width="16" Height="16" Foreground="#E8182E"
+                                                  IsVisible="{Binding IsRefreshing}"
+                                                  Data="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z">
+                                            <PathIcon.Styles>
+                                                <Style Selector="PathIcon">
+                                                    <Style.Animations>
+                                                        <Animation Duration="0:0:1" IterationCount="Infinite">
+                                                            <KeyFrame Cue="0%">
+                                                                <Setter Property="Opacity" Value="1"/>
+                                                            </KeyFrame>
+                                                            <KeyFrame Cue="50%">
+                                                                <Setter Property="Opacity" Value="0.2"/>
+                                                            </KeyFrame>
+                                                            <KeyFrame Cue="100%">
+                                                                <Setter Property="Opacity" Value="1"/>
+                                                            </KeyFrame>
+                                                        </Animation>
+                                                    </Style.Animations>
+                                                </Style>
+                                            </PathIcon.Styles>
+                                        </PathIcon>
+                                    </Panel>
+                                </Button>
+                            </Grid>
                         </Border>
 
                         <Button DockPanel.Dock="Bottom"
@@ -196,19 +232,55 @@
                             <Border DockPanel.Dock="Top"
                                     BorderThickness="0,0,0,2" BorderBrush="#E8182E"
                                     Padding="0,0,0,16" Margin="0,0,0,20">
-                                <StackPanel Orientation="Horizontal" Spacing="12">
-                                    <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
-                                        <PathIcon Width="16" Height="16" Foreground="White"
-                                                  Data="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                                    </Border>
-                                    <StackPanel VerticalAlignment="Center" Spacing="2">
-                                        <TextBlock Text="Üstümdeki Başvurular"
-                                                   FontSize="14" FontWeight="Medium"
-                                                   Foreground="#111111"/>
-                                        <TextBlock Text="Üzerime aldığım başvurular"
-                                                   FontSize="11" Foreground="#999999"/>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                                        <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
+                                            <PathIcon Width="16" Height="16" Foreground="White"
+                                                      Data="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center" Spacing="2">
+                                            <TextBlock Text="Üstümdeki Başvurular"
+                                                       FontSize="14" FontWeight="Medium"
+                                                       Foreground="#111111"/>
+                                            <TextBlock Text="Üzerime aldığım başvurular"
+                                                       FontSize="11" Foreground="#999999"/>
+                                        </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                    <Button Grid.Column="1"
+                                            Command="{Binding RefreshCommand}"
+                                            Width="36" Height="36"
+                                            CornerRadius="8"
+                                            Background="#F5F5F5"
+                                            VerticalAlignment="Center"
+                                            ToolTip.Tip="Yenile">
+                                        <Panel>
+                                            <PathIcon Width="16" Height="16" Foreground="#555555"
+                                                      IsVisible="{Binding !IsRefreshing}"
+                                                      Data="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                                            <PathIcon Width="16" Height="16" Foreground="#E8182E"
+                                                      IsVisible="{Binding IsRefreshing}"
+                                                      Data="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z">
+                                                <PathIcon.Styles>
+                                                    <Style Selector="PathIcon">
+                                                        <Style.Animations>
+                                                            <Animation Duration="0:0:1" IterationCount="Infinite">
+                                                                <KeyFrame Cue="0%">
+                                                                    <Setter Property="Opacity" Value="1"/>
+                                                                </KeyFrame>
+                                                                <KeyFrame Cue="50%">
+                                                                    <Setter Property="Opacity" Value="0.2"/>
+                                                                </KeyFrame>
+                                                                <KeyFrame Cue="100%">
+                                                                    <Setter Property="Opacity" Value="1"/>
+                                                                </KeyFrame>
+                                                            </Animation>
+                                                        </Style.Animations>
+                                                    </Style>
+                                                </PathIcon.Styles>
+                                            </PathIcon>
+                                        </Panel>
+                                    </Button>
+                                </Grid>
                             </Border>
 
                             <DataGrid Sorting="MyRequestsGrid_Sorting"

@@ -2,6 +2,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
 using ZTCRM.Models;
+using Avalonia.Threading;
+
 
 namespace ZTCRM.ViewModels;
 
@@ -9,6 +11,7 @@ public partial class StaffViewModel : ObservableObject
 {
     private readonly StaffRequestRepository _repository = new();
     private readonly Staff _staff;
+    private readonly DispatcherTimer _refreshTimer;
 
     public string WelcomeMessage => $"Hoş geldiniz, {_staff.FullName} | {_staff.UnitName ?? "Birim atanmadı"}";
     private readonly NotificationRepository _notificationRepository = new();
@@ -23,6 +26,7 @@ public partial class StaffViewModel : ObservableObject
     [ObservableProperty] private string _successMessage = string.Empty;
     [ObservableProperty] private List<Notification> _staffNotifications = new();
     [ObservableProperty] private int _unreadCount;
+    [ObservableProperty] private bool _isRefreshing = false;
     public bool HasUnread => UnreadCount > 0;
     
     private void LoadNotifications()
@@ -44,6 +48,28 @@ public partial class StaffViewModel : ObservableObject
         LoadPool();
         LoadMyRequests();
         LoadNotifications();
+        _refreshTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(30)
+        };
+        _refreshTimer.Tick += (s, e) => RefreshAll();
+        _refreshTimer.Start();
+
+    }
+    private async void RefreshAll()
+    {
+        IsRefreshing = true;
+        await Task.Delay(1000);
+        LoadPool();
+        LoadMyRequests();
+        LoadNotifications();
+        IsRefreshing = false;
+    }
+
+    [RelayCommand]
+    private void Refresh()
+    {
+        RefreshAll();
     }
 
     private void LoadPool()

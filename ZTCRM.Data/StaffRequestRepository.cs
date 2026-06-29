@@ -18,10 +18,8 @@ public class StaffRequestRepository
         cmd.Parameters.Add("p_StaffId", OracleDbType.Int32).Value = staffId;
         cmd.Parameters.Add("p_Result", OracleDbType.RefCursor).Direction = System.Data.ParameterDirection.Output;
         using var reader = cmd.ExecuteReader();
-        
         while (reader.Read())
         {
-            
             list.Add(new ServiceRequest
             {
                 RequestId     = reader.GetInt32(reader.GetOrdinal("RequestId")),

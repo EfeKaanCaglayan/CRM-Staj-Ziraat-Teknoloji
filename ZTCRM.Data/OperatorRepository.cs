@@ -36,6 +36,51 @@ public class OperatorRepository
         Console.WriteLine($"Toplam kayıt: {list.Count}");
         return list;
     }
+    public List<ServiceRequest> GetPool(int staffId)
+    {
+        var list = new List<ServiceRequest>();
+        using var conn = new OracleConnection(_connectionString);
+        conn.Open();
+        using var cmd = new OracleCommand("ZTCRM.sp_Operator_GetPool", conn);
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+      
+        cmd.Parameters.Add("p_Result", OracleDbType.RefCursor).Direction = System.Data.ParameterDirection.Output;
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            list.Add(new ServiceRequest
+            {
+                RequestId = reader.GetInt32(reader.GetOrdinal("RequestId")),
+                CustomerName = reader.GetString(reader.GetOrdinal("CustomerName")),
+                Description = reader.GetString(reader.GetOrdinal("Description")),
+                Priority = reader.GetString(reader.GetOrdinal("Priority")),
+                CurrentStatus = reader.GetString(reader.GetOrdinal("CurrentStatus")),
+                CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+                CategoryName = reader.IsDBNull(reader.GetOrdinal("CategoryName")) ? null : reader.GetString(reader.GetOrdinal("CategoryName"))
+            });
+        }
+        return list;
+    }
+    public void UpdateCategory(int requestId, int categoryId, string priority)
+    {
+        using var conn = new OracleConnection(_connectionString);
+        conn.Open();
+        using var cmd = new OracleCommand("ZTCRM.sp_ServiceRequest_UpdateCategory", conn);
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        cmd.Parameters.Add("p_RequestId", OracleDbType.Int32).Value = requestId;
+        cmd.Parameters.Add("p_CategoryId", OracleDbType.Int32).Value = categoryId;
+        cmd.Parameters.Add("p_Priority", OracleDbType.Varchar2).Value = priority;
+        cmd.ExecuteNonQuery();
+    }
+    public void ReturnToPending(int requestId)
+    {
+        using var conn = new OracleConnection(_connectionString);
+        conn.Open();
+        using var cmd = new OracleCommand("ZTCRM.sp_ServiceRequest_ReturnToPending", conn);
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        cmd.Parameters.Add("p_RequestId", OracleDbType.Int32).Value = requestId;
+        cmd.ExecuteNonQuery();
+    }
 
     public List<Category> GetCategories()
     {
