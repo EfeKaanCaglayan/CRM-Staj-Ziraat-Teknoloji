@@ -9,6 +9,7 @@ public partial class CustomerViewModel : ObservableObject
 {
     private readonly ServiceRequestRepository _repository = new();
     private readonly NotificationRepository _notifications = new();
+    private readonly GroqService _groqService = new();
     private readonly Customer _customer;
     public bool HasUnread => UnreadCount > 0;
     public List<string> RequestTypes { get; } = new() { "Şikayet", "Talep" };
@@ -21,10 +22,24 @@ public partial class CustomerViewModel : ObservableObject
     [ObservableProperty] private bool _isApproved = false;
     [ObservableProperty] private ServiceRequest? _selectedRequest;
     [ObservableProperty] private List<Notification>  _notifications2=new();
+    [ObservableProperty] private bool _showClosed=false;
     
+    public ObservableCollection<ServiceRequest> FilteredRequests=>
+        ShowClosed? Requests
+            :new ObservableCollection<ServiceRequest>( Requests.Where(r => r.CurrentStatus != "Closed" && 
+                                                                           r.CurrentStatus != "Canceled" && 
+                                                                           r.CurrentStatus != "Rejected"));
+    partial void OnShowClosedChanged(bool value)
+    {
+        OnPropertyChanged(nameof(FilteredRequests));
+    }
+
+    partial void OnRequestsChanged(ObservableCollection<ServiceRequest> value)
+    {
+        OnPropertyChanged(nameof(FilteredRequests));
+    }
     
-    
-    private readonly GroqService _groqService = new();
+   
     [RelayCommand]
     private async Task GetApproval()
     {

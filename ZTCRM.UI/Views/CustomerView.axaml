@@ -201,23 +201,44 @@
                         <Border DockPanel.Dock="Top"
                                 BorderThickness="0,0,0,2" BorderBrush="#E8182E"
                                 Padding="0,0,0,16" Margin="0,0,0,20">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
-                                    <PathIcon Width="16" Height="16" Foreground="White"
-                                              Data="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
-                                </Border>
-                                <StackPanel VerticalAlignment="Center" Spacing="2">
-                                    <TextBlock Text="Şikayetlerim"
-                                               FontSize="14" FontWeight="Medium"
-                                               Foreground="#111111"/>
-                                    <TextBlock Text="Tüm talepleriniz"
-                                               FontSize="11" Foreground="#999999"/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                                    <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
+                                        <PathIcon Width="16" Height="16" Foreground="White"
+                                                  Data="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center" Spacing="2">
+                                        <TextBlock Text="Şikayetlerim"
+                                                   FontSize="14" FontWeight="Medium"
+                                                   Foreground="#111111"/>
+                                        <TextBlock Text="Tüm talepleriniz"
+                                                   FontSize="11" Foreground="#999999"/>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
+                                <ToggleButton Grid.Column="1"
+                                              IsChecked="{Binding ShowClosed}"
+                                              VerticalAlignment="Center"
+                                              Padding="12,6"
+                                              CornerRadius="6"
+                                              FontSize="12">
+                                    <ToggleButton.Styles>
+                                        <Style Selector="ToggleButton">
+                                            <Setter Property="Background" Value="#F5F5F5"/>
+                                            <Setter Property="Foreground" Value="#555555"/>
+                                            <Setter Property="Content" Value="Kapalıları Göster"/>
+                                        </Style>
+                                        <Style Selector="ToggleButton:checked">
+                                            <Setter Property="Background" Value="#E8182E"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="Content" Value="Kapalıları Gizle"/>
+                                        </Style>
+                                    </ToggleButton.Styles>
+                                </ToggleButton>
+                            </Grid>
                         </Border>
 
                         <DataGrid Sorting="RequestsGrid_Sorting"
-                                  ItemsSource="{Binding Requests}"
+                                  ItemsSource="{Binding FilteredRequests}"
                                   SelectedItem="{Binding SelectedRequest}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
