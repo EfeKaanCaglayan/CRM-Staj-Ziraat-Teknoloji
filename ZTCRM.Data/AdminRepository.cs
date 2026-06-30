@@ -23,6 +23,7 @@ public class AdminRepository
                 UnitName     = reader.GetString(reader.GetOrdinal("UnitName")),
                 UnitType     = reader.GetString(reader.GetOrdinal("UnitType")),
                 ParentUnitId = reader.IsDBNull(reader.GetOrdinal("ParentUnitId")) ? null : reader.GetInt32(reader.GetOrdinal("ParentUnitId")),
+                IsActive     = reader.GetInt32(reader.GetOrdinal("IsActive")) == 1,
                 IsActiveText = reader.IsDBNull(reader.GetOrdinal("IsActiveText")) ? null : reader.GetString(reader.GetOrdinal("IsActiveText")),
                 CreatedAt    = reader.GetDateTime(reader.GetOrdinal("CreatedAt"))
             });
@@ -76,6 +77,7 @@ public class AdminRepository
                 UnitName = reader.IsDBNull(reader.GetOrdinal("UnitName")) ? null : reader.GetString(reader.GetOrdinal("UnitName")),
                 PasswordHash = reader.GetString(reader.GetOrdinal("PasswordHash")),
                 IsActiveText = reader.GetString(reader.GetOrdinal("IsActiveText")),
+                IsActive = reader.GetInt32(reader.GetOrdinal("IsActive")) == 1,
                 UnitIsActiveText = reader.IsDBNull(reader.GetOrdinal("UnitIsActiveText")) ? string.Empty : reader.GetString(reader.GetOrdinal("UnitIsActiveText")),
                 RoleName = reader.GetString(reader.GetOrdinal("RoleName"))
             });

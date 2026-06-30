@@ -8,7 +8,8 @@
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
         CanResize="True"
-        Background="#2C2C2C">
+        Background="#2C2C2C"
+        Icon="/Assets/Logo2.png">
 
     <DockPanel>
 
@@ -107,7 +108,7 @@
 
                         <Border DockPanel.Dock="Top"
                                 BorderThickness="0,0,0,2" BorderBrush="#E8182E"
-                                Padding="0,0,0,16" Margin="0,0,0,20">
+                                Padding="0,0,0,16" Margin="0,0,0,12">
                             <Grid ColumnDefinitions="*,Auto">
                                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
                                     <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
@@ -159,6 +160,16 @@
                             </Grid>
                         </Border>
 
+                        <!-- Search Bar - Havuz -->
+                        <TextBox DockPanel.Dock="Top"
+                                 Text="{Binding PoolSearchText}"
+                                 PlaceholderText="Müşteri,Id, kategori veya açıklama ara..."
+                                 Height="36" FontSize="12"
+                                 Background="#F8F8F8" Foreground="#111111"
+                                 BorderBrush="#DDDDDD" BorderThickness="1"
+                                 CornerRadius="6" Padding="10,0"
+                                 Margin="0,0,0,12"/>
+
                         <Button DockPanel.Dock="Bottom"
                                 Content="Üstüme Al"
                                 Command="{Binding AssignToSelfCommand}"
@@ -169,7 +180,7 @@
                                 CornerRadius="8" Margin="0,16,0,0"/>
 
                         <DataGrid Sorting="PoolGrid_Sorting"
-                                  ItemsSource="{Binding PoolRequests}"
+                                  ItemsSource="{Binding FilteredPoolRequests}"
                                   SelectedItem="{Binding SelectedPoolRequest}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
@@ -231,8 +242,8 @@
 
                             <Border DockPanel.Dock="Top"
                                     BorderThickness="0,0,0,2" BorderBrush="#E8182E"
-                                    Padding="0,0,0,16" Margin="0,0,0,20">
-                                <Grid ColumnDefinitions="*,Auto">
+                                    Padding="0,0,0,16" Margin="0,0,0,12">
+                                <Grid ColumnDefinitions="*,Auto,Auto">
                                     <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
                                         <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
                                             <PathIcon Width="16" Height="16" Foreground="White"
@@ -246,7 +257,27 @@
                                                        FontSize="11" Foreground="#999999"/>
                                         </StackPanel>
                                     </StackPanel>
-                                    <Button Grid.Column="1"
+                                    <ToggleButton Grid.Column="1"
+                                                  IsChecked="{Binding ShowClosedMyRequests, Mode=TwoWay}"
+                                                  VerticalAlignment="Center"
+                                                  Padding="10,6"
+                                                  CornerRadius="6"
+                                                  FontSize="11"
+                                                  Margin="0,0,8,0">
+                                        <ToggleButton.Styles>
+                                            <Style Selector="ToggleButton">
+                                                <Setter Property="Background" Value="#F5F5F5"/>
+                                                <Setter Property="Foreground" Value="#555555"/>
+                                                <Setter Property="Content" Value="Kapalıları Göster"/>
+                                            </Style>
+                                            <Style Selector="ToggleButton:checked">
+                                                <Setter Property="Background" Value="#E8182E"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Content" Value="Kapalıları Gizle"/>
+                                            </Style>
+                                        </ToggleButton.Styles>
+                                    </ToggleButton>
+                                    <Button Grid.Column="2"
                                             Command="{Binding RefreshCommand}"
                                             Width="36" Height="36"
                                             CornerRadius="8"
@@ -283,8 +314,18 @@
                                 </Grid>
                             </Border>
 
+                            <!-- Search Bar - Üstümdekiler -->
+                            <TextBox DockPanel.Dock="Top"
+                                     Text="{Binding MyRequestsSearchText}"
+                                     PlaceholderText="Müşteri,Id kategori veya açıklama ara..."
+                                     Height="36" FontSize="12"
+                                     Background="#F8F8F8" Foreground="#111111"
+                                     BorderBrush="#DDDDDD" BorderThickness="1"
+                                     CornerRadius="6" Padding="10,0"
+                                     Margin="0,0,0,12"/>
+
                             <DataGrid Sorting="MyRequestsGrid_Sorting"
-                                      ItemsSource="{Binding MyRequests}"
+                                      ItemsSource="{Binding FilteredMyRequests}"
                                       SelectedItem="{Binding SelectedMyRequest}"
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True"

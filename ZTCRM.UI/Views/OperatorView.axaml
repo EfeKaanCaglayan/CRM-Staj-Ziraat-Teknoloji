@@ -8,7 +8,8 @@
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
         CanResize="True"
-        Background="#2C2C2C">
+        Background="#2C2C2C"
+        Icon="/Assets/Logo2.png">
 
     <DockPanel>
 
@@ -72,12 +73,8 @@
             </Border>
 
             <Canvas>
-                <Ellipse Canvas.Left="700" Canvas.Top="-140"
-                         Width="560" Height="560"
-                         Fill="#A50E26" Opacity="0.5"/>
-                <Ellipse Canvas.Left="-160" Canvas.Top="300"
-                         Width="480" Height="480"
-                         Fill="#A50E26" Opacity="0.4"/>
+                <Ellipse Canvas.Left="700" Canvas.Top="-140" Width="560" Height="560" Fill="#A50E26" Opacity="0.5"/>
+                <Ellipse Canvas.Left="-160" Canvas.Top="300" Width="480" Height="480" Fill="#A50E26" Opacity="0.4"/>
             </Canvas>
 
             <Grid ColumnDefinitions="*,380" Margin="32">
@@ -93,7 +90,7 @@
                             <DockPanel>
                                 <Border DockPanel.Dock="Top"
                                         BorderThickness="0,0,0,2" BorderBrush="#E8182E"
-                                        Padding="0,0,0,16" Margin="0,0,0,20">
+                                        Padding="0,0,0,16" Margin="0,0,0,12">
                                     <Grid ColumnDefinitions="*,Auto">
                                         <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
                                             <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
@@ -101,20 +98,13 @@
                                                           Data="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Center" Spacing="2">
-                                                <TextBlock Text="Bekleyen Başvurular"
-                                                           FontSize="14" FontWeight="Medium"
-                                                           Foreground="#111111"/>
-                                                <TextBlock Text="Kategorize edilmeyi bekleyen başvurular"
-                                                           FontSize="11" Foreground="#999999"/>
+                                                <TextBlock Text="Bekleyen Başvurular" FontSize="14" FontWeight="Medium" Foreground="#111111"/>
+                                                <TextBlock Text="Kategorize edilmeyi bekleyen başvurular" FontSize="11" Foreground="#999999"/>
                                             </StackPanel>
                                         </StackPanel>
-                                        <Button Grid.Column="1"
-                                                Command="{Binding RefreshCommand}"
-                                                Width="36" Height="36"
-                                                CornerRadius="8"
-                                                Background="#F5F5F5"
-                                                VerticalAlignment="Center"
-                                                ToolTip.Tip="Yenile">
+                                        <Button Grid.Column="1" Command="{Binding RefreshCommand}"
+                                                Width="36" Height="36" CornerRadius="8"
+                                                Background="#F5F5F5" VerticalAlignment="Center" ToolTip.Tip="Yenile">
                                             <Panel>
                                                 <PathIcon Width="16" Height="16" Foreground="#555555"
                                                           IsVisible="{Binding !IsRefreshing}"
@@ -126,15 +116,9 @@
                                                         <Style Selector="PathIcon">
                                                             <Style.Animations>
                                                                 <Animation Duration="0:0:1" IterationCount="Infinite">
-                                                                    <KeyFrame Cue="0%">
-                                                                        <Setter Property="Opacity" Value="1"/>
-                                                                    </KeyFrame>
-                                                                    <KeyFrame Cue="50%">
-                                                                        <Setter Property="Opacity" Value="0.2"/>
-                                                                    </KeyFrame>
-                                                                    <KeyFrame Cue="100%">
-                                                                        <Setter Property="Opacity" Value="1"/>
-                                                                    </KeyFrame>
+                                                                    <KeyFrame Cue="0%"><Setter Property="Opacity" Value="1"/></KeyFrame>
+                                                                    <KeyFrame Cue="50%"><Setter Property="Opacity" Value="0.2"/></KeyFrame>
+                                                                    <KeyFrame Cue="100%"><Setter Property="Opacity" Value="1"/></KeyFrame>
                                                                 </Animation>
                                                             </Style.Animations>
                                                         </Style>
@@ -145,41 +129,32 @@
                                     </Grid>
                                 </Border>
 
+                                <TextBox DockPanel.Dock="Top"
+                                         Text="{Binding RequestsSearchText}"
+                                         PlaceholderText="No, müşteri veya açıklama ara..."
+                                         Height="36" FontSize="12"
+                                         Background="#F8F8F8" Foreground="#111111"
+                                         BorderBrush="#DDDDDD" BorderThickness="1"
+                                         CornerRadius="6" Padding="10,0"
+                                         Margin="0,0,0,12"/>
+
                                 <DataGrid Sorting="RequestsGrid_Sorting"
-                                          ItemsSource="{Binding Requests}"
+                                          ItemsSource="{Binding FilteredRequests}"
                                           SelectedItem="{Binding SelectedRequest}"
-                                          AutoGenerateColumns="False"
-                                          IsReadOnly="True"
-                                          CanUserSortColumns="True"
-                                          CanUserReorderColumns="False"
-                                          GridLinesVisibility="Horizontal"
-                                          BorderThickness="0">
+                                          AutoGenerateColumns="False" IsReadOnly="True"
+                                          CanUserSortColumns="True" CanUserReorderColumns="False"
+                                          GridLinesVisibility="Horizontal" BorderThickness="0">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="No"
-                                                            Binding="{Binding RequestId}"
-                                                            Width="55"
-                                                            CanUserSort="True"/>
-                                        <DataGridTextColumn Header="Müşteri"
-                                                            Binding="{Binding CustomerName}"
-                                                            Width="140"
-                                                            CanUserSort="True"/>
-                                        <DataGridTextColumn Header="Açıklama"
-                                                            Binding="{Binding Description}"
-                                                            Width="*"/>
-                                        <DataGridTextColumn Header="Tarih"
-                                                            Binding="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy}'}"
-                                                            Width="110"
-                                                            CanUserSort="True"/>
+                                        <DataGridTextColumn Header="No" Binding="{Binding RequestId}" Width="55" CanUserSort="True"/>
+                                        <DataGridTextColumn Header="Müşteri" Binding="{Binding CustomerName}" Width="140" CanUserSort="True"/>
+                                        <DataGridTextColumn Header="Açıklama" Binding="{Binding Description}" Width="*"/>
+                                        <DataGridTextColumn Header="Tarih" Binding="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy}'}" Width="110" CanUserSort="True"/>
                                         <DataGridTemplateColumn Header="Detay" Width="80">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate x:DataType="models:ServiceRequest">
-                                                    <Button Content="Detay"
-                                                            Tag="{Binding}"
-                                                            Click="DetailButton_Click"
-                                                            HorizontalAlignment="Center"
-                                                            Height="26" FontSize="11"
-                                                            Background="#E8182E" Foreground="White"
-                                                            CornerRadius="4" Padding="10,0"/>
+                                                    <Button Content="Detay" Tag="{Binding}" Click="DetailButton_Click"
+                                                            HorizontalAlignment="Center" Height="26" FontSize="11"
+                                                            Background="#E8182E" Foreground="White" CornerRadius="4" Padding="10,0"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
@@ -193,7 +168,7 @@
                             <DockPanel>
                                 <Border DockPanel.Dock="Top"
                                         BorderThickness="0,0,0,2" BorderBrush="#E8182E"
-                                        Padding="0,0,0,16" Margin="0,0,0,20">
+                                        Padding="0,0,0,16" Margin="0,0,0,12">
                                     <Grid ColumnDefinitions="*,Auto">
                                         <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
                                             <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
@@ -201,20 +176,13 @@
                                                           Data="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Center" Spacing="2">
-                                                <TextBlock Text="Havuzdaki Başvurular"
-                                                           FontSize="14" FontWeight="Medium"
-                                                           Foreground="#111111"/>
-                                                <TextBlock Text="Havuzdaki tüm başvurular"
-                                                           FontSize="11" Foreground="#999999"/>
+                                                <TextBlock Text="Havuzdaki Başvurular" FontSize="14" FontWeight="Medium" Foreground="#111111"/>
+                                                <TextBlock Text="Havuzdaki tüm başvurular" FontSize="11" Foreground="#999999"/>
                                             </StackPanel>
                                         </StackPanel>
-                                        <Button Grid.Column="1"
-                                                Command="{Binding RefreshCommand}"
-                                                Width="36" Height="36"
-                                                CornerRadius="8"
-                                                Background="#F5F5F5"
-                                                VerticalAlignment="Center"
-                                                ToolTip.Tip="Yenile">
+                                        <Button Grid.Column="1" Command="{Binding RefreshCommand}"
+                                                Width="36" Height="36" CornerRadius="8"
+                                                Background="#F5F5F5" VerticalAlignment="Center" ToolTip.Tip="Yenile">
                                             <Panel>
                                                 <PathIcon Width="16" Height="16" Foreground="#555555"
                                                           IsVisible="{Binding !IsRefreshing}"
@@ -226,15 +194,9 @@
                                                         <Style Selector="PathIcon">
                                                             <Style.Animations>
                                                                 <Animation Duration="0:0:1" IterationCount="Infinite">
-                                                                    <KeyFrame Cue="0%">
-                                                                        <Setter Property="Opacity" Value="1"/>
-                                                                    </KeyFrame>
-                                                                    <KeyFrame Cue="50%">
-                                                                        <Setter Property="Opacity" Value="0.2"/>
-                                                                    </KeyFrame>
-                                                                    <KeyFrame Cue="100%">
-                                                                        <Setter Property="Opacity" Value="1"/>
-                                                                    </KeyFrame>
+                                                                    <KeyFrame Cue="0%"><Setter Property="Opacity" Value="1"/></KeyFrame>
+                                                                    <KeyFrame Cue="50%"><Setter Property="Opacity" Value="0.2"/></KeyFrame>
+                                                                    <KeyFrame Cue="100%"><Setter Property="Opacity" Value="1"/></KeyFrame>
                                                                 </Animation>
                                                             </Style.Animations>
                                                         </Style>
@@ -245,33 +207,27 @@
                                     </Grid>
                                 </Border>
 
-                                <DataGrid ItemsSource="{Binding PoolRequests}"
+                                <TextBox DockPanel.Dock="Top"
+                                         Text="{Binding PoolSearchText}"
+                                         PlaceholderText="No, müşteri, kategori veya açıklama ara..."
+                                         Height="36" FontSize="12"
+                                         Background="#F8F8F8" Foreground="#111111"
+                                         BorderBrush="#DDDDDD" BorderThickness="1"
+                                         CornerRadius="6" Padding="10,0"
+                                         Margin="0,0,0,12"/>
+
+                                <DataGrid ItemsSource="{Binding FilteredPoolRequests}"
                                           SelectedItem="{Binding SelectedPoolRequest}"
-                                          AutoGenerateColumns="False"
-                                          IsReadOnly="True"
-                                          CanUserSortColumns="True"
-                                          CanUserReorderColumns="False"
-                                          GridLinesVisibility="Horizontal"
-                                          BorderThickness="0">
+                                          AutoGenerateColumns="False" IsReadOnly="True"
+                                          CanUserSortColumns="True" CanUserReorderColumns="False"
+                                          GridLinesVisibility="Horizontal" BorderThickness="0">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="No"
-                                                            Binding="{Binding RequestId}"
-                                                            Width="55"/>
-                                        <DataGridTextColumn Header="Müşteri"
-                                                            Binding="{Binding CustomerName}"
-                                                            Width="140"/>
-                                        <DataGridTextColumn Header="Kategori"
-                                                            Binding="{Binding CategoryName}"
-                                                            Width="120"/>
-                                        <DataGridTextColumn Header="Öncelik"
-                                                            Binding="{Binding Priority}"
-                                                            Width="80"/>
-                                        <DataGridTextColumn Header="Açıklama"
-                                                            Binding="{Binding Description}"
-                                                            Width="*"/>
-                                        <DataGridTextColumn Header="Tarih"
-                                                            Binding="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy}'}"
-                                                            Width="110"/>
+                                        <DataGridTextColumn Header="No" Binding="{Binding RequestId}" Width="55"/>
+                                        <DataGridTextColumn Header="Müşteri" Binding="{Binding CustomerName}" Width="140"/>
+                                        <DataGridTextColumn Header="Kategori" Binding="{Binding CategoryName}" Width="120"/>
+                                        <DataGridTextColumn Header="Öncelik" Binding="{Binding Priority}" Width="80"/>
+                                        <DataGridTextColumn Header="Açıklama" Binding="{Binding Description}" Width="*"/>
+                                        <DataGridTextColumn Header="Tarih" Binding="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy}'}" Width="110"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </DockPanel>
@@ -280,194 +236,235 @@
                     </TabControl>
                 </Border>
 
-                <!-- SAĞ: İşlem Paneli -->
-                <Border Grid.Column="1" Background="White" CornerRadius="12"
-                        Padding="28,24">
-                    <Border.BoxShadow>0 8 40 0 #40000000</Border.BoxShadow>
-                    <ScrollViewer>
-                        <StackPanel Spacing="0">
-
-                            <Border BorderThickness="0,0,0,2" BorderBrush="#E8182E"
-                                    Padding="0,0,0,16" Margin="0,0,0,20">
-                                <StackPanel Orientation="Horizontal" Spacing="12">
-                                    <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
-                                        <PathIcon Width="16" Height="16" Foreground="White"
-                                                  Data="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                                    </Border>
-                                    <StackPanel VerticalAlignment="Center" Spacing="2">
-                                        <TextBlock Text="İşlem Paneli"
-                                                   FontSize="14" FontWeight="Medium"
-                                                   Foreground="#111111"/>
-                                        <TextBlock Text="Seçili başvuruyu yönetin"
-                                                   FontSize="11" Foreground="#999999"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- TAB 1 İÇERİĞİ -->
-                            <StackPanel IsVisible="{Binding IsTab1Selected}">
-                                <Border Background="#F8F8F8" CornerRadius="8"
-                                        Padding="14,10" Margin="0,0,0,16"
-                                        IsVisible="{Binding SelectedRequest,
-                                                    Converter={x:Static ObjectConverters.IsNotNull}}">
-                                    <StackPanel Spacing="4">
-                                        <TextBlock Text="SEÇİLİ BAŞVURU"
-                                                   FontSize="10" Foreground="#999999"/>
-                                        <TextBlock Text="{Binding SelectedRequest.RequestId, StringFormat='#{0}'}"
-                                                   FontSize="13" FontWeight="Medium" Foreground="#E8182E"/>
-                                        <TextBlock Text="{Binding SelectedRequest.CustomerName}"
-                                                   FontSize="12" Foreground="#555555"/>
-                                    </StackPanel>
-                                </Border>
-
-                                <TextBlock Text="Kategori" FontSize="12"
-                                           Foreground="#555555" Margin="0,0,0,6"/>
-                                <ComboBox ItemsSource="{Binding Categories}"
-                                          SelectedItem="{Binding SelectedCategory}"
-                                          PlaceholderText="Kategori seçin"
-                                          HorizontalAlignment="Stretch"
-                                          Height="38" FontSize="13"
-                                          Margin="0,0,0,14">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate x:DataType="models:Category">
-                                            <TextBlock Text="{Binding CategoryName}"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-
-                                <TextBlock Text="Öncelik" FontSize="12"
-                                           Foreground="#555555" Margin="0,0,0,6"/>
-                                <ComboBox ItemsSource="{Binding Priorities}"
-                                          SelectedItem="{Binding SelectedPriority}"
-                                          PlaceholderText="Öncelik seçin"
-                                          HorizontalAlignment="Stretch"
-                                          Height="38" FontSize="13"
-                                          Margin="0,0,0,14"/>
-
-                                <Button Content="Havuza Ekle"
-                                        Command="{Binding CategorizeAndPoolCommand}"
-                                        HorizontalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        Height="42" FontSize="13" FontWeight="Medium"
-                                        Background="#E8182E" Foreground="White"
-                                        CornerRadius="8" Margin="0,0,0,8"/>
-
-                                <Border Height="1" Background="#EEEEEE" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="BAŞVURUYU REDDET"
-                                           FontSize="10" Foreground="#999999"
-                                           LetterSpacing="1" Margin="0,0,0,12"/>
-
-                                <TextBlock Text="Red Türü" FontSize="12"
-                                           Foreground="#555555" Margin="0,0,0,6"/>
-                                <ComboBox ItemsSource="{Binding RejectionTypes}"
-                                          SelectedItem="{Binding SelectedRejectionType}"
-                                          PlaceholderText="Red türü seçin"
-                                          HorizontalAlignment="Stretch"
-                                          Height="38" FontSize="13"
-                                          Margin="0,0,0,14"/>
-
-                                <TextBlock Text="Red Sebebi" FontSize="12"
-                                           Foreground="#555555" Margin="0,0,0,6"/>
-                                <TextBox PlaceholderText="Red sebebini açıklayın..."
-                                         Text="{Binding RejectionReason}"
-                                         Height="80" FontSize="13"
-                                         Background="#F8F8F8" Foreground="#111111"
-                                         BorderBrush="#DDDDDD" BorderThickness="1"
-                                         CornerRadius="6" Padding="10,8"
-                                         AcceptsReturn="True" TextWrapping="Wrap"
-                                         Margin="0,0,0,14"/>
-
-                                <Button Content="Reddet"
-                                        Command="{Binding RejectCommand}"
-                                        HorizontalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        Height="42" FontSize="13" FontWeight="Medium"
-                                        Background="#555555" Foreground="White"
-                                        CornerRadius="8"/>
-                            </StackPanel>
-
-                            <!-- TAB 2 İÇERİĞİ -->
-                            <StackPanel IsVisible="{Binding IsTab2Selected}">
-                                <Border Background="#F8F8F8" CornerRadius="8"
-                                        Padding="14,10" Margin="0,0,0,16"
-                                        IsVisible="{Binding SelectedPoolRequest,
-                                                    Converter={x:Static ObjectConverters.IsNotNull}}">
-                                    <StackPanel Spacing="4">
-                                        <TextBlock Text="SEÇİLİ BAŞVURU"
-                                                   FontSize="10" Foreground="#999999"/>
-                                        <TextBlock Text="{Binding SelectedPoolRequest.RequestId, StringFormat='#{0}'}"
-                                                   FontSize="13" FontWeight="Medium" Foreground="#E8182E"/>
-                                        <TextBlock Text="{Binding SelectedPoolRequest.CustomerName}"
-                                                   FontSize="12" Foreground="#555555"/>
-                                    </StackPanel>
-                                </Border>
-
-                                <TextBlock Text="Kategori" FontSize="12"
-                                           Foreground="#555555" Margin="0,0,0,6"/>
-                                <ComboBox ItemsSource="{Binding Categories}"
-                                          SelectedItem="{Binding SelectedPoolCategory}"
-                                          PlaceholderText="Kategori seçin"
-                                          HorizontalAlignment="Stretch"
-                                          Height="38" FontSize="13"
-                                          Margin="0,0,0,14">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate x:DataType="models:Category">
-                                            <TextBlock Text="{Binding CategoryName}"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-
-                                <TextBlock Text="Öncelik" FontSize="12"
-                                           Foreground="#555555" Margin="0,0,0,6"/>
-                                <ComboBox ItemsSource="{Binding Priorities}"
-                                          SelectedItem="{Binding SelectedPoolPriority}"
-                                          PlaceholderText="Öncelik seçin"
-                                          HorizontalAlignment="Stretch"
-                                          Height="38" FontSize="13"
-                                          Margin="0,0,0,14"/>
-
-                                <Button Content="Kategori Güncelle"
-                                        Command="{Binding UpdateCategoryCommand}"
-                                        HorizontalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        Height="42" FontSize="13" FontWeight="Medium"
-                                        Background="#E8182E" Foreground="White"
-                                        CornerRadius="8" Margin="0,0,0,8"/>
-
-                                <Button Content="Bekleyene Gönder"
-                                        Command="{Binding ReturnToPendingCommand}"
-                                        HorizontalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        Height="42" FontSize="13" FontWeight="Medium"
-                                        Background="#555555" Foreground="White"
-                                        CornerRadius="8"/>
-                            </StackPanel>
-
-                            <!-- HATA / BAŞARI MESAJLARI -->
-                            <Border Background="#FEF2F2" BorderBrush="#FECACA"
-                                    BorderThickness="1" CornerRadius="8"
-                                    Padding="12,10" Margin="0,12,0,0"
-                                    IsVisible="{Binding ErrorMessage,
-                                                Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                                <TextBlock Text="{Binding ErrorMessage}"
-                                           Foreground="#B91C1C" FontSize="12"
-                                           TextWrapping="Wrap"/>
-                            </Border>
-
-                            <Border Background="#F0FDF4" BorderBrush="#BBF7D0"
-                                    BorderThickness="1" CornerRadius="8"
-                                    Padding="12,10" Margin="0,12,0,0"
-                                    IsVisible="{Binding SuccessMessage,
-                                                Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                                <TextBlock Text="{Binding SuccessMessage}"
-                                           Foreground="#15803D" FontSize="12"
-                                           TextWrapping="Wrap"/>
-                            </Border>
-
-                        </StackPanel>
-                    </ScrollViewer>
+<!-- SAĞ: İşlem Paneli -->
+<Border Grid.Column="1" Background="White" CornerRadius="12" Padding="28,24">
+    <Border.BoxShadow>0 8 40 0 #40000000</Border.BoxShadow>
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- Başlık -->
+        <Border Grid.Row="0" BorderThickness="0,0,0,2" BorderBrush="#E8182E"
+                Padding="0,0,0,16" Margin="0,0,0,16">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
+                    <PathIcon Width="16" Height="16" Foreground="White"
+                              Data="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                 </Border>
+                <StackPanel VerticalAlignment="Center" Spacing="2">
+                    <TextBlock Text="İşlem Paneli" FontSize="14" FontWeight="Medium" Foreground="#111111"/>
+                    <TextBlock Text="Seçili başvuruyu yönetin" FontSize="11" Foreground="#999999"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- TAB 1 seçiliyken işlem tabları -->
+        <TabControl Grid.Row="1" IsVisible="{Binding IsTab1Selected}">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="6" Margin="4,0">
+                        <PathIcon Width="12" Height="12"
+                                  Data="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        <TextBlock Text="Kategorize Et" FontSize="12"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <StackPanel Spacing="0" Margin="0,12,0,0">
+                        <Border Background="#F8F8F8" CornerRadius="8"
+                                Padding="14,10" Margin="0,0,0,16"
+                                IsVisible="{Binding SelectedRequest, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="SEÇİLİ BAŞVURU" FontSize="10" Foreground="#999999"/>
+                                <TextBlock Text="{Binding SelectedRequest.RequestId, StringFormat='#{0}'}"
+                                           FontSize="13" FontWeight="Medium" Foreground="#E8182E"/>
+                                <TextBlock Text="{Binding SelectedRequest.CustomerName}" FontSize="12" Foreground="#555555"/>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Kategori" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"
+                                  PlaceholderText="Kategori seçin" HorizontalAlignment="Stretch"
+                                  Height="38" FontSize="13" Margin="0,0,0,14">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="models:Category">
+                                    <TextBlock Text="{Binding CategoryName}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBlock Text="Öncelik" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding Priorities}" SelectedItem="{Binding SelectedPriority}"
+                                  PlaceholderText="Öncelik seçin" HorizontalAlignment="Stretch"
+                                  Height="38" FontSize="13" Margin="0,0,0,14"/>
+
+                        <Button Content="Havuza Ekle" Command="{Binding CategorizeAndPoolCommand}"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                Height="42" FontSize="13" FontWeight="Medium"
+                                Background="#E8182E" Foreground="White" CornerRadius="8" Margin="0,0,0,16"/>
+
+                        <Border Height="1" Background="#EEEEEE" Margin="0,0,0,16"/>
+
+                        <TextBlock Text="BAŞVURUYU REDDET" FontSize="10" Foreground="#999999"
+                                   LetterSpacing="1" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Red Türü" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding RejectionTypes}" SelectedItem="{Binding SelectedRejectionType}"
+                                  PlaceholderText="Red türü seçin" HorizontalAlignment="Stretch"
+                                  Height="38" FontSize="13" Margin="0,0,0,14"/>
+
+                        <TextBlock Text="Red Sebebi" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                        <TextBox PlaceholderText="Red sebebini açıklayın..." Text="{Binding RejectionReason}"
+                                 Height="80" FontSize="13" Background="#F8F8F8" Foreground="#111111"
+                                 BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="6" Padding="10,8"
+                                 AcceptsReturn="True" TextWrapping="Wrap" Margin="0,0,0,14"/>
+
+                        <Button Content="Reddet" Command="{Binding RejectCommand}"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                Height="42" FontSize="13" FontWeight="Medium"
+                                Background="#555555" Foreground="White" CornerRadius="8"/>
+
+                        <Border Background="#FEF2F2" BorderBrush="#FECACA"
+                                BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,12,0,0"
+                                IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                            <TextBlock Text="{Binding ErrorMessage}" Foreground="#B91C1C" FontSize="12" TextWrapping="Wrap"/>
+                        </Border>
+                        <Border Background="#F0FDF4" BorderBrush="#BBF7D0"
+                                BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,8,0,0"
+                                IsVisible="{Binding SuccessMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                            <TextBlock Text="{Binding SuccessMessage}" Foreground="#15803D" FontSize="12" TextWrapping="Wrap"/>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="6" Margin="4,0">
+                        <PathIcon Width="12" Height="12"
+                                  Data="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/>
+                        <TextBlock Text="Yeni Başvuru" FontSize="12"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <StackPanel Spacing="0" Margin="0,12,0,0">
+                        <TextBlock Text="TC Kimlik No" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                            <TextBox Grid.Column="0" Text="{Binding NewRequestNationalId}"
+                                     PlaceholderText="TC Kimlik No girin"
+                                     Height="38" FontSize="13"
+                                     Background="#F8F8F8" Foreground="#111111"
+                                     BorderBrush="#DDDDDD" BorderThickness="1"
+                                     CornerRadius="6" Padding="10,0" Margin="0,0,8,0"/>
+                            <Button Grid.Column="1" Content="Ara"
+                                    Command="{Binding SearchCustomerCommand}"
+                                    Height="38" FontSize="12" FontWeight="Medium"
+                                    Background="#555555" Foreground="White"
+                                    CornerRadius="6" Padding="12,0"/>
+                        </Grid>
+
+                        <Border Background="#F0FDF4" BorderBrush="#BBF7D0"
+                                BorderThickness="1" CornerRadius="6"
+                                Padding="10,8" Margin="0,0,0,12"
+                                IsVisible="{Binding IsCustomerFound}">
+                            <TextBlock Text="{Binding CustomerSearchResult}" FontSize="12" Foreground="#15803D"/>
+                        </Border>
+
+                        <Border Background="#FEF2F2" BorderBrush="#FECACA"
+                                BorderThickness="1" CornerRadius="6"
+                                Padding="10,8" Margin="0,0,0,12"
+                                IsVisible="{Binding IsCustomerNotFound}">
+                            <TextBlock Text="{Binding CustomerSearchResult}" FontSize="12" Foreground="#B91C1C"/>
+                        </Border>
+
+                        <TextBlock Text="Başvuru Türü" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding RequestTypes}" SelectedItem="{Binding NewRequestType}"
+                                  PlaceholderText="Tür seçin" HorizontalAlignment="Stretch"
+                                  Height="38" FontSize="13" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Açıklama" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding NewRequestDescription}"
+                                 PlaceholderText="Açıklama girin..."
+                                 Height="80" FontSize="13"
+                                 Background="#F8F8F8" Foreground="#111111"
+                                 BorderBrush="#DDDDDD" BorderThickness="1"
+                                 CornerRadius="6" Padding="10,8"
+                                 AcceptsReturn="True" TextWrapping="Wrap"
+                                 Margin="0,0,0,12"/>
+
+                        <Button Content="Başvuru Oluştur"
+                                Command="{Binding CreateRequestForCustomerCommand}"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                Height="42" FontSize="13" FontWeight="Medium"
+                                Background="#0369A1" Foreground="White" CornerRadius="8"/>
+
+                        <Border Background="#FEF2F2" BorderBrush="#FECACA"
+                                BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,12,0,0"
+                                IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                            <TextBlock Text="{Binding ErrorMessage}" Foreground="#B91C1C" FontSize="12" TextWrapping="Wrap"/>
+                        </Border>
+                        <Border Background="#F0FDF4" BorderBrush="#BBF7D0"
+                                BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,8,0,0"
+                                IsVisible="{Binding SuccessMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                            <TextBlock Text="{Binding SuccessMessage}" Foreground="#15803D" FontSize="12" TextWrapping="Wrap"/>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <!-- TAB 2 seçiliyken havuz işlemleri -->
+        <ScrollViewer Grid.Row="1" IsVisible="{Binding IsTab2Selected}">
+            <StackPanel Spacing="0">
+                <Border Background="#F8F8F8" CornerRadius="8"
+                        Padding="14,10" Margin="0,0,0,16"
+                        IsVisible="{Binding SelectedPoolRequest, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="SEÇİLİ BAŞVURU" FontSize="10" Foreground="#999999"/>
+                        <TextBlock Text="{Binding SelectedPoolRequest.RequestId, StringFormat='#{0}'}"
+                                   FontSize="13" FontWeight="Medium" Foreground="#E8182E"/>
+                        <TextBlock Text="{Binding SelectedPoolRequest.CustomerName}" FontSize="12" Foreground="#555555"/>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="Kategori" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedPoolCategory}"
+                          PlaceholderText="Kategori seçin" HorizontalAlignment="Stretch"
+                          Height="38" FontSize="13" Margin="0,0,0,14">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:Category">
+                            <TextBlock Text="{Binding CategoryName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Text="Öncelik" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                <ComboBox ItemsSource="{Binding Priorities}" SelectedItem="{Binding SelectedPoolPriority}"
+                          PlaceholderText="Öncelik seçin" HorizontalAlignment="Stretch"
+                          Height="38" FontSize="13" Margin="0,0,0,14"/>
+
+                <Button Content="Kategori Güncelle" Command="{Binding UpdateCategoryCommand}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        Height="42" FontSize="13" FontWeight="Medium"
+                        Background="#E8182E" Foreground="White" CornerRadius="8" Margin="0,0,0,8"/>
+
+                <Button Content="Bekleyene Gönder" Command="{Binding ReturnToPendingCommand}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        Height="42" FontSize="13" FontWeight="Medium"
+                        Background="#555555" Foreground="White" CornerRadius="8"/>
+
+                <Border Background="#FEF2F2" BorderBrush="#FECACA"
+                        BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,12,0,0"
+                        IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="#B91C1C" FontSize="12" TextWrapping="Wrap"/>
+                </Border>
+                <Border Background="#F0FDF4" BorderBrush="#BBF7D0"
+                        BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,8,0,0"
+                        IsVisible="{Binding SuccessMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <TextBlock Text="{Binding SuccessMessage}" Foreground="#15803D" FontSize="12" TextWrapping="Wrap"/>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+</Border>
 
             </Grid>
         </Grid>

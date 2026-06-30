@@ -8,7 +8,8 @@
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
         CanResize="True"
-        Background="#2C2C2C">
+        Background="#2C2C2C"
+        Icon="/Assets/Logo2.png">
 
     <DockPanel>
 
@@ -91,13 +92,42 @@
 
                             <Border Grid.Column="0" Margin="0,0,16,0">
                                 <DockPanel>
-                                    <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+                                    <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto,Auto,Auto" Margin="0,0,0,12">
                                         <TextBlock Grid.Column="0"
                                                    Text="Mevcut Birimler"
                                                    FontSize="13" FontWeight="Medium"
                                                    Foreground="#111111"
                                                    VerticalAlignment="Center"/>
-                                        <Button Grid.Column="1"
+                                        <TextBox Grid.Column="1"
+                                                 Text="{Binding UnitsSearchText}"
+                                                 PlaceholderText="Ara..."
+                                                 Height="36" Width="180" FontSize="12"
+                                                 Background="#F8F8F8" Foreground="#111111"
+                                                 BorderBrush="#DDDDDD" BorderThickness="1"
+                                                 CornerRadius="6" Padding="10,0"
+                                                 Margin="0,0,8,0"
+                                                 VerticalAlignment="Center"/>
+                                        <ToggleButton Grid.Column="2"
+                                                      IsChecked="{Binding ShowOnlyActiveUnits, Mode=TwoWay}"
+                                                      VerticalAlignment="Center"
+                                                      Padding="10,6"
+                                                      CornerRadius="6"
+                                                      FontSize="11"
+                                                      Margin="0,0,8,0">
+                                            <ToggleButton.Styles>
+                                                <Style Selector="ToggleButton">
+                                                    <Setter Property="Background" Value="#F5F5F5"/>
+                                                    <Setter Property="Foreground" Value="#555555"/>
+                                                    <Setter Property="Content" Value="Tümünü Göster"/>
+                                                </Style>
+                                                <Style Selector="ToggleButton:checked">
+                                                    <Setter Property="Background" Value="#E8182E"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="Content" Value="Sadece Aktif"/>
+                                                </Style>
+                                            </ToggleButton.Styles>
+                                        </ToggleButton>
+                                        <Button Grid.Column="3"
                                                 Command="{Binding RefreshCommand}"
                                                 Width="36" Height="36"
                                                 CornerRadius="8"
@@ -133,7 +163,7 @@
                                         </Button>
                                     </Grid>
                                     <DataGrid Sorting="UnitsGrid_Sorting"
-                                              ItemsSource="{Binding Units}"
+                                              ItemsSource="{Binding FilteredUnits}"
                                               SelectedItem="{Binding SelectedUnit}"
                                               AutoGenerateColumns="False"
                                               IsReadOnly="True"
@@ -247,13 +277,42 @@
 
                             <Border Grid.Column="0" Margin="0,0,16,0">
                                 <DockPanel>
-                                    <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+                                    <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto,Auto,Auto" Margin="0,0,0,12">
                                         <TextBlock Grid.Column="0"
                                                    Text="Mevcut Personel"
                                                    FontSize="13" FontWeight="Medium"
                                                    Foreground="#111111"
                                                    VerticalAlignment="Center"/>
-                                        <Button Grid.Column="1"
+                                        <TextBox Grid.Column="1"
+                                                 Text="{Binding StaffSearchText}"
+                                                 PlaceholderText="Ara..."
+                                                 Height="36" Width="180" FontSize="12"
+                                                 Background="#F8F8F8" Foreground="#111111"
+                                                 BorderBrush="#DDDDDD" BorderThickness="1"
+                                                 CornerRadius="6" Padding="10,0"
+                                                 Margin="0,0,8,0"
+                                                 VerticalAlignment="Center"/>
+                                        <ToggleButton Grid.Column="2"
+                                                      IsChecked="{Binding ShowOnlyActiveStaff, Mode=TwoWay}"
+                                                      VerticalAlignment="Center"
+                                                      Padding="10,6"
+                                                      CornerRadius="6"
+                                                      FontSize="11"
+                                                      Margin="0,0,8,0">
+                                            <ToggleButton.Styles>
+                                                <Style Selector="ToggleButton">
+                                                    <Setter Property="Background" Value="#F5F5F5"/>
+                                                    <Setter Property="Foreground" Value="#555555"/>
+                                                    <Setter Property="Content" Value="Tümünü Göster"/>
+                                                </Style>
+                                                <Style Selector="ToggleButton:checked">
+                                                    <Setter Property="Background" Value="#E8182E"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="Content" Value="Sadece Aktif"/>
+                                                </Style>
+                                            </ToggleButton.Styles>
+                                        </ToggleButton>
+                                        <Button Grid.Column="3"
                                                 Command="{Binding RefreshCommand}"
                                                 Width="36" Height="36"
                                                 CornerRadius="8"
@@ -289,7 +348,7 @@
                                         </Button>
                                     </Grid>
                                     <DataGrid Sorting="StaffGrid_Sorting"
-                                              ItemsSource="{Binding StaffList}"
+                                              ItemsSource="{Binding FilteredStaffList}"
                                               SelectedItem="{Binding SelectedStaff}"
                                               AutoGenerateColumns="False"
                                               IsReadOnly="True"
@@ -457,13 +516,22 @@
                     <!-- AKTİVİTE LOGU SEKMESI -->
                     <TabItem Header="Aktivite Logu">
                         <DockPanel Margin="0,16,0,0">
-                            <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+                            <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,12">
                                 <TextBlock Grid.Column="0"
                                            Text="Sistem Aktivite Logu"
                                            FontSize="13" FontWeight="Medium"
                                            Foreground="#111111"
                                            VerticalAlignment="Center"/>
-                                <Button Grid.Column="1"
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding LogSearchText}"
+                                         PlaceholderText="Ara..."
+                                         Height="36" Width="220" FontSize="12"
+                                         Background="#F8F8F8" Foreground="#111111"
+                                         BorderBrush="#DDDDDD" BorderThickness="1"
+                                         CornerRadius="6" Padding="10,0"
+                                         Margin="0,0,8,0"
+                                         VerticalAlignment="Center"/>
+                                <Button Grid.Column="2"
                                         Command="{Binding RefreshCommand}"
                                         Width="36" Height="36"
                                         CornerRadius="8"
@@ -499,7 +567,7 @@
                                 </Button>
                             </Grid>
                             <DataGrid Sorting="ActivityGrid_Sorting"
-                                      ItemsSource="{Binding ActivityLogs}"
+                                      ItemsSource="{Binding FilteredActivityLogs}"
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True"
                                       CanUserSortColumns="True"

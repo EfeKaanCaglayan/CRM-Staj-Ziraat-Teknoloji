@@ -9,6 +9,11 @@ namespace ZTCRM.UI.Views;
 
 public partial class LoginView : Window
 {
+    private void KvkkText_Click(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+    {
+        var kvkkWindow = new KvkkView();
+        kvkkWindow.ShowDialog(this);
+    }
     public LoginView()
     {
         InitializeComponent();

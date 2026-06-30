@@ -41,6 +41,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.UI/Views/CustomerView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.UI/Views/KvkkView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.UI/Views/LoginView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
 using ZTCRM.Models;
 using Avalonia.Threading;
+using System.Linq;
 
 namespace ZTCRM.ViewModels;
 
@@ -22,15 +23,71 @@ public partial class AdminViewModel : ObservableObject
     [ObservableProperty] private string _newUsername = string.Empty;
     [ObservableProperty] private string _newPasswordHash = string.Empty;
     [ObservableProperty] private int _newRoleId = 1;
-
     [ObservableProperty] private List<ActivityLog> _activityLogs = new();
-
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private string _successMessage = string.Empty;
     [ObservableProperty] private OrgUnit? _selectedUnitForStaff;
     [ObservableProperty] private string _newRoleName = string.Empty;
     [ObservableProperty] private bool _isRefreshing = false;
-    
+    [ObservableProperty] private bool _showOnlyActiveUnits = true;
+    [ObservableProperty] private bool _showOnlyActiveStaff = true;
+    [ObservableProperty] private string _logSearchText = string.Empty;
+    [ObservableProperty] private List<OrgUnit> _filteredUnits = new();
+    [ObservableProperty] private List<Staff> _filteredStaffList = new();
+    [ObservableProperty] private List<ActivityLog> _filteredActivityLogs = new();
+    [ObservableProperty] private string _unitsSearchText = string.Empty;
+    [ObservableProperty] private string _staffSearchText = string.Empty;
+
+    partial void OnUnitsSearchTextChanged(string value) => ApplyUnitsFilter();
+    partial void OnStaffSearchTextChanged(string value) => ApplyStaffFilter();
+    partial void OnShowOnlyActiveUnitsChanged(bool value) => ApplyUnitsFilter();
+    partial void OnUnitsChanged(List<OrgUnit> value) => ApplyUnitsFilter();
+    partial void OnShowOnlyActiveStaffChanged(bool value) => ApplyStaffFilter();
+    partial void OnStaffListChanged(List<Staff> value) => ApplyStaffFilter();
+    partial void OnLogSearchTextChanged(string value) => ApplyLogFilter();
+    partial void OnActivityLogsChanged(List<ActivityLog> value) => ApplyLogFilter();
+    private void ApplyUnitsFilter()
+    {
+        var filtered = ShowOnlyActiveUnits 
+            ? Units.Where(u => u.IsActive).ToList() 
+            : Units.ToList();
+        if (!string.IsNullOrWhiteSpace(UnitsSearchText))
+            filtered = filtered.Where(u =>
+                u.UnitId.ToString().Contains(UnitsSearchText) ||
+                u.UnitName?.Contains(UnitsSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                u.UnitType?.Contains(UnitsSearchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
+        FilteredUnits = filtered;
+    }
+
+    private void ApplyStaffFilter()
+    {
+        var filtered = ShowOnlyActiveStaff 
+            ? StaffList.Where(s => s.IsActive).ToList() 
+            : StaffList.ToList();
+        if (!string.IsNullOrWhiteSpace(StaffSearchText))
+            filtered = filtered.Where(s =>
+                s.StaffId.ToString().Contains(StaffSearchText) ||
+                s.FullName?.Contains(StaffSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                s.Username?.Contains(StaffSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                s.RoleName?.Contains(StaffSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                s.UnitName?.Contains(StaffSearchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
+        FilteredStaffList = filtered;
+    }
+
+    private void ApplyLogFilter()
+    {
+        if (string.IsNullOrWhiteSpace(LogSearchText))
+        {
+            FilteredActivityLogs = ActivityLogs;
+            return;
+        }
+        FilteredActivityLogs = ActivityLogs.Where(l =>
+            l.RequestId.ToString().Contains(LogSearchText) ||
+            l.OldStatus?.Contains(LogSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+            l.NewStatus?.Contains(LogSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+            l.ChangedBy?.Contains(LogSearchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
+    }
+ 
     public List<string> RoleNames { get; } = new() { "Admin", "Operatör", "Personel", "Yönetici" };
     public List<string> UnitTypes { get; } = new() { "Birim", "Şube", "Departman", "Bölge" };    
     public List<int> RoleIds { get; } = new() { 1, 2, 3, 4 };

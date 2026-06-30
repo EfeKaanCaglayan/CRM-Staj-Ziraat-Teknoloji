@@ -63,6 +63,32 @@ app.MapPost("/api/notify/status-change", async (StatusChangeDto dto) =>
 });
 
 app.Run();
+app.MapPost("/api/captcha/verify", async (CaptchaRequest dto) =>
+{
+    try
+    {
+        var secretKey = Environment.GetEnvironmentVariable("RECAPTCHA_SECRET_KEY") 
+                        ?? builder.Configuration["RecaptchaSecretKey"];
+        
+        using var client = new HttpClient();
+        var response = await client.PostAsync(
+            $"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={dto.Token}",
+            null);
+        
+        var json = await response.Content.ReadFromJsonAsync<RecaptchaResponse>();
+        
+        if (json?.Success == true && json.Score >= 0.5)
+            return Results.Ok(new { success = true, score = json.Score });
+        
+        return Results.Ok(new { success = false, score = json?.Score ?? 0 });
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new { success = false, error = ex.Message });
+    }
+});
 
 public record CreateRequestDto(int CustomerId, string RequestType, string Description, string Channel);
 public record StatusChangeDto(int RequestId, string Status);
+public record CaptchaRequest(string Token);
+public record RecaptchaResponse(bool Success, float Score, [property: System.Text.Json.Serialization.JsonPropertyName("error-codes")] string[]? ErrorCodes);

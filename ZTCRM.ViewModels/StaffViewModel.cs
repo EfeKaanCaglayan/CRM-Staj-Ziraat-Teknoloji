@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
@@ -15,7 +16,7 @@ public partial class StaffViewModel : ObservableObject
 
     public string WelcomeMessage => $"Hoş geldiniz, {_staff.FullName} | {_staff.UnitName ?? "Birim atanmadı"}";
     private readonly NotificationRepository _notificationRepository = new();
-
+     public bool HasUnread => UnreadCount > 0;
 
     [ObservableProperty] private List<ServiceRequest> _poolRequests = new();
     [ObservableProperty] private List<ServiceRequest> _myRequests = new();
@@ -27,7 +28,50 @@ public partial class StaffViewModel : ObservableObject
     [ObservableProperty] private List<Notification> _staffNotifications = new();
     [ObservableProperty] private int _unreadCount;
     [ObservableProperty] private bool _isRefreshing = false;
-    public bool HasUnread => UnreadCount > 0;
+    [ObservableProperty] private string _poolSearchText = string.Empty;
+    [ObservableProperty] private string _myRequestsSearchText = string.Empty;
+    [ObservableProperty] private bool _showClosedMyRequests = false;
+    [ObservableProperty] private ObservableCollection<ServiceRequest> _filteredPoolRequests = new();
+    [ObservableProperty] private ObservableCollection<ServiceRequest> _filteredMyRequests = new();
+  
+    partial void OnPoolSearchTextChanged(string value) => ApplyPoolFilter();
+    partial void OnPoolRequestsChanged(List<ServiceRequest> value) => ApplyPoolFilter();
+    partial void OnMyRequestsSearchTextChanged(string value) => ApplyMyRequestsFilter();
+    partial void OnMyRequestsChanged(List<ServiceRequest> value) => ApplyMyRequestsFilter();
+    partial void OnShowClosedMyRequestsChanged(bool value) => ApplyMyRequestsFilter();
+
+    private void ApplyPoolFilter()
+    {
+        var filtered = PoolRequests.AsEnumerable();
+        if (!string.IsNullOrWhiteSpace(PoolSearchText))
+         filtered=filtered.Where(r=>
+                     r.CustomerName?.Contains(PoolSearchText,StringComparison.OrdinalIgnoreCase) == true||
+                 r.Description?.Contains(PoolSearchText,StringComparison.OrdinalIgnoreCase) == true ||
+        r.CategoryName?.Contains(PoolSearchText, StringComparison.OrdinalIgnoreCase) == true||
+        r.RequestId.ToString().Contains(PoolSearchText));
+        FilteredPoolRequests = new ObservableCollection<ServiceRequest>(filtered);
+    }
+
+    private void ApplyMyRequestsFilter()
+    {
+        var filtered = MyRequests.AsEnumerable();
+        if (!ShowClosedMyRequests)
+         filtered=filtered.Where(r=>
+            r.CurrentStatus !="Kapatıldı");
+        if (!string.IsNullOrWhiteSpace(MyRequestsSearchText))
+            filtered = filtered.Where(r => 
+                r.CustomerName?.Contains(MyRequestsSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                r.Description?.Contains(MyRequestsSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                r.CategoryName?.Contains(MyRequestsSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                r.RequestId.ToString().Contains(MyRequestsSearchText) );
+    
+        FilteredMyRequests = new ObservableCollection<ServiceRequest>(filtered);
+    
+            
+            
+            
+        
+    }
     
     private void LoadNotifications()
     {

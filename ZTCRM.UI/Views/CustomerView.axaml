@@ -9,7 +9,8 @@
         WindowStartupLocation="CenterScreen"
         xmlns:models="using:ZTCRM.Models"
         xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
-        Background="#2C2C2C">
+        Background="#2C2C2C"
+        Icon="/Assets/Logo2.png">
 
     <DockPanel>
 
@@ -216,7 +217,7 @@
                                     </StackPanel>
                                 </StackPanel>
                                 <ToggleButton Grid.Column="1"
-                                              IsChecked="{Binding ShowClosed}"
+                                              IsChecked="{Binding ShowClosed, Mode=TwoWay}"
                                               VerticalAlignment="Center"
                                               Padding="12,6"
                                               CornerRadius="6"

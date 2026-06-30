@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
 using ZTCRM.Models;
+using System.Linq;
 namespace ZTCRM.ViewModels;
 
 public partial class CustomerViewModel : ObservableObject
@@ -22,22 +23,30 @@ public partial class CustomerViewModel : ObservableObject
     [ObservableProperty] private bool _isApproved = false;
     [ObservableProperty] private ServiceRequest? _selectedRequest;
     [ObservableProperty] private List<Notification>  _notifications2=new();
-    [ObservableProperty] private bool _showClosed=false;
+    [ObservableProperty] private bool _showClosed = false;
+    [ObservableProperty] private ObservableCollection<ServiceRequest> _filteredRequests = new();
     
-    public ObservableCollection<ServiceRequest> FilteredRequests=>
-        ShowClosed? Requests
-            :new ObservableCollection<ServiceRequest>( Requests.Where(r => r.CurrentStatus != "Closed" && 
-                                                                           r.CurrentStatus != "Canceled" && 
-                                                                           r.CurrentStatus != "Rejected"));
     partial void OnShowClosedChanged(bool value)
     {
-        OnPropertyChanged(nameof(FilteredRequests));
+        ApplyFilter();
     }
-
+    
     partial void OnRequestsChanged(ObservableCollection<ServiceRequest> value)
     {
-        OnPropertyChanged(nameof(FilteredRequests));
+        ApplyFilter();
     }
+
+    private void ApplyFilter()
+    {
+        if (ShowClosed)
+            FilteredRequests = Requests;
+        else
+            FilteredRequests = new ObservableCollection<ServiceRequest>(
+                Requests.Where(r => r.CurrentStatus != "Kapatıldı" &&
+                                    r.CurrentStatus != "İptal" &&
+                                    r.CurrentStatus != "Reddedildi"));
+    }
+    
     
    
     [RelayCommand]

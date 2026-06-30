@@ -8,7 +8,8 @@
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
         CanResize="True"
-        Background="#2C2C2C">
+        Background="#2C2C2C"
+        Icon="/Assets/Logo2.png">
 
     <DockPanel>
 

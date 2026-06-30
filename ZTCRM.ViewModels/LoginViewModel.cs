@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ZTCRM.Data;
 using ZTCRM.Models;
 using System.Linq;
+using System.Net.Http.Json;
 
 namespace ZTCRM.ViewModels;
 
@@ -33,6 +34,7 @@ public partial class LoginViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _isYabanciMusteri = false;
+    [ObservableProperty] private bool _isKvkkAccepted = false;
 
     public bool IsTcknVisible => IsMusteriTab && !IsYabanciMusteri;
 
@@ -78,60 +80,92 @@ public partial class LoginViewModel : ObservableObject
         Password = string.Empty;
         ErrorMessage = string.Empty;
     }
-
     [RelayCommand]
-    private void Login()
+private async Task Login()
+{
+    ErrorMessage = string.Empty;
+
+    if (IsPersonelTab)
     {
-        ErrorMessage = string.Empty;
-
-        if (IsPersonelTab)
+        if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
         {
-            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
-            {
-                ErrorMessage = "Kullanıcı adı ve şifre boş bırakılamaz.";
-                return;
-            }
-
-            var staff = _staffRepository.Login(Username, Password);
-            if (staff == null)
-            {
-                ErrorMessage = "Kullanıcı adı veya şifre hatalı.";
-                return;
-            }
-
-            OnLoginSuccess(staff);
+            ErrorMessage = "Kullanıcı adı ve şifre boş bırakılamaz.";
+            return;
         }
-        else
+
+        var staff = _staffRepository.Login(Username, Password);
+        if (staff == null)
         {
-            if (string.IsNullOrWhiteSpace(Username))
-            {
-                ErrorMessage = IsYabanciMusteri
-                    ? "Pasaport No boş bırakılamaz."
-                    : "TC Kimlik No boş bırakılamaz.";
-                return;
-            }
-
-            if (!IsYabanciMusteri && Username.Length != 11)
-            {
-                ErrorMessage = "TC Kimlik No 11 haneli olmalıdır.";
-                return;
-            }
-
-            var customer = IsYabanciMusteri
-                ? _customerRepository.Login(null, Username)
-                : _customerRepository.Login(Username);
-
-            if (customer == null)
-            {
-                ErrorMessage = IsYabanciMusteri
-                    ? "Pasaport No bulunamadı."
-                    : "TC Kimlik No bulunamadı.";
-                return;
-            }
-
-            OnCustomerLoginSuccess(customer);
+            ErrorMessage = "Kullanıcı adı veya şifre hatalı.";
+            return;
         }
+
+        OnLoginSuccess(staff);
     }
+    else
+    {
+        if (!IsKvkkAccepted)
+        {
+            ErrorMessage = "Lütfen KVKK aydınlatma metnini kabul edin.";
+            return;
+        }
+
+        // Captcha doğrulama
+        var captchaOk = await VerifyCaptcha();
+        if (!captchaOk)
+        {
+            ErrorMessage = "Güvenlik doğrulaması başarısız. Lütfen tekrar deneyin.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Username))
+        {
+            ErrorMessage = IsYabanciMusteri
+                ? "Pasaport No boş bırakılamaz."
+                : "TC Kimlik No boş bırakılamaz.";
+            return;
+        }
+
+        if (!IsYabanciMusteri && Username.Length != 11)
+        {
+            ErrorMessage = "TC Kimlik No 11 haneli olmalıdır.";
+            return;
+        }
+
+        var customer = IsYabanciMusteri
+            ? _customerRepository.Login(null, Username)
+            : _customerRepository.Login(Username);
+
+        if (customer == null)
+        {
+            ErrorMessage = IsYabanciMusteri
+                ? "Pasaport No bulunamadı."
+                : "TC Kimlik No bulunamadı.";
+            return;
+        }
+
+        OnCustomerLoginSuccess(customer);
+    }
+}
+
+private async Task<bool> VerifyCaptcha()
+{
+    try
+    {
+        using var client = new HttpClient();
+        var siteKey = "BURAYA_SITE_KEY";
+        var payload = new { token = siteKey };
+        var json = System.Text.Json.JsonSerializer.Serialize(payload);
+        var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        var response = await client.PostAsync("http://localhost:5239/api/captcha/verify", content);
+        var result = await response.Content.ReadFromJsonAsync<System.Text.Json.JsonElement>();
+        return result.GetProperty("success").GetBoolean();
+    }
+    catch
+    {
+        return true; // API erişilemezse geç
+    }
+}
 
     private void OnLoginSuccess(Staff staff)
     {

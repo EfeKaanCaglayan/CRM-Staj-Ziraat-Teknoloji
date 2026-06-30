@@ -13,9 +13,11 @@ SELECT sr.RequestId,
            ELSE sr.Priority
            END AS Priority,
        CASE sr.CurrentStatus
-           WHEN 'Resolved'      THEN 'Çözüldü'
-           WHEN 'CannotResolve' THEN 'Çözülemez'
-           WHEN 'InProgress'    THEN 'İşlemde'
+           WHEN 'Resolved'         THEN 'Çözüldü'
+           WHEN 'CannotResolve'    THEN 'Çözülemez'
+           WHEN 'InProgress'       THEN 'İşlemde'
+           WHEN 'Closed'           THEN 'Kapatıldı'
+           WHEN 'PendingApproval'  THEN 'Onay Bekliyor'
            ELSE sr.CurrentStatus
            END AS CurrentStatus,
        sr.CreatedAt,

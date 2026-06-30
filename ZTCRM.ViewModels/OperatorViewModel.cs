@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using ZTCRM.Data;
 using ZTCRM.Models;
 using Avalonia.Threading;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace ZTCRM.ViewModels;
 
@@ -29,14 +31,67 @@ public partial class OperatorViewModel : ObservableObject
     [ObservableProperty] private string _selectedRejectionType = string.Empty;
     [ObservableProperty] private string _rejectionReason = string.Empty;
     [ObservableProperty] private bool _isRefreshing = false;
+    [ObservableProperty] private string _requestsSearchText = string.Empty;
+    [ObservableProperty] private string _poolSearchText = string.Empty;
+    [ObservableProperty] private ObservableCollection<ServiceRequest> _filteredRequests = new();
+    [ObservableProperty] private ObservableCollection<ServiceRequest> _filteredPoolRequests = new();
+    [ObservableProperty] private string _newRequestNationalId = string.Empty;
+    [ObservableProperty] private string _newRequestDescription = string.Empty;
+    [ObservableProperty] private string _newRequestType = string.Empty;
+    [ObservableProperty] private string _customerSearchResult = string.Empty;
+    [ObservableProperty] private int? _foundCustomerId = null;
+    
+    public List<string> RequestTypes { get; } = new() { "Şikayet", "Talep" };
+
+    partial void OnRequestsSearchTextChanged(string value) => ApplyRequestsFilter();
+    partial void OnRequestsChanged(List<ServiceRequest> value) => ApplyRequestsFilter();
+    partial void OnPoolSearchTextChanged(string value) => ApplyPoolFilter();
+    partial void OnPoolRequestsChanged(List<ServiceRequest> value) => ApplyPoolFilter();
+
+    private void ApplyRequestsFilter()
+    {
+        var filtered = Requests.AsEnumerable();
+        if (!string.IsNullOrWhiteSpace(RequestsSearchText))
+            filtered = filtered.Where(r =>
+                r.RequestId.ToString().Contains(RequestsSearchText) ||
+                r.CustomerName?.Contains(RequestsSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                r.Description?.Contains(RequestsSearchText, StringComparison.OrdinalIgnoreCase) == true);
+        FilteredRequests = new ObservableCollection<ServiceRequest>(filtered);
+    }
+
+    private void ApplyPoolFilter()
+    {
+        var filtered = PoolRequests.AsEnumerable();
+        if (!string.IsNullOrWhiteSpace(PoolSearchText))
+            filtered = filtered.Where(r =>
+                r.RequestId.ToString().Contains(PoolSearchText) ||
+                r.CustomerName?.Contains(PoolSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                r.Description?.Contains(PoolSearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                r.CategoryName?.Contains(PoolSearchText, StringComparison.OrdinalIgnoreCase) == true);
+        FilteredPoolRequests = new ObservableCollection<ServiceRequest>(filtered);
+    }
     
     public bool IsTab1Selected => SelectedTabIndex == 0;
     public bool IsTab2Selected => SelectedTabIndex == 1;
+    public bool IsCustomerFound => FoundCustomerId != null;
+    public bool IsCustomerNotFound => !string.IsNullOrEmpty(CustomerSearchResult) && FoundCustomerId == null;
+
 
     public List<string> Priorities { get; } = new() { "Düşük", "Orta", "Yüksek" };
     public List<string> RejectionTypes { get; } = new() { "Eksik Bilgi", "Kapsam Dışı", "Mükerrer", "Diğer" };
   
-    
+   
+    partial void OnFoundCustomerIdChanged(int? value)
+    {
+        OnPropertyChanged(nameof(IsCustomerFound));
+        OnPropertyChanged(nameof(IsCustomerNotFound));
+    }
+
+    partial void OnCustomerSearchResultChanged(string value)
+    {
+        OnPropertyChanged(nameof(IsCustomerFound));
+        OnPropertyChanged(nameof(IsCustomerNotFound));
+    }
     partial void OnSelectedTabIndexChanged(int value)
     {
         OnPropertyChanged(nameof(IsTab1Selected));
@@ -165,6 +220,83 @@ public partial class OperatorViewModel : ObservableObject
             ErrorMessage = $"Hata: {ex.Message}";
         }
     }
+    
+    [RelayCommand]
+    private void SearchCustomer()
+    {
+        try
+        {
+            ErrorMessage = string.Empty;
+            CustomerSearchResult = string.Empty;
+            FoundCustomerId = null;
+
+            if (string.IsNullOrWhiteSpace(NewRequestNationalId))
+            {
+                ErrorMessage = "TC Kimlik No boş bırakılamaz.";
+                return;
+            }
+
+            var customer = _repository.FindCustomerByNationalId(NewRequestNationalId);
+            if (customer == null)
+            {
+                CustomerSearchResult = "Müşteri bulunamadı.";
+                return;
+            }
+
+            FoundCustomerId = customer.CustomerId;
+            CustomerSearchResult = $"✓ {customer.FullName}";
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Hata: {ex.Message}";
+        }
+    }
+    [RelayCommand]
+    private void CreateRequestForCustomer()
+    {
+        try
+        {
+            ErrorMessage = string.Empty;
+            SuccessMessage = string.Empty;
+
+            if (FoundCustomerId == null)
+            {
+                ErrorMessage = "Lütfen önce müşteri arayın.";
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(NewRequestType))
+            {
+                ErrorMessage = "Başvuru türü seçin.";
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(NewRequestDescription))
+            {
+                ErrorMessage = "Açıklama boş bırakılamaz.";
+                return;
+            }
+
+            var mappedType = NewRequestType switch
+            {
+                "Şikayet" => "Complaint",
+                "Talep"   => "Request",
+                _         => NewRequestType
+            };
+
+            _repository.CreateRequest(FoundCustomerId.Value, mappedType, NewRequestDescription, "Phone");
+            SuccessMessage = "Başvuru başarıyla oluşturuldu.";
+            NewRequestNationalId = string.Empty;
+            NewRequestDescription = string.Empty;
+            NewRequestType = string.Empty;
+            CustomerSearchResult = string.Empty;
+            FoundCustomerId = null;
+            LoadRequests();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Hata: {ex.Message}";
+        }
+    }
+  
     
     [RelayCommand]
     private void ReturnToPending()

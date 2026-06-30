@@ -6,7 +6,8 @@
         Title="Bildirimler"
         Width="500" Height="400"
         WindowStartupLocation="CenterOwner"
-        Background="White">
+        Background="White"
+        Icon="/Assets/Logo2.png">
 
     <Border Padding="24">
         <DockPanel>

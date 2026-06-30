@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ZTCRM.UI.Views.KvkkView"
+        Title="KVKK Aydınlatma Metni"
+        Width="700" Height="500"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False">
+    <Border Padding="32">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Top"
+                       Text="Kişisel Verilerin Korunması ve İşlenmesi Hakkında Bilgilendirme"
+                       FontSize="16" FontWeight="Bold" Foreground="#E8182E"
+                       TextWrapping="Wrap" Margin="0,0,0,16"/>
+            <Button DockPanel.Dock="Bottom"
+                    Content="Kapat"
+                    HorizontalAlignment="Right"
+                    Height="38" Width="100"
+                    Background="#E8182E" Foreground="White"
+                    CornerRadius="8" Margin="0,16,0,0"
+                    Click="CloseButton_Click"/>
+            <ScrollViewer>
+                <TextBlock TextWrapping="Wrap" FontSize="13" Foreground="#333333" LineHeight="22">
+                    Kişisel verilerin işlenmesinde başta özel hayatın gizliliği olmak üzere kişilerin temel hak ve özgürlüklerini korumak ve kişisel verileri işleyen gerçek ve tüzel kişilerin yükümlülüklerini belirlemek amacıyla 7 Nisan 2016 tarihli ve 29677 Sayılı Resmî Gazete'de yayımlanan 6698 sayılı Kişisel Verilerin Korunması Kanunu ("Kanun") hususunda ZTCRM olarak veri sorumlusu sıfatıyla sizleri bilgilendirmek isteriz.&#10;&#10;1. Kişisel Verilerin İşlenme Amacı&#10;Toplanan kişisel verileriniz; şikayet ve taleplerinizin işlenmesi, müşteri ilişkilerinin yönetimi ve yasal yükümlülüklerin yerine getirilmesi amacıyla işlenmektedir.&#10;&#10;2. Kişisel Verilerin Aktarılması&#10;Kişisel verileriniz, yasal zorunluluklar dışında üçüncü kişilerle paylaşılmamaktadır.&#10;&#10;3. Haklarınız&#10;KVKK'nın 11. maddesi kapsamında kişisel verilerinize ilişkin haklarınızı kullanabilirsiniz.
+                </TextBlock>
+            </ScrollViewer>
+        </DockPanel>
+    </Border>
+</Window>
