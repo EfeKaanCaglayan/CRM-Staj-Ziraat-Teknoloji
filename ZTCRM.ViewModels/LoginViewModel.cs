@@ -110,13 +110,7 @@ private async Task Login()
             return;
         }
 
-        // Captcha doğrulama
-        var captchaOk = await VerifyCaptcha();
-        if (!captchaOk)
-        {
-            ErrorMessage = "Güvenlik doğrulaması başarısız. Lütfen tekrar deneyin.";
-            return;
-        }
+    
 
         if (string.IsNullOrWhiteSpace(Username))
         {

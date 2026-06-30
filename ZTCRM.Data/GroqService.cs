@@ -22,7 +22,7 @@ Eğer eksik bilgi varsa SADECE şu formatta yaz:
 - [eksik bilgi 1]
 - [eksik bilgi 2]'
 
-Başka hiçbir şey yazma. Türkçe konuş.";
+Başka hiçbir şey yazma.Kesinlikle Türkçe konuş.";
 
     public async Task<string> SendMessageAsync(List<(string role, string content)> messages)
     {
@@ -66,4 +66,45 @@ Başka hiçbir şey yazma. Türkçe konuş.";
         {
             return $"AI bağlantı hatası: {ex.Message}";
         }
-    }}
+    }
+    public async Task<string> SendRawMessageAsync(string systemPrompt, string userMessage)
+    {
+        try
+        {
+            var body = new
+            {
+                model = "llama-3.3-70b-versatile",
+                messages = new object[]
+                {
+                    new { role = "system", content = systemPrompt },
+                    new { role = "user", content = userMessage }
+                },
+                max_tokens = 50,
+                temperature = 0
+            };
+
+            var request = new HttpRequestMessage(HttpMethod.Post, Url);
+            request.Headers.Add("Authorization", $"Bearer {_apiKey}");
+            request.Content = new StringContent(
+                JsonSerializer.Serialize(body),
+                Encoding.UTF8,
+                "application/json");
+
+            var response = await _client.SendAsync(request);
+            var json = await response.Content.ReadAsStringAsync();
+            var doc = JsonDocument.Parse(json);
+            return doc.RootElement
+                .GetProperty("choices")[0]
+                .GetProperty("message")
+                .GetProperty("content")
+                .GetString()?.Trim() ?? "";
+        }
+        catch (Exception ex)
+        {
+            return $"AI bağlantı hatası: {ex.Message}";
+        }
+    }
+    
+    
+    
+}

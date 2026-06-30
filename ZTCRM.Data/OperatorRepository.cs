@@ -132,8 +132,10 @@ public class OperatorRepository
         {
             list.Add(new Category
             {
-                CategoryId   = reader.GetInt32(reader.GetOrdinal("CategoryId")),
-                CategoryName = reader.GetString(reader.GetOrdinal("CategoryName"))
+                CategoryId       = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                CategoryName     = reader.GetString(reader.GetOrdinal("CategoryName")),
+                DefaultUnitId    = reader.IsDBNull(reader.GetOrdinal("DefaultUnitId")) ? null : reader.GetInt32(reader.GetOrdinal("DefaultUnitId")),
+                ParentCategoryId = reader.IsDBNull(reader.GetOrdinal("ParentCategoryId")) ? null : reader.GetInt32(reader.GetOrdinal("ParentCategoryId"))
             });
         }
         return list;

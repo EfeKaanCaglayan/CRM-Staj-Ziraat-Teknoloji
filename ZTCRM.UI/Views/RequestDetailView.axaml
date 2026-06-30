@@ -1,10 +1,11 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:models="using:ZTCRM.Models"
+        xmlns:vm="using:ZTCRM.ViewModels"
         x:Class="ZTCRM.UI.Views.RequestDetailView"
-        x:DataType="models:ServiceRequest"
+        x:DataType="vm:RequestDetailViewModel"
         Title="Başvuru Detayı"
-        Width="460" Height="500"
+        Width="520" Height="640"
         WindowStartupLocation="CenterOwner"
         CanResize="False"
         Background="#F5F5F5"
@@ -15,9 +16,9 @@
         <!-- Header -->
         <Border Grid.Row="0" Background="#C8102E" Padding="24,20">
             <StackPanel Spacing="4">
-                <TextBlock Text="{Binding RequestId, StringFormat='Başvuru #{0}'}"
+                <TextBlock Text="{Binding Request.RequestId, StringFormat='Başvuru #{0}'}"
                            FontSize="18" FontWeight="Bold" Foreground="White"/>
-                <TextBlock Text="{Binding RequestType}"
+                <TextBlock Text="{Binding Request.RequestType}"
                            FontSize="12" Foreground="#FFCCCC"/>
             </StackPanel>
         </Border>
@@ -29,14 +30,14 @@
                 <Border Background="White" CornerRadius="8" Padding="16,12">
                     <StackPanel Spacing="4">
                         <TextBlock Text="DURUM" FontSize="10" Foreground="#999999"/>
-                        <TextBlock Text="{Binding CurrentStatus}" FontSize="13" Foreground="#111111"/>
+                        <TextBlock Text="{Binding Request.CurrentStatus}" FontSize="13" Foreground="#111111"/>
                     </StackPanel>
                 </Border>
 
                 <Border Background="White" CornerRadius="8" Padding="16,12">
                     <StackPanel Spacing="4">
                         <TextBlock Text="TARİH" FontSize="10" Foreground="#999999"/>
-                        <TextBlock Text="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
+                        <TextBlock Text="{Binding Request.CreatedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"
                                    FontSize="13" Foreground="#111111"/>
                     </StackPanel>
                 </Border>
@@ -44,17 +45,49 @@
                 <Border Background="White" CornerRadius="8" Padding="16,12">
                     <StackPanel Spacing="4">
                         <TextBlock Text="KATEGORİ" FontSize="10" Foreground="#999999"/>
-                        <TextBlock Text="{Binding CategoryName}" FontSize="13" Foreground="#111111"/>
+                        <TextBlock Text="{Binding Request.CategoryName}" FontSize="13" Foreground="#111111"/>
                     </StackPanel>
                 </Border>
 
                 <Border Background="White" CornerRadius="8" Padding="16,12">
                     <StackPanel Spacing="4">
                         <TextBlock Text="AÇIKLAMA" FontSize="10" Foreground="#999999"/>
-                        <TextBlock Text="{Binding Description}" FontSize="13"
+                        <TextBlock Text="{Binding Request.Description}" FontSize="13"
                                    Foreground="#111111" TextWrapping="Wrap"/>
                     </StackPanel>
                 </Border>
+
+                <!-- Müşterinin diğer başvuruları -->
+                <Border Height="1" Background="#DDDDDD" Margin="0,12,0,4"/>
+                <TextBlock Text="MÜŞTERİNİN DİĞER BAŞVURULARI"
+                           FontSize="10" Foreground="#999999" LetterSpacing="1" Margin="0,0,0,4"/>
+
+                <ItemsControl ItemsSource="{Binding PastRequests}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:ServiceRequest">
+                            <Border Background="White" CornerRadius="8" Padding="14,10" Margin="0,0,0,6">
+                                <StackPanel Spacing="3">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding RequestId, StringFormat='#{0}'}"
+                                                   FontSize="12" FontWeight="Medium" Foreground="#C8102E"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy}'}"
+                                                   FontSize="11" Foreground="#999999"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding RequestType}" FontSize="11" Foreground="#555555"/>
+                                    <TextBlock Text="{Binding CurrentStatus}" FontSize="11" Foreground="#555555"/>
+                                    <TextBlock Text="{Binding Description}" FontSize="11"
+                                               Foreground="#777777" TextWrapping="Wrap"
+                                               MaxLines="2" TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock Text="Başka başvurusu bulunmuyor."
+                           FontSize="12" Foreground="#999999"
+                           Margin="0,4,0,0"
+                           IsVisible="{Binding !PastRequests.Count}"/>
 
             </StackPanel>
         </ScrollViewer>

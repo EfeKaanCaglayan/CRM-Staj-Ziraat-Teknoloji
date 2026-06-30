@@ -3,6 +3,8 @@ using ZTCRM.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.MapPost("/api/requests/create", async (CreateRequestDto dto) =>
 {
@@ -17,6 +19,7 @@ app.MapPost("/api/requests/create", async (CreateRequestDto dto) =>
         return Results.BadRequest(new { success = false, error = ex.Message });
     }
 });
+
 
 app.MapGet("/api/customers/find", (string nationalId) =>
 {
@@ -62,7 +65,52 @@ app.MapPost("/api/notify/status-change", async (StatusChangeDto dto) =>
     }
 });
 
-app.Run();
+app.MapPost("/api/groq/validate", async (GroqValidateDto dto) =>
+{
+    try
+    {
+        var groq = new GroqService();
+        var messages = new List<(string role, string content)>
+        {
+            ("user", $"Müşteri adı: {dto.FullName}\nŞikayet türü: {dto.RequestType}\nAçıklama: {dto.Description}")
+        };
+        var response = await groq.SendMessageAsync(messages);
+        var isApproved = response.Contains("Bilgiler tam");
+        return Results.Ok(new { success = true, message = response, approved = isApproved });
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new { success = false, error = ex.Message });
+    }
+});
+
+app.MapPost("/api/groq/suggest-category", async (SuggestCategoryDto dto) =>
+{
+    try
+    {
+        var groq = new GroqService();
+        var categoryListText = string.Join("\n", dto.Categories);
+
+        var systemPrompt = $@"Sen bir banka şikayet sınıflandırma asistanısın. Sana bir müşteri şikayeti açıklaması verilecek, görevin aşağıdaki listeden EN UYGUN alt kategoriyi seçmek.
+
+Kategori Listesi:
+{categoryListText}
+
+KURALLAR:
+- Cevabın SADECE listedeki kategori adlarından biri olmalı, birebir aynı yazımla.
+- Hiçbir açıklama, ek kelime veya noktalama ekleme.
+- Emin olamadığın durumlarda en yakın anlamlı kategoriyi seç.";
+
+        var suggested = await groq.SendRawMessageAsync(systemPrompt, dto.Description);
+
+        return Results.Ok(new { success = true, category = suggested });
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new { success = false, error = ex.Message });
+    }
+});
+
 app.MapPost("/api/captcha/verify", async (CaptchaRequest dto) =>
 {
     try
@@ -88,7 +136,11 @@ app.MapPost("/api/captcha/verify", async (CaptchaRequest dto) =>
     }
 });
 
+app.Run();
+
 public record CreateRequestDto(int CustomerId, string RequestType, string Description, string Channel);
 public record StatusChangeDto(int RequestId, string Status);
 public record CaptchaRequest(string Token);
 public record RecaptchaResponse(bool Success, float Score, [property: System.Text.Json.Serialization.JsonPropertyName("error-codes")] string[]? ErrorCodes);
+public record GroqValidateDto(string FullName, string RequestType, string Description);
+public record SuggestCategoryDto(string Description, List<string> Categories);

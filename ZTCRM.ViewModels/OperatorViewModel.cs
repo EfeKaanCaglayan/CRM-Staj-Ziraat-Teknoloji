@@ -5,6 +5,7 @@ using ZTCRM.Models;
 using Avalonia.Threading;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Net.Http.Json;
 
 namespace ZTCRM.ViewModels;
 
@@ -15,6 +16,19 @@ public partial class OperatorViewModel : ObservableObject
     private readonly Staff _operator;
 
     public string WelcomeMessage => $"Hoş geldiniz, {_operator.FullName}";
+    public List<string> RequestTypes { get; } = new() { "Şikayet", "Talep", "İtiraz", "Öneri", "Teşekkür" };
+    public List<Category> MainCategories => Categories.Where(c => c.ParentCategoryId == null).ToList();
+
+    public List<Category> SubCategories =>
+        SelectedMainCategory == null
+            ? new List<Category>()
+            : Categories.Where(c => c.ParentCategoryId == SelectedMainCategory.CategoryId).ToList();
+
+    public List<Category> PoolSubCategories =>
+        SelectedPoolMainCategory == null
+            ? new List<Category>()
+            : Categories.Where(c => c.ParentCategoryId == SelectedPoolMainCategory.CategoryId).ToList();
+
 
     [ObservableProperty] private List<ServiceRequest> _requests = new();
     [ObservableProperty] private ServiceRequest? _selectedRequest;
@@ -40,9 +54,29 @@ public partial class OperatorViewModel : ObservableObject
     [ObservableProperty] private string _newRequestType = string.Empty;
     [ObservableProperty] private string _customerSearchResult = string.Empty;
     [ObservableProperty] private int? _foundCustomerId = null;
+    [ObservableProperty] private Category? _selectedMainCategory;
+    [ObservableProperty] private Category? _selectedSubCategory;
+    [ObservableProperty] private Category? _selectedPoolMainCategory;
+    [ObservableProperty] private Category? _selectedPoolSubCategory;
     
-    public List<string> RequestTypes { get; } = new() { "Şikayet", "Talep" };
+    partial void OnSelectedMainCategoryChanged(Category? value)
+    {
+        SelectedSubCategory = null;
+        OnPropertyChanged(nameof(SubCategories));
+    }
 
+    partial void OnSelectedPoolMainCategoryChanged(Category? value)
+    {
+        SelectedPoolSubCategory = null;
+        OnPropertyChanged(nameof(PoolSubCategories));
+    }
+
+    partial void OnCategoriesChanged(List<Category> value)
+    {
+        OnPropertyChanged(nameof(MainCategories));
+        OnPropertyChanged(nameof(SubCategories));
+        OnPropertyChanged(nameof(PoolSubCategories));
+    }
     partial void OnRequestsSearchTextChanged(string value) => ApplyRequestsFilter();
     partial void OnRequestsChanged(List<ServiceRequest> value) => ApplyRequestsFilter();
     partial void OnPoolSearchTextChanged(string value) => ApplyPoolFilter();
@@ -189,7 +223,7 @@ public partial class OperatorViewModel : ObservableObject
                 ErrorMessage = "Lütfen bir başvuru seçin.";
                 return;
             }
-            if (SelectedPoolCategory == null)
+            if (SelectedPoolSubCategory == null)
             {
                 ErrorMessage = "Lütfen bir kategori seçin.";
                 return;
@@ -208,11 +242,11 @@ public partial class OperatorViewModel : ObservableObject
                 _        => SelectedPoolPriority
             };
 
-            _repository.UpdateCategory(SelectedPoolRequest.RequestId, SelectedPoolCategory.CategoryId, mappedPriority);
+            _repository.UpdateCategory(SelectedPoolRequest.RequestId, SelectedPoolSubCategory.CategoryId, mappedPriority);
             SuccessMessage = $"#{SelectedPoolRequest.RequestId} numaralı başvurunun kategorisi güncellendi.";
             LoadPoolRequests();
             SelectedPoolRequest = null;
-            SelectedPoolCategory = null;
+            SelectedPoolSubCategory = null;
             SelectedPoolPriority = string.Empty;
         }
         catch (Exception ex)
@@ -275,11 +309,14 @@ public partial class OperatorViewModel : ObservableObject
                 return;
             }
 
-            var mappedType = NewRequestType switch
+            var mappedType =NewRequestType switch
             {
-                "Şikayet" => "Complaint",
-                "Talep"   => "Request",
-                _         => NewRequestType
+                "İtiraz"   => "Objection",
+                "Öneri"    => "Suggestion",
+                "Şikayet"  => "Complaint",
+                "Talep"    => "Request",
+                "Teşekkür" => "Thanks",
+                _          => NewRequestType
             };
 
             _repository.CreateRequest(FoundCustomerId.Value, mappedType, NewRequestDescription, "Phone");
@@ -337,7 +374,7 @@ public partial class OperatorViewModel : ObservableObject
                 ErrorMessage = "Lütfen bir başvuru seçin.";
                 return;
             }
-            if (SelectedCategory == null)
+            if (SelectedSubCategory == null)
             {
                 ErrorMessage = "Lütfen bir kategori seçin.";
                 return;
@@ -356,11 +393,11 @@ public partial class OperatorViewModel : ObservableObject
                 _        => SelectedPriority
             };
 
-            _repository.CategorizeAndPool(SelectedRequest.RequestId, SelectedCategory.CategoryId, mappedPriority, _operator.StaffId);
+            _repository.CategorizeAndPool(SelectedRequest.RequestId, SelectedSubCategory.CategoryId, mappedPriority, _operator.StaffId);
             SuccessMessage = $"#{SelectedRequest.RequestId} numaralı başvuru kategorize edildi ve havuza eklendi.";
             LoadRequests();
             SelectedRequest = null;
-            SelectedCategory = null;
+            SelectedSubCategory = null;
             SelectedPriority = string.Empty;
         }
         catch (Exception ex)
@@ -368,7 +405,52 @@ public partial class OperatorViewModel : ObservableObject
             ErrorMessage = $"Hata: {ex.Message}";
         }
     }
+    [RelayCommand]
+    private async Task SuggestCategory()
+    {
+        try
+        {
+            ErrorMessage = string.Empty;
+            SuccessMessage = string.Empty;
 
+            if (SelectedRequest == null)
+            {
+                ErrorMessage = "Lütfen önce bir başvuru seçin.";
+                return;
+            }
+
+            var allSubCategories = Categories.Where(c => c.ParentCategoryId != null).ToList();
+            var categoryNames = allSubCategories.Select(c => c.CategoryName).ToList();
+
+            using var client = new HttpClient();
+            var payload = new { description = SelectedRequest.Description, categories = categoryNames };
+            var response = await client.PostAsJsonAsync("http://localhost:5239/api/groq/suggest-category", payload);
+            var result = await response.Content.ReadFromJsonAsync<System.Text.Json.JsonElement>();
+
+            if (!result.GetProperty("success").GetBoolean())
+            {
+                ErrorMessage = "AI önerisi alınamadı.";
+                return;
+            }
+
+            var suggestedName = result.GetProperty("category").GetString();
+            var match = allSubCategories.FirstOrDefault(c => c.CategoryName == suggestedName);
+
+            if (match == null)
+            {
+                ErrorMessage = "AI geçerli bir kategori öneremedi, lütfen manuel seçin.";
+                return;
+            }
+
+            SelectedMainCategory = Categories.FirstOrDefault(c => c.CategoryId == match.ParentCategoryId);
+            SelectedSubCategory = match;
+            SuccessMessage = $"AI önerisi: {match.CategoryName}";
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Hata: {ex.Message}";
+        }
+    }
     [RelayCommand]
     private void Reject()
     {

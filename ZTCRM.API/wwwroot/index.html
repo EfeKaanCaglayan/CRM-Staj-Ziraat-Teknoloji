@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ZTCRM — Şikayet Başvurusu</title>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcYPzwtAAAAAH3AYrD303L-zry2beZ5ErQWHxdF"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --maroon: #6B0A1A;
+            --red: #E8182E;
+            --red-dark: #C8102E;
+            --ink: #16181D;
+            --muted: #6B7280;
+            --line: #E5E1DA;
+            --paper: #FFFDF9;
+            --success: #15803D;
+            --success-bg: #F0FDF4;
+            --error: #B91C1C;
+            --error-bg: #FEF2F2;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background:
+                    radial-gradient(ellipse 900px 600px at 15% -10%, #8C0B1F 0%, transparent 60%),
+                    radial-gradient(ellipse 700px 700px at 110% 30%, #A50E26 0%, transparent 55%),
+                    var(--maroon);
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .stage {
+            width: 100%;
+            max-width: 460px;
+            animation: rise 0.5s cubic-bezier(.16,1,.3,1) both;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .stage { animation: none; }
+        }
+
+        .brandbar {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding: 0 6px 18px;
+            color: rgba(255,255,255,0.92);
+        }
+        .brandbar .mark {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 0.01em;
+        }
+        .brandbar .sub {
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .card {
+            background: var(--paper);
+            border-radius: 4px;
+            box-shadow: 0 24px 60px -12px rgba(0,0,0,0.45);
+            overflow: hidden;
+        }
+
+        .ribbon {
+            background: var(--ink);
+            color: rgba(255,255,255,0.85);
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            padding: 9px 28px;
+            display: flex;
+            justify-content: space-between;
+            font-variant-numeric: tabular-nums;
+        }
+        .ribbon span:first-child { color: rgba(255,255,255,0.5); }
+
+        .body { padding: 32px 28px 28px; }
+
+        .heading {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 23px;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+            color: var(--ink);
+            margin: 0 0 6px;
+        }
+        .deck {
+            font-size: 13px;
+            color: var(--muted);
+            margin: 0 0 26px;
+            line-height: 1.5;
+        }
+
+        .field { margin-bottom: 18px; }
+        .field label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            color: var(--ink);
+            margin-bottom: 7px;
+        }
+        .field .hint {
+            font-weight: 400;
+            color: var(--muted);
+            margin-left: 4px;
+        }
+
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 11px 13px;
+            border: 1.5px solid var(--line);
+            border-radius: 3px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--ink);
+            background: #fff;
+            transition: border-color 0.15s;
+        }
+        input[type="text"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--red);
+        }
+        input::placeholder, textarea::placeholder { color: #A8A29E; }
+
+        select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8"><path d="M1 1l5 5 5-5" stroke="%236B7280" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 13px center;
+            padding-right: 34px;
+        }
+
+        textarea { resize: vertical; min-height: 96px; line-height: 1.5; }
+
+        .row { display: flex; gap: 10px; }
+        .row .field { flex: 1; }
+
+        fieldset {
+            border: none;
+            margin: 0 0 18px;
+            padding: 0;
+        }
+        .seg {
+            display: flex;
+            border: 1.5px solid var(--line);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .seg input { display: none; }
+        .seg label {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            margin: 0;
+            letter-spacing: normal;
+        }
+        .seg label:not(:last-child) { border-right: 1.5px solid var(--line); }
+        .seg input:checked + label {
+            background: var(--ink);
+            color: white;
+        }
+        .seg-5 label { font-size: 11px; padding: 9px 0; }
+
+        .kvkk {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin: 4px 0 24px;
+            padding: 14px;
+            background: #F7F3EC;
+            border-radius: 3px;
+            border: 1px solid var(--line);
+        }
+        .kvkk input[type="checkbox"] {
+            margin-top: 2px;
+            width: 15px;
+            height: 15px;
+            accent-color: var(--red);
+            flex-shrink: 0;
+        }
+        .kvkk .txt {
+            font-size: 12px;
+            line-height: 1.55;
+            color: #4B4640;
+        }
+        .kvkk a { color: var(--red-dark); text-decoration: underline; cursor: pointer; font-weight: 500; }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s;
+        }
+        button[type="submit"]:hover:not(:disabled) { background: var(--red-dark); }
+        button[type="submit"]:active:not(:disabled) { transform: scale(0.99); }
+        button[type="submit"]:disabled { background: #D8C9C9; cursor: not-allowed; }
+
+        .verify-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--ink);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: background 0.15s;
+        }
+        .verify-btn:hover:not(:disabled) { background: #2B2E37; }
+        .verify-btn:disabled { background: #C9C5BE; cursor: not-allowed; }
+
+        .ai-msg {
+            margin-bottom: 18px;
+            padding: 12px 14px;
+            border-radius: 3px;
+            font-size: 12.5px;
+            line-height: 1.55;
+            display: none;
+            border: 1px solid transparent;
+            white-space: pre-line;
+        }
+        .ai-msg.show { display: block; }
+        .ai-msg.pending { background: #F0F6FA; color: #1E5A7D; border-color: #BFE0F0; }
+        .ai-msg.ok { background: var(--success-bg); color: var(--success); border-color: #BBF7D0; }
+        .ai-msg.missing { background: #FFF7ED; color: #9A5B0D; border-color: #FED7AA; }
+
+        .msg {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 3px;
+            font-size: 12.5px;
+            line-height: 1.5;
+            display: none;
+            border: 1px solid transparent;
+        }
+        .msg.error { background: var(--error-bg); color: var(--error); border-color: #FECACA; }
+        .msg.success { background: var(--success-bg); color: var(--success); border-color: #BBF7D0; }
+
+        .footnote {
+            text-align: center;
+            font-size: 10.5px;
+            color: #B0A89E;
+            margin-top: 22px;
+            letter-spacing: 0.02em;
+        }
+        .footnote a { color: inherit; }
+
+        /* simple modal */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(20,12,12,0.55);
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            z-index: 50;
+        }
+        .modal-backdrop.open { display: flex; }
+        .modal {
+            background: white;
+            max-width: 480px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 4px;
+            padding: 28px;
+        }
+        .modal h2 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+            margin: 0 0 12px;
+            color: var(--red-dark);
+        }
+        .modal p { font-size: 13px; line-height: 1.6; color: #3F3A35; margin: 0 0 12px; }
+        .modal button {
+            margin-top: 8px;
+            background: var(--ink);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 3px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="stage">
+    <div class="brandbar">
+        <span class="mark">ZTCRM</span>
+        <span class="sub">Şikayet Yönetim Sistemi</span>
+    </div>
+
+    <div class="card">
+        <div class="ribbon">
+            <span>Başvuru Kanalı</span>
+            <span>Web · <span id="clock"></span></span>
+        </div>
+
+        <div class="body">
+            <h1 class="heading">Başvurunuzu iletin</h1>
+            <p class="deck">Banka kartı, hesap veya işlem süreçlerinizle ilgili şikayet ve taleplerinizi buradan kaydedebilirsiniz.</p>
+
+            <form id="requestForm">
+                <div class="field">
+                    <label for="nationalId">T.C. Kimlik No</label>
+                    <input type="text" id="nationalId" maxlength="11" inputmode="numeric" placeholder="11 haneli kimlik numaranız" required>
+                </div>
+
+                <fieldset>
+                    <label style="display:block; font-size:11.5px; font-weight:600; letter-spacing:.03em; margin-bottom:7px;">Başvuru Türü</label>
+                    <div class="seg seg-5">
+                        <input type="radio" name="reqtype" id="t-complaint" value="Complaint" checked>
+                        <label for="t-complaint">Şikayet</label>
+                        <input type="radio" name="reqtype" id="t-request" value="Request">
+                        <label for="t-request">Talep</label>
+                        <input type="radio" name="reqtype" id="t-objection" value="Objection">
+                        <label for="t-objection">İtiraz</label>
+                        <input type="radio" name="reqtype" id="t-suggestion" value="Suggestion">
+                        <label for="t-suggestion">Öneri</label>
+                        <input type="radio" name="reqtype" id="t-thanks" value="Thanks">
+                        <label for="t-thanks">Teşekkür</label>
+                    </div>
+                </fieldset>
+
+                <div class="field">
+                    <label for="description">Açıklama</label>
+                    <textarea id="description" placeholder="Başvurunuzu detaylarıyla açıklayınız." required></textarea>
+                </div>
+
+                <div class="kvkk">
+                    <input type="checkbox" id="kvkk" required>
+                    <div class="txt">
+                        Kişisel verilerimin işlenmesine ilişkin <a id="kvkkLink">KVKK Aydınlatma Metni'ni</a> okudum, anladım ve kabul ediyorum.
+                    </div>
+                </div>
+
+                <button type="button" class="verify-btn" id="verifyBtn">Onay Al</button>
+                <div class="ai-msg" id="aiMsg"></div>
+
+                <button type="submit" id="submitBtn" disabled>Başvuruyu Gönder</button>
+
+                <div class="msg error" id="errorMsg"></div>
+                <div class="msg success" id="successMsg"></div>
+            </form>
+
+            <div class="footnote">Bu sayfa Google reCAPTCHA ile korunmaktadır</div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="kvkkModal">
+    <div class="modal">
+        <h2>Kişisel Verilerin Korunması Hakkında Bilgilendirme</h2>
+        <p>6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, başvurunuzu işleme almak amacıyla T.C. kimlik numaranız, iletişim bilgileriniz ve başvuru içeriğiniz ZTCRM tarafından işlenir.</p>
+        <p>Verileriniz yalnızca başvurunuzun değerlendirilmesi ve sonuçlandırılması amacıyla kullanılır, yasal zorunluluklar dışında üçüncü taraflarla paylaşılmaz.</p>
+        <p>KVKK'nın 11. maddesi kapsamındaki haklarınızı kullanmak için bizimle iletişime geçebilirsiniz.</p>
+        <button id="closeModal">Kapat</button>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('requestForm');
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+    const submitBtn = document.getElementById('submitBtn');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const aiMsg = document.getElementById('aiMsg');
+    const clock = document.getElementById('clock');
+    let isApproved = false;
+
+    function updateClock() {
+        clock.textContent = new Date().toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+
+    document.getElementById('kvkkLink').addEventListener('click', () => {
+        document.getElementById('kvkkModal').classList.add('open');
+    });
+    document.getElementById('closeModal').addEventListener('click', () => {
+        document.getElementById('kvkkModal').classList.remove('open');
+    });
+    document.getElementById('kvkkModal').addEventListener('click', (e) => {
+        if (e.target.id === 'kvkkModal') e.target.classList.remove('open');
+    });
+
+    document.getElementById('nationalId').addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '').slice(0, 11);
+    });
+
+    ['nationalId', 'description'].forEach(id => {
+        document.getElementById(id).addEventListener('input', () => {
+            if (isApproved) {
+                isApproved = false;
+                submitBtn.disabled = true;
+                aiMsg.classList.remove('show', 'ok', 'missing', 'pending');
+            }
+        });
+    });
+
+    verifyBtn.addEventListener('click', async () => {
+        const nationalId = document.getElementById('nationalId').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const requestType = document.querySelector('input[name="reqtype"]:checked').value;
+
+        if (nationalId.length !== 11) {
+            aiMsg.textContent = 'T.C. kimlik numarası 11 haneli olmalıdır.';
+            aiMsg.className = 'ai-msg show missing';
+            return;
+        }
+        if (!description) {
+            aiMsg.textContent = 'Lütfen önce açıklamanızı yazın.';
+            aiMsg.className = 'ai-msg show missing';
+            return;
+        }
+
+        verifyBtn.disabled = true;
+        verifyBtn.textContent = 'Kontrol ediliyor…';
+        aiMsg.textContent = 'Açıklamanız değerlendiriliyor…';
+        aiMsg.className = 'ai-msg show pending';
+
+        try {
+            const customerRes = await fetch(`/api/customers/find?nationalId=${nationalId}`);
+            if (!customerRes.ok) {
+                aiMsg.textContent = 'Girilen T.C. kimlik numarasına kayıtlı müşteri bulunamadı.';
+                aiMsg.className = 'ai-msg show missing';
+                return;
+            }
+            const customerData = await customerRes.json();
+
+            const typeLabels = { Objection: 'İtiraz', Suggestion: 'Öneri', Complaint: 'Şikayet', Request: 'Talep', Thanks: 'Teşekkür' };
+
+            const res = await fetch('/api/groq/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    fullName: customerData.fullName,
+                    requestType: typeLabels[requestType] || requestType,
+                    description
+                })
+            });
+            const data = await res.json();
+
+            aiMsg.textContent = data.message;
+            if (data.approved) {
+                aiMsg.className = 'ai-msg show ok';
+                isApproved = true;
+                submitBtn.disabled = false;
+            } else {
+                aiMsg.className = 'ai-msg show missing';
+                isApproved = false;
+                submitBtn.disabled = true;
+            }
+        } catch (err) {
+            aiMsg.textContent = 'Doğrulama sırasında bir hata oluştu: ' + err.message;
+            aiMsg.className = 'ai-msg show missing';
+        } finally {
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = 'Onay Al';
+        }
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+
+        if (!isApproved) {
+            errorMsg.textContent = 'Lütfen önce "Onay Al" butonuna basın.';
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        const nationalId = document.getElementById('nationalId').value.trim();
+        const requestType = document.querySelector('input[name="reqtype"]:checked').value;
+        const description = document.getElementById('description').value.trim();
+        const kvkk = document.getElementById('kvkk').checked;
+
+        if (!kvkk) {
+            errorMsg.textContent = 'Devam etmek için KVKK aydınlatma metnini kabul etmeniz gerekir.';
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Gönderiliyor…';
+
+        try {
+            const token = await grecaptcha.execute('6LcYPzwtAAAAAH3AYrD303L-zry2beZ5ErQWHxdF', { action: 'submit' });
+
+            const captchaRes = await fetch('/api/captcha/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token })
+            });
+            const captchaData = await captchaRes.json();
+
+            if (!captchaData.success) {
+                errorMsg.textContent = 'Güvenlik doğrulaması tamamlanamadı. Lütfen tekrar deneyin.';
+                errorMsg.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Başvuruyu Gönder';
+                return;
+            }
+
+            const customerRes = await fetch(`/api/customers/find?nationalId=${nationalId}`);
+            if (!customerRes.ok) {
+                errorMsg.textContent = 'Girilen T.C. kimlik numarasına kayıtlı müşteri bulunamadı.';
+                errorMsg.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Başvuruyu Gönder';
+                return;
+            }
+            const customerData = await customerRes.json();
+
+            const createRes = await fetch('/api/requests/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    customerId: customerData.customerId,
+                    requestType,
+                    description,
+                    channel: 'Web'
+                })
+            });
+            const createData = await createRes.json();
+
+            if (createData.success) {
+                successMsg.textContent = `Başvurunuz alındı — referans numaranız #${createData.requestId}. Süreç hakkında bilgilendirileceksiniz.`;
+                successMsg.style.display = 'block';
+                form.reset();
+                isApproved = false;
+                submitBtn.disabled = true;
+                aiMsg.classList.remove('show', 'ok', 'missing', 'pending');
+            } else {
+                errorMsg.textContent = 'Başvuru kaydedilirken bir sorun oluştu. Lütfen tekrar deneyin.';
+                errorMsg.style.display = 'block';
+            }
+        } catch (err) {
+            errorMsg.textContent = 'Bağlantı hatası: ' + err.message;
+            errorMsg.style.display = 'block';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Başvuruyu Gönder';
+        }
+    });
+</script>
+
+</body>
+</html>

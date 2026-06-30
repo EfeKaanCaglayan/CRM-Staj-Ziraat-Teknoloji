@@ -46,3 +46,5 @@
 /Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.API/obj/Debug/net10.0/ZTCRM.API.pdb
 /Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.API/obj/Debug/net10.0/ZTCRM.API.genruntimeconfig.cache
 /Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.API/obj/Debug/net10.0/ref/ZTCRM.API.dll
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.API/bin/Debug/net10.0/ZTCRM.API.staticwebassets.runtime.json
+/Users/efekaancaglayan/CRM-Staj-Ziraat-Teknoloji/ZTCRM.API/obj/Debug/net10.0/compressed/2zhsgpzdv6-{0}-o3x7abdo8d-o3x7abdo8d.gz

@@ -23,6 +23,7 @@ public class StaffRequestRepository
             list.Add(new ServiceRequest
             {
                 RequestId     = reader.GetInt32(reader.GetOrdinal("RequestId")),
+                CustomerId    = reader.GetInt32(reader.GetOrdinal("CustomerId")),
                 Description   = reader.GetString(reader.GetOrdinal("Description")),
                 Priority      = reader.GetString(reader.GetOrdinal("Priority")),
                 CurrentStatus = reader.GetString(reader.GetOrdinal("CurrentStatus")),
@@ -50,6 +51,7 @@ public class StaffRequestRepository
             list.Add(new ServiceRequest
             {
                 RequestId     = reader.GetInt32(reader.GetOrdinal("RequestId")),
+                CustomerId    = reader.GetInt32(reader.GetOrdinal("CustomerId")),
                 Description   = reader.GetString(reader.GetOrdinal("Description")),
                 Priority      = reader.GetString(reader.GetOrdinal("Priority")),
                 CurrentStatus = reader.GetString(reader.GetOrdinal("CurrentStatus")),

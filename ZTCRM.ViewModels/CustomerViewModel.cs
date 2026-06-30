@@ -13,7 +13,7 @@ public partial class CustomerViewModel : ObservableObject
     private readonly GroqService _groqService = new();
     private readonly Customer _customer;
     public bool HasUnread => UnreadCount > 0;
-    public List<string> RequestTypes { get; } = new() { "Şikayet", "Talep" };
+    public List<string> RequestTypes { get; } = new() { "Şikayet", "Talep", "İtiraz", "Öneri", "Teşekkür" };
     [ObservableProperty] private string _requestType = string.Empty;
     [ObservableProperty] private string _description = string.Empty;
     [ObservableProperty] private string _errorMessage = string.Empty;
@@ -133,9 +133,12 @@ public partial class CustomerViewModel : ObservableObject
 
         var mappedType = RequestType switch
         {
-            "Şikayet" => "Complaint",
-            "Talep"   => "Request",
-            _         => RequestType
+            "İtiraz"   => "Objection",
+            "Öneri"    => "Suggestion",
+            "Şikayet"  => "Complaint",
+            "Talep"    => "Request",
+            "Teşekkür" => "Thanks",
+            _          => RequestType
         };
 
         var requestId = _repository.Create(_customer.CustomerId, mappedType, Description, null);

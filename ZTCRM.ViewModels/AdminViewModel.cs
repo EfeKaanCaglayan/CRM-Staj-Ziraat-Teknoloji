@@ -37,6 +37,7 @@ public partial class AdminViewModel : ObservableObject
     [ObservableProperty] private List<ActivityLog> _filteredActivityLogs = new();
     [ObservableProperty] private string _unitsSearchText = string.Empty;
     [ObservableProperty] private string _staffSearchText = string.Empty;
+    [ObservableProperty] private string _updateRoleName = string.Empty;
 
     partial void OnUnitsSearchTextChanged(string value) => ApplyUnitsFilter();
     partial void OnStaffSearchTextChanged(string value) => ApplyStaffFilter();
@@ -120,7 +121,7 @@ public partial class AdminViewModel : ObservableObject
         RefreshAll();
     }
 
-    
+  
     private void LoadUnits()
     {
         try
@@ -297,11 +298,10 @@ public partial class AdminViewModel : ObservableObject
             ErrorMessage = $"Hata: {ex.Message}";
         }
     }
-
     [RelayCommand]
     private void UpdateStaffRole()
     {
-        var mappedRole = NewRoleName switch
+        var mappedRole = UpdateRoleName switch
         {
             "Admin"    => 1,
             "Operatör" => 2,

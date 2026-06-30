@@ -279,9 +279,28 @@
                             </StackPanel>
                         </Border>
 
-                        <TextBlock Text="Kategori" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
-                        <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"
-                                  PlaceholderText="Kategori seçin" HorizontalAlignment="Stretch"
+                        <Button Content="✨ AI ile Kategori Öner"
+                                Command="{Binding SuggestCategoryCommand}"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Height="38" FontSize="12" FontWeight="Medium"
+                                Background="#0369A1" Foreground="White"
+                                CornerRadius="8" Margin="0,0,0,14"/>
+
+                        <TextBlock Text="Ana Kategori" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding MainCategories}" SelectedItem="{Binding SelectedMainCategory}"
+                                  PlaceholderText="Ana kategori seçin" HorizontalAlignment="Stretch"
+                                  Height="38" FontSize="13" Margin="0,0,0,12">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="models:Category">
+                                    <TextBlock Text="{Binding CategoryName}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBlock Text="Alt Kategori" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding SubCategories}" SelectedItem="{Binding SelectedSubCategory}"
+                                  PlaceholderText="Alt kategori seçin" HorizontalAlignment="Stretch"
                                   Height="38" FontSize="13" Margin="0,0,0,14">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate x:DataType="models:Category">
@@ -424,9 +443,20 @@
                     </StackPanel>
                 </Border>
 
-                <TextBlock Text="Kategori" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
-                <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedPoolCategory}"
-                          PlaceholderText="Kategori seçin" HorizontalAlignment="Stretch"
+                <TextBlock Text="Ana Kategori" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                <ComboBox ItemsSource="{Binding MainCategories}" SelectedItem="{Binding SelectedPoolMainCategory}"
+                          PlaceholderText="Ana kategori seçin" HorizontalAlignment="Stretch"
+                          Height="38" FontSize="13" Margin="0,0,0,12">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:Category">
+                            <TextBlock Text="{Binding CategoryName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Text="Alt Kategori" FontSize="12" Foreground="#555555" Margin="0,0,0,6"/>
+                <ComboBox ItemsSource="{Binding PoolSubCategories}" SelectedItem="{Binding SelectedPoolSubCategory}"
+                          PlaceholderText="Alt kategori seçin" HorizontalAlignment="Stretch"
                           Height="38" FontSize="13" Margin="0,0,0,14">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="models:Category">

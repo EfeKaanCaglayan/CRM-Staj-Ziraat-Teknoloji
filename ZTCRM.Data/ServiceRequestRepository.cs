@@ -42,6 +42,7 @@ public class ServiceRequestRepository
         }
         return null;
     }
+    
     public int Create(int customerId, string requestType, string description, int? categoryId,string channel="App")
     {
         using var conn = DbConnection.GetConnection();
@@ -57,6 +58,40 @@ public class ServiceRequestRepository
         outParam.Direction = System.Data.ParameterDirection.Output;
         cmd.ExecuteNonQuery();
         return Convert.ToInt32(outParam.Value.ToString());
+    }
+    public List<ServiceRequest> GetAllByCustomer(int customerId)
+    {
+        var list = new List<ServiceRequest>();
+        using var conn = DbConnection.GetConnection();
+        conn.Open();
+        using var cmd = new OracleCommand("ZTCRM.sp_ServiceRequest_GetAllByCustomer", conn);
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        cmd.Parameters.Add("p_CustomerId", OracleDbType.Int32).Value = customerId;
+        cmd.Parameters.Add("p_Result", OracleDbType.RefCursor).Direction = System.Data.ParameterDirection.Output;
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            list.Add(new ServiceRequest
+            {
+                RequestId = reader.GetInt32(reader.GetOrdinal("RequestId")),
+                RequestType = reader.GetString(reader.GetOrdinal("RequestType")),
+                Description = reader.GetString(reader.GetOrdinal("Description")),
+                Priority = reader.GetString(reader.GetOrdinal("Priority")),
+                CurrentStatus = reader.GetString(reader.GetOrdinal("CurrentStatus")),
+                CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+                ResolvedAt = reader.IsDBNull(reader.GetOrdinal("ResolvedAt"))
+                    ? null
+                    : reader.GetDateTime(reader.GetOrdinal("ResolvedAt")),
+                ClosedAt = reader.IsDBNull(reader.GetOrdinal("ClosedAt"))
+                    ? null
+                    : reader.GetDateTime(reader.GetOrdinal("ClosedAt")),
+                CategoryName = reader.IsDBNull(reader.GetOrdinal("CategoryName"))
+                    ? null
+                    : reader.GetString(reader.GetOrdinal("CategoryName"))
+            });
+        }
+
+        return list;
     }
 
     public List<ServiceRequest> GetByCustomer(int customerId)
