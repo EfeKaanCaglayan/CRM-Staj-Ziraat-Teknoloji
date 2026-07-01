@@ -1,1 +1,6 @@
-appsettings.json
+bin/
+obj/
+*.user
+.vs/
+.idea/
+*.DotSettings.user

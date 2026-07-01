@@ -1,0 +1,110 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ZTCRM.ViewModels"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
+             x:Class="ZTCRM.UI.Views.DashboardView"
+             x:DataType="vm:DashBoardViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="20">
+
+            <!-- Başlık + Yenile -->
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                    <Border Width="36" Height="36" CornerRadius="8" Background="#E8182E">
+                        <PathIcon Width="16" Height="16" Foreground="White"
+                                  Data="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center" Spacing="2">
+                        <TextBlock Text="Dashboard" FontSize="16" FontWeight="Medium" Foreground="#111111"/>
+                        <TextBlock Text="Genel istatistikler ve performans göstergeleri" FontSize="11" Foreground="#999999"/>
+                    </StackPanel>
+                </StackPanel>
+                <Button Grid.Column="1" Content="Yenile" Click="RefreshButton_Click"
+                        Height="36" FontSize="12" FontWeight="Medium"
+                        Background="#F5F5F5" Foreground="#333333"
+                        CornerRadius="8" Padding="16,0"/>
+            </Grid>
+
+            <!-- Özet Kartları -->
+            <Grid ColumnDefinitions="*,*,*,*">
+                <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="18,16" Margin="0,0,8,0">
+                    <Border.BoxShadow>0 4 16 0 #20000000</Border.BoxShadow>
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="AÇIK BAŞVURU" FontSize="10" Foreground="#999999" LetterSpacing="1"/>
+                        <TextBlock Text="{Binding Summary.OpenCount}" FontSize="26" FontWeight="Bold" Foreground="#C8102E"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="18,16" Margin="8,0,8,0">
+                    <Border.BoxShadow>0 4 16 0 #20000000</Border.BoxShadow>
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="KAPANMIŞ BAŞVURU" FontSize="10" Foreground="#999999" LetterSpacing="1"/>
+                        <TextBlock Text="{Binding Summary.ClosedCount}" FontSize="26" FontWeight="Bold" Foreground="#15803D"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Background="White" CornerRadius="10" Padding="18,16" Margin="8,0,8,0">
+                    <Border.BoxShadow>0 4 16 0 #20000000</Border.BoxShadow>
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="BUGÜN AÇILAN" FontSize="10" Foreground="#999999" LetterSpacing="1"/>
+                        <TextBlock Text="{Binding Summary.TodayCount}" FontSize="26" FontWeight="Bold" Foreground="#0369A1"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Background="White" CornerRadius="10" Padding="18,16" Margin="8,0,0,0">
+                    <Border.BoxShadow>0 4 16 0 #20000000</Border.BoxShadow>
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="ORT. ÇÖZÜM SÜRESİ" FontSize="10" Foreground="#999999" LetterSpacing="1"/>
+                        <TextBlock Text="{Binding Summary.AvgResolutionHours, StringFormat='{}{0:F1} saat'}"
+                                   FontSize="26" FontWeight="Bold" Foreground="#D97706"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Durum + Kanal Dağılımı (Pasta grafikler) -->
+            <Grid ColumnDefinitions="*,*">
+                <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="20" Margin="0,0,8,0">
+                    <Border.BoxShadow>0 4 16 0 #20000000</Border.BoxShadow>
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Durum Dağılımı" FontSize="13" FontWeight="Medium" Foreground="#111111"/>
+                        <lvc:PieChart Series="{Binding StatusSeries}" Height="260" LegendPosition="Right"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="20" Margin="8,0,0,0">
+                    <Border.BoxShadow>0 4 16 0 #20000000</Border.BoxShadow>
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Kanal Dağılımı" FontSize="13" FontWeight="Medium" Foreground="#111111"/>
+                        <lvc:PieChart Series="{Binding ChannelSeries}" Height="260" LegendPosition="Right"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Kategori Dağılımı (Bar) -->
+            <Border Background="White" CornerRadius="10" Padding="20">
+                <Border.BoxShadow>0 4 16 0 #20000000</Border.BoxShadow>
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Kategori Bazında Başvuru Sayısı" FontSize="13" FontWeight="Medium" Foreground="#111111"/>
+                    <lvc:CartesianChart Series="{Binding CategorySeries}" XAxes="{Binding CategoryXAxes}" Height="280"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Zaman İçinde Trend (Çizgi) -->
+            <Border Background="White" CornerRadius="10" Padding="20">
+                <Border.BoxShadow>0 4 16 0 #20000000</Border.BoxShadow>
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Son 30 Günün Başvuru Trendi" FontSize="13" FontWeight="Medium" Foreground="#111111"/>
+                    <lvc:CartesianChart Series="{Binding DailyTrendSeries}" XAxes="{Binding DailyTrendXAxes}" Height="260"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Birim Bazında Ortalama Çözüm Süresi (Bar) -->
+            <Border Background="White" CornerRadius="10" Padding="20">
+                <Border.BoxShadow>0 4 16 0 #20000000</Border.BoxShadow>
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Birim Bazında Ortalama Çözüm Süresi" FontSize="13" FontWeight="Medium" Foreground="#111111"/>
+                    <TextBlock Text="Saat cinsinden, hangi birim ortalama ne kadar sürede çözüm sağlıyor" FontSize="11" Foreground="#999999"/>
+                    <lvc:CartesianChart Series="{Binding UnitResolutionSeries}" XAxes="{Binding UnitXAxes}" Height="280"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

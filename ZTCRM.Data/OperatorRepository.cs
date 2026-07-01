@@ -21,21 +21,21 @@ public class OperatorRepository
     
         while (reader.Read())
         {
-            Console.WriteLine($"Satır okundu: {reader.GetInt32(0)}");
             list.Add(new ServiceRequest
             {
                 RequestId     = reader.GetInt32(reader.GetOrdinal("RequestId")),
                 CustomerId    = reader.GetInt32(reader.GetOrdinal("CustomerId")),
-                CustomerName  = reader.GetString(reader.GetOrdinal("CustomerName")),
-                Description   = reader.GetString(reader.GetOrdinal("Description")),
-                CurrentStatus = reader.GetString(reader.GetOrdinal("CurrentStatus")),
+                CustomerName  = GetSafeString(reader, "CustomerName") ?? "İsimsiz", 
+                Description   = GetSafeString(reader, "Description") ?? "",
+                CurrentStatus = GetSafeString(reader, "CurrentStatus") ?? "Bilinmiyor",
                 CreatedAt     = reader.GetDateTime(reader.GetOrdinal("CreatedAt"))
             });
         }
-    
+        
         Console.WriteLine($"Toplam kayıt: {list.Count}");
         return list;
     }
+
     public List<ServiceRequest> GetPool(int staffId)
     {
         var list = new List<ServiceRequest>();
@@ -43,7 +43,7 @@ public class OperatorRepository
         conn.Open();
         using var cmd = new OracleCommand("ZTCRM.sp_Operator_GetPool", conn);
         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-      
+
         cmd.Parameters.Add("p_Result", OracleDbType.RefCursor).Direction = System.Data.ParameterDirection.Output;
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
@@ -51,17 +51,18 @@ public class OperatorRepository
             list.Add(new ServiceRequest
             {
                 RequestId = reader.GetInt32(reader.GetOrdinal("RequestId")),
-                CustomerName = reader.GetString(reader.GetOrdinal("CustomerName")),
-                Description = reader.GetString(reader.GetOrdinal("Description")),
-                Priority = reader.GetString(reader.GetOrdinal("Priority")),
-                CurrentStatus = reader.GetString(reader.GetOrdinal("CurrentStatus")),
+                CustomerName = GetSafeString(reader, "CustomerName") ?? "İsimsiz",
+                Description = GetSafeString(reader, "Description") ?? "",
+                Priority = GetSafeString(reader, "Priority") ?? "Düşük",
+                CurrentStatus = GetSafeString(reader, "CurrentStatus") ?? "Bilinmiyor",
                 CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
-                CategoryName = reader.IsDBNull(reader.GetOrdinal("CategoryName")) ? null : reader.GetString(reader.GetOrdinal("CategoryName"))
+                CategoryName = GetSafeString(reader, "CategoryName")
             });
         }
+
         return list;
     }
-    
+
     public Customer? FindCustomerByNationalId(string nationalId)
     {
         using var conn = new OracleConnection(_connectionString);
@@ -77,7 +78,7 @@ public class OperatorRepository
             return new Customer
             {
                 CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId")),
-                FullName = reader.GetString(reader.GetOrdinal("FullName"))
+                FullName   = GetSafeString(reader, "FullName") ?? "İsimsiz"
             };
         }
         return null;
@@ -132,12 +133,17 @@ public class OperatorRepository
         {
             list.Add(new Category
             {
-                CategoryId       = reader.GetInt32(reader.GetOrdinal("CategoryId")),
-                CategoryName     = reader.GetString(reader.GetOrdinal("CategoryName")),
-                DefaultUnitId    = reader.IsDBNull(reader.GetOrdinal("DefaultUnitId")) ? null : reader.GetInt32(reader.GetOrdinal("DefaultUnitId")),
-                ParentCategoryId = reader.IsDBNull(reader.GetOrdinal("ParentCategoryId")) ? null : reader.GetInt32(reader.GetOrdinal("ParentCategoryId"))
+                CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                CategoryName = GetSafeString(reader, "CategoryName") ?? "Kategorisiz",
+                DefaultUnitId = reader.IsDBNull(reader.GetOrdinal("DefaultUnitId"))
+                    ? null
+                    : reader.GetInt32(reader.GetOrdinal("DefaultUnitId")),
+                ParentCategoryId = reader.IsDBNull(reader.GetOrdinal("ParentCategoryId"))
+                    ? null
+                    : reader.GetInt32(reader.GetOrdinal("ParentCategoryId"))
             });
         }
+
         return list;
     }
 
@@ -164,6 +170,11 @@ public class OperatorRepository
         cmd.Parameters.Add("p_RejectionReason", OracleDbType.Varchar2).Value = rejectionReason;
         cmd.Parameters.Add("p_OperatorId",      OracleDbType.Int32).Value    = operatorId;
         cmd.ExecuteNonQuery();
+    }
+    private string? GetSafeString(OracleDataReader reader, string columnName)
+    {
+        int ordinal = reader.GetOrdinal(columnName);
+        return reader.IsDBNull(ordinal) ? null : reader.GetString(ordinal);
     }
 
 }

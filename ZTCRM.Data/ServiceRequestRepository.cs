@@ -68,26 +68,31 @@ public class ServiceRequestRepository
         cmd.CommandType = System.Data.CommandType.StoredProcedure;
         cmd.Parameters.Add("p_CustomerId", OracleDbType.Int32).Value = customerId;
         cmd.Parameters.Add("p_Result", OracleDbType.RefCursor).Direction = System.Data.ParameterDirection.Output;
+    
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
             list.Add(new ServiceRequest
             {
                 RequestId = reader.GetInt32(reader.GetOrdinal("RequestId")),
-                RequestType = reader.GetString(reader.GetOrdinal("RequestType")),
-                Description = reader.GetString(reader.GetOrdinal("Description")),
-                Priority = reader.GetString(reader.GetOrdinal("Priority")),
-                CurrentStatus = reader.GetString(reader.GetOrdinal("CurrentStatus")),
+            
+                // GetSafeString kullanarak NULL hatalarını engelliyoruz
+                RequestType   = GetSafeString(reader, "RequestType"),
+                Description   = GetSafeString(reader, "Description"),
+                Priority      = GetSafeString(reader, "Priority"),
+                CurrentStatus = GetSafeString(reader, "CurrentStatus"),
+            
                 CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+            
                 ResolvedAt = reader.IsDBNull(reader.GetOrdinal("ResolvedAt"))
                     ? null
                     : reader.GetDateTime(reader.GetOrdinal("ResolvedAt")),
+            
                 ClosedAt = reader.IsDBNull(reader.GetOrdinal("ClosedAt"))
                     ? null
                     : reader.GetDateTime(reader.GetOrdinal("ClosedAt")),
-                CategoryName = reader.IsDBNull(reader.GetOrdinal("CategoryName"))
-                    ? null
-                    : reader.GetString(reader.GetOrdinal("CategoryName"))
+            
+                CategoryName = GetSafeString(reader, "CategoryName")
             });
         }
 
@@ -104,22 +109,39 @@ public class ServiceRequestRepository
         cmd.Parameters.Add("p_CustomerId", OracleDbType.Int32).Value = customerId;
         cmd.Parameters.Add("p_Result", OracleDbType.RefCursor).Direction = System.Data.ParameterDirection.Output;
         using var reader = cmd.ExecuteReader();
+    
         while (reader.Read())
         {
             list.Add(new ServiceRequest
             {
                 RequestId = reader.GetInt32(reader.GetOrdinal("RequestId")),
-                RequestType = reader.GetString(reader.GetOrdinal("RequestType")),
-                Description = reader.GetString(reader.GetOrdinal("Description")),
-                Priority = reader.GetString(reader.GetOrdinal("Priority")),
-                CurrentStatus = reader.GetString(reader.GetOrdinal("CurrentStatus")),
+        
+                RequestType = reader.IsDBNull(reader.GetOrdinal("RequestType")) 
+                    ? null 
+                    : reader.GetString(reader.GetOrdinal("RequestType")),
+            
+                Description = reader.IsDBNull(reader.GetOrdinal("Description")) 
+                    ? null 
+                    : reader.GetString(reader.GetOrdinal("Description")),
+            
+                Priority = reader.IsDBNull(reader.GetOrdinal("Priority")) 
+                    ? null 
+                    : reader.GetString(reader.GetOrdinal("Priority")),
+            
+                CurrentStatus = reader.IsDBNull(reader.GetOrdinal("CurrentStatus")) 
+                    ? null 
+                    : reader.GetString(reader.GetOrdinal("CurrentStatus")),
+            
                 CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+        
                 ResolvedAt = reader.IsDBNull(reader.GetOrdinal("ResolvedAt"))
                     ? null
                     : reader.GetDateTime(reader.GetOrdinal("ResolvedAt")),
+            
                 ClosedAt = reader.IsDBNull(reader.GetOrdinal("ClosedAt"))
                     ? null
                     : reader.GetDateTime(reader.GetOrdinal("ClosedAt")),
+            
                 CategoryName = reader.IsDBNull(reader.GetOrdinal("CategoryName"))
                     ? null
                     : reader.GetString(reader.GetOrdinal("CategoryName"))
@@ -127,5 +149,10 @@ public class ServiceRequestRepository
         }
 
         return list;
+    }
+    private string? GetSafeString(OracleDataReader reader, string columnName)
+    {
+        int ordinal = reader.GetOrdinal(columnName);
+        return reader.IsDBNull(ordinal) ? null : reader.GetString(ordinal);
     }
 }
