@@ -4,3 +4,5 @@ obj/
 .vs/
 .idea/
 *.DotSettings.user
+appsettings.Production.json
+appsettings.local.json

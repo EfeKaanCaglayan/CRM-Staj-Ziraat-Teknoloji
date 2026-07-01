@@ -4,6 +4,10 @@ using ZTCRM.Data;
 using ZTCRM.Models;
 using Avalonia.Threading;
 using System.Linq;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
+
 
 namespace ZTCRM.ViewModels;
 
@@ -88,7 +92,8 @@ public partial class AdminViewModel : ObservableObject
             l.NewStatus?.Contains(LogSearchText, StringComparison.OrdinalIgnoreCase) == true ||
             l.ChangedBy?.Contains(LogSearchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
     }
- 
+    
+    
     public List<string> RoleNames { get; } = new() { "Admin", "Operatör", "Personel", "Yönetici" };
     public List<string> UnitTypes { get; } = new() { "Birim", "Şube", "Departman", "Bölge" };    
     public List<int> RoleIds { get; } = new() { 1, 2, 3, 4 };
